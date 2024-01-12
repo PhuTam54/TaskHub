@@ -1,0 +1,15 @@
+bin/
+obj/
+*.config
+*.bak
+*.key
+packages/
+node_modules/
+binaries/
+artifacts/
+publish/
+publishOutput/
+*.user
+*.suo
+*.cache
+*.pdb
