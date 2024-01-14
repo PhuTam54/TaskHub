@@ -51,11 +51,19 @@ var appData = {
 };
 
 function currentCards() {
-    return appData.boards[appData.currentBoard].cards;
+    if (appData.boards[appData.currentBoard]) {
+        return appData.boards[appData.currentBoard].cards;
+    } else {
+        return [];
+    }
 }
 
 function currentBoard() {
-    return appData.boards[appData.currentBoard];
+    if (appData.boards[appData.currentBoard]) {
+        return appData.boards[appData.currentBoard];
+    } else {
+        return [];
+    }
 }
 
 /* <=================================== Extensions ===================================> */
@@ -130,7 +138,7 @@ function listBoards() {
 
 function renderBoard(board) {
     appData.currentBoard = appData.boards.indexOf(board);
-    document.title = 'Kards | ' + currentBoard().name;
+    document.title = 'TaskHub | ' + currentBoard().name;
     e_title.innerText = currentBoard().name;
     //e_title.addEventListener('click'), allow editing board name
     // To-Do: set theme
