@@ -1,51 +1,94 @@
-﻿<!DOCTYPE html>
+﻿
+<!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - TaskHub</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/TaskHub.styles.css" asp-append-version="true" />
-</head>
-<body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container">
-                <a class="navbar-brand" asp-area="" asp-page="/Index">TaskHub</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Privacy">Privacy</a>
-                        </li>
-                    </ul>
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="apple-touch-icon" sizes="180x180" href="../test/icons/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="../test/icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="../test/icons/favicon-16x16.png">
+        <link rel="manifest" href="icons/site.webmanifest">
+    <link rel="mask-icon" href="../test/icons/safari-pinned-tab.svg" color="#5bbad5">
+    <link rel="shortcut icon" href="../test/icons/favicon.ico">
+        <meta name="apple-mobile-web-app-title" content="Kards">
+        <meta name="application-name" content="Kards">
+        <meta name="msapplication-TileColor" content="#2b5797">
+    <meta name="msapplication-config" content="../test/icons/browserconfig.xml">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="stylesheet" href="../test/css/main.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha512-SfTiTlX6kk+qitfevl/7LibUOeJWlt9rbyDn92a1DqWOw9vWG2MFoays0sgObmWazO5BQPiFucnnEAjpAB+/Sw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+        <title>Kards | Simple Kanban Board</title>
+    </head>
+    <body>
+        <header>
+            <div class="header-flex">
+                <span id="sidebar-button"><i class="fa fa-list"></i></span>
+                <h1 id="title" class="text-align-center">Kards</h1>
+                <span class="title-actions-container" style="font-size:25px;cursor:pointer;letter-spacing: 1ch;">
+                    <label for="auto-save" class="auto-save-text">Auto Save</label>
+                    <label class="switch" id="auto-save-label">
+                       <input id="auto-save" type="checkbox" checked>
+                       <span class="slider round"></span>
+                    </label>
+                    <i title="Delete this board." id="delete-button" class="fa fa-trash"></i>
+                    <i title="Save all boards." id="save-button" class="fa fa-floppy-o"></i>
+                    <i title="Settings" id="settings-button" class="fa fa-gear"></i>
+                </span>
+            </div>
+        </header>
+
+      @RenderBody()
+        <div id="sidebar" class="sidenav">
+            <span id="sidebar-close">&times;</span>
+            <p class="is-title">Boards</p>
+            <ul id="boards-list">
+                <!-- Boards will be listed here... -->
+            </ul>
+
+            <div class="flex-col">
+                <input type="text" id="add-board-text" name="add-board" placeholder="Add Board...">
+                <button id="add-board-button">Add Board</button>
+            </div>
+        </div>
+
+        <div id="card-context-menu" class="context-menu">
+            <!-- Right-click context menu on cards. -->
+            <ul>
+                <li id="card-context-menu-delete">Delete</li>
+                <li id="card-context-menu-clear">Clear</li>
+                <li id="card-context-menu-duplicate">Duplicate</li>
+            </ul>
+        </div>
+
+        <div class="container" id="main-container">
+            <div id="cards-container">
+                <div id="add-card">
+                    <input maxlength="128" type="text" id="add-card-text" name="add-card" placeholder="Add Card..." autofocus>
+                    <button id="add-card-button" class="plus-button">+</button>
                 </div>
             </div>
-        </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
-
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2024 - TaskHub - <a asp-area="" asp-page="/Privacy">Privacy</a>
         </div>
-    </footer>
 
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
+        <div id="alert-container">
+            <div id="alerts">
+                <!-- alerts go here -->
+            </div>
+        </div>
 
-    @await RenderSectionAsync("Scripts", required: false)
-</body>
+        <div id="confirm-dialog" class="modal">
+            <div class="dialog-content">
+                <span id="confirm-dialog-close" class="confirm-dialog-close">&times;</span>
+                <div id="confirm-dialog-text" class="confirm-dialog-text"></div>
+                <div class="confirm-dialog-actions">
+                    <button id="confirm-dialog-cancel" class="confirm-dialog-cancel"> Cancel </button>
+                    <button id="confirm-dialog-confirm" class="confirm-dialog-confirm"> Confirm </button>
+                </div>
+            </div>
+        </div>
+
+    <script src="../test/js/main.js"></script>
+    </body>
 </html>
