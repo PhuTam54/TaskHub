@@ -18,7 +18,7 @@
         <meta name="msapplication-TileColor" content="#2b5797">
         <meta name="msapplication-config" content="~/test/icons/browserconfig.xml">
         <meta name="theme-color" content="#ffffff">
-
+        
         <title>@ViewData["Title"] - TaskHub</title>
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
         <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
@@ -73,6 +73,22 @@
                     </li>
                 </ul>
             </nav>
+        <header>
+            <div class="header-flex">
+                <span></span>
+                <h1 id="title" class="text-align-center">TaskHub</h1>
+                <span class="title-actions-container" style="font-size:25px;cursor:pointer;letter-spacing: 1ch;">
+                    <label for="auto-save" class="auto-save-text">Auto Save</label>
+                    <label class="switch" id="auto-save-label">
+                        <input id="auto-save" type="checkbox" checked>
+                        <span class="slider round"></span>
+                    </label>
+                    <i title="Delete this board." id="delete-button" class="fa fa-trash"></i>
+                    <i title="Save all boards." id="save-button" class="fa fa-floppy-o"></i>
+                    <i title="Settings" id="settings-button" class="fa fa-gear"></i>
+                </span>
+            </div>
+        </header>
             <!-- /.navbar -->
         <!-- Main Sidebar Container -->
         <aside class="main-sidebar sidebar-dark-primary elevation-4">
@@ -89,7 +105,7 @@
                 <!-- Sidebar user panel (optional) -->
                 <div class="user-panel mt-3 pb-3 mb-3 d-flex">
                     <div class="image">
-                        <img src="~/test/icons/favicon.ico" style="width: 40px;" class="img-circle elevation-2" alt="User Image">
+                        <img src="~/test/icons/default-avatar.jpg" style="width: 40px;" class="img-circle elevation-2" alt="User Image">
                     </div>
                     <div class="info">
                         <a href="admin/admin-dashboard" class="d-block">Phu Tam</a>
@@ -114,7 +130,7 @@
                         <!-- Add icons to the links using the .nav-icon class
                              with font-awesome or any other icon font library -->
                         <li class="nav-item menu-ope {{ request()->is('admin/admin-dashboard') ? 'menu-open' : '' }}">
-                            <a href="admin/admin-dashboard"
+                            <a href="/TaskItems"
                                class="nav-link active
                                {{request()->
                                 is('admin/admin-dashboard') ? 'active' : '' }}"
@@ -129,6 +145,12 @@
                                 <p>Boards</p>
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a href="/Users" class="nav-link {{request()->is('admin/admin-result') ? 'active' : '' }}">
+                                <i class="fa fa-user nav-icon"></i>
+                                <p>Users</p>
+                            </a>
+                        </li>
                        
                         <li class="nav-header text-center" style="margin-left: -10px"><br><br><br><br>Phu Tam 54</li>
                     </ul>
@@ -138,7 +160,7 @@
             <!-- /.sidebar -->
         </aside>
 
-        <div class="content-wrapper p-4">
+        <div class="content-wrapper ">
             @RenderBody()
         </div>
 

@@ -65,6 +65,24 @@ function currentBoard() {
         return [];
     }
 }
+document.addEventListener('DOMContentLoaded', function () {
+    var contentAddColumn = document.querySelector('.content-add-column');
+    contentAddColumn.style.display = 'none';
+});
+function toggleInputAndButton() {
+    var addCard = document.getElementById('add-card');
+    var contentAddColumn = document.querySelector('.content-add-column');
+    var addCardInput = document.getElementById('add-card-text');
+
+    if (addCard.style.display !== 'none') {
+        addCard.style.display = 'none';
+        contentAddColumn.style.display = 'block';
+        addCardInput.focus(); // Tự động focus vào ô input khi hiển thị
+    } else {
+        addCard.style.display = 'block';
+        contentAddColumn.style.display = 'none';
+    }
+}
 
 /* <=================================== Extensions ===================================> */
 Array.prototype.move = function(from, to) {

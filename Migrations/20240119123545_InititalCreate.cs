@@ -20,9 +20,9 @@ namespace TaskHub.Migrations
                     UserName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     Email = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    LastName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    EnrollmentDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    LastName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    EnrollmentDate = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -36,8 +36,8 @@ namespace TaskHub.Migrations
                     WorkSpaceId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     WorkSpaceTitle = table.Column<string>(type: "nvarchar(60)", maxLength: 60, nullable: false),
-                    WorkSpaceDescription = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
-                    Status = table.Column<int>(type: "int", nullable: false),
+                    WorkSpaceDescription = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true),
+                    Status = table.Column<int>(type: "int", nullable: false, defaultValue: 1),
                     UserId = table.Column<int>(type: "int", maxLength: 50, nullable: false)
                 },
                 constraints: table =>
@@ -58,8 +58,8 @@ namespace TaskHub.Migrations
                     BoardId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     WorkSpaceId = table.Column<int>(type: "int", nullable: false),
-                    BoardTitle = table.Column<string>(type: "nvarchar(60)", maxLength: 60, nullable: false),
-                    Status = table.Column<int>(type: "int", nullable: false)
+                    BoardTitle = table.Column<string>(type: "nvarchar(60)", maxLength: 60, nullable: true),
+                    Status = table.Column<int>(type: "int", nullable: false, defaultValue: 1)
                 },
                 constraints: table =>
                 {
@@ -80,7 +80,7 @@ namespace TaskHub.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     WorkSpaceId = table.Column<int>(type: "int", nullable: false),
                     UserId = table.Column<int>(type: "int", nullable: false),
-                    Status = table.Column<int>(type: "int", nullable: false)
+                    Status = table.Column<int>(type: "int", nullable: false, defaultValue: 1)
                 },
                 constraints: table =>
                 {
@@ -107,7 +107,7 @@ namespace TaskHub.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     BoardId = table.Column<int>(type: "int", nullable: false),
                     ListTitle = table.Column<string>(type: "nvarchar(60)", maxLength: 60, nullable: false),
-                    Status = table.Column<int>(type: "int", nullable: false)
+                    Status = table.Column<int>(type: "int", nullable: false, defaultValue: 1)
                 },
                 constraints: table =>
                 {
@@ -127,12 +127,12 @@ namespace TaskHub.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Title = table.Column<string>(type: "nvarchar(60)", maxLength: 60, nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true),
                     Deadline = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UserId = table.Column<int>(type: "int", nullable: false),
                     ListId = table.Column<int>(type: "int", nullable: false),
-                    position = table.Column<int>(type: "int", nullable: false),
-                    Status = table.Column<int>(type: "int", nullable: false)
+                    position = table.Column<int>(type: "int", nullable: false, defaultValue: 1),
+                    Status = table.Column<int>(type: "int", nullable: false, defaultValue: 1)
                 },
                 constraints: table =>
                 {
@@ -161,7 +161,7 @@ namespace TaskHub.Migrations
                     Timestamp = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UserId = table.Column<int>(type: "int", nullable: false),
                     TaskItemId = table.Column<int>(type: "int", nullable: false),
-                    Status = table.Column<int>(type: "int", nullable: false)
+                    Status = table.Column<int>(type: "int", nullable: false, defaultValue: 1)
                 },
                 constraints: table =>
                 {
