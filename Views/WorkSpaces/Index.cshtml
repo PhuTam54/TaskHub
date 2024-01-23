@@ -1,0 +1,59 @@
+﻿@model IEnumerable<TaskHub.Models.WorkSpace>
+
+@{
+    ViewData["Title"] = "WorkSpace";
+}
+
+<h1>WorkSpace</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.WorkSpaceId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.WorkSpaceTitle)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.WorkSpaceDescription)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Status)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.User)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.WorkSpaceId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.WorkSpaceTitle)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.WorkSpaceDescription)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Status)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.User.UserName)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.WorkSpaceId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.WorkSpaceId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.WorkSpaceId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

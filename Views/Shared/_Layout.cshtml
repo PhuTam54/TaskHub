@@ -1,7 +1,9 @@
-﻿
+﻿@using TaskHub.Models
+
 <!DOCTYPE html>
 <html lang="en">
     <head>
+
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -50,6 +52,9 @@
     <link rel="stylesheet" href="~/test/css/main.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha512-SfTiTlX6kk+qitfevl/7LibUOeJWlt9rbyDn92a1DqWOw9vWG2MFoays0sgObmWazO5BQPiFucnnEAjpAB+/Sw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     </head>
+@{
+    var user = ViewContext.HttpContext.Session.GetString("Account");
+}
 
     <body class="hold-transition sidebar-mini layout-fixed">
         <div class="wrapper">
@@ -89,10 +94,15 @@
                 <!-- Sidebar user panel (optional) -->
                 <div class="user-panel mt-3 pb-3 mb-3 d-flex">
                     <div class="image">
-                        <img src="~/test/icons/favicon.ico" style="width: 40px;" class="img-circle elevation-2" alt="User Image">
+                        <img src="~/test/icons/default-avatar.jpg" style="width: 40px;" class="img-circle elevation-2" alt="User Image">
                     </div>
                     <div class="info">
-                        <a href="admin/admin-dashboard" class="d-block">Phu Tam</a>
+                         @{ if (user != null)
+                            {
+                                <a href="admin/admin-dashboard" class="d-block">@user.FullName</a>
+                            }
+                         }
+                        
                     </div>
                 </div>
 
@@ -114,7 +124,7 @@
                         <!-- Add icons to the links using the .nav-icon class
                              with font-awesome or any other icon font library -->
                         <li class="nav-item menu-ope {{ request()->is('admin/admin-dashboard') ? 'menu-open' : '' }}">
-                            <a href="admin/admin-dashboard"
+                            <a href="/TaskItems"
                                class="nav-link active
                                {{request()->
                                 is('admin/admin-dashboard') ? 'active' : '' }}"
@@ -129,6 +139,39 @@
                                 <p>Boards</p>
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a href="/Users" class="nav-link {{request()->is('admin/admin-result') ? 'active' : '' }}">
+                                <i class="fa fa-user nav-icon"></i>
+                                <p>Users</p>
+                            </a>
+                        </li>
+                      
+                        @{
+                            if (user == null)
+                            {
+                                <li class="nav-item">
+                                    <a href="/Accounts/Register" class="nav-link {{request()->is('admin/admin-result') ? 'active' : '' }}">
+                                        <i class="fa fa-user nav-icon"></i>
+                                        <p>Register</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="/Accounts/Login" class="nav-link {{request()->is('admin/admin-result') ? 'active' : '' }}">
+                                        <i class="fa fa-user nav-icon"></i>
+                                        <p>Login</p>
+                                    </a>
+                                </li>
+                            }
+                            else
+                            {
+                                <li class="nav-item">
+                                    <a href="/Accounts/Logout" class="nav-link {{request()->is('admin/admin-result') ? 'active' : '' }}">
+                                        <i class="fa fa-user nav-icon"></i>
+                                        <p>Login</p>
+                                    </a>
+                                </li>
+                            }
+                        }
                         <li class="nav-header text-center" style="margin-left: -10px"><br><br><br><br>Phu Tam 54</li>
                     </ul>
                 </nav>
