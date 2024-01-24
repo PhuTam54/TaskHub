@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using ContosoUniversity.Models;
+using TaskHub.Models;
 using TaskHub.Data;
 using TaskHub.Models.WorkSpaceViewModels;
 
@@ -21,18 +21,13 @@ namespace TaskHub.Controllers
         }
 
         // GET: Users
-        public async Task<IActionResult> Index(int? id, int? WorkSpaceIdForMember, int? WorkSpaceIdForDetails)
+        public async Task<IActionResult> Index(int? id)
         {
             var viewModel = new UserIndexData();
             viewModel.Users = await _context.User
+                .Include(i => i.WorkSpaceMembers)
+                    .ThenInclude(i => i.WorkSpace)
                 .Include(i => i.WorkSpaces)
-                    .ThenInclude(i => i.WorkSpaceMembers)
-                        .ThenInclude(i => i.User)
-                .Include(i => i.WorkSpaces)
-                    .ThenInclude(i => i.Boards)
-                        .ThenInclude(i => i.Lists)
-                            .ThenInclude(i => i.TaskItems)
-                                .ThenInclude(i => i.Comments)
                 .AsNoTracking()
                 .OrderBy(i => i.LastName)
                 .ToListAsync();
@@ -43,20 +38,6 @@ namespace TaskHub.Controllers
                 User user = viewModel.Users.Where(
                     i => i.ID == id.Value).Single();
                 viewModel.WorkSpaces = user.WorkSpaces;
-            }
-
-            if (WorkSpaceIdForMember != null)
-            {
-                ViewData["WorkSpaceIdForMember"] = WorkSpaceIdForMember.Value;
-                viewModel.WorkSpaceMembers = viewModel.WorkSpaces.Where(
-                    w => w.WorkSpaceId == WorkSpaceIdForMember).Single().WorkSpaceMembers;
-            }
-
-            if (WorkSpaceIdForDetails != null)
-            {
-                ViewData["WorkSpaceIdForDetails"] = WorkSpaceIdForDetails.Value;
-                viewModel.Boards = viewModel.WorkSpaces.Where(
-                    w => w.WorkSpaceId == WorkSpaceIdForDetails).Single().Boards;
             }
 
             return View(viewModel);
