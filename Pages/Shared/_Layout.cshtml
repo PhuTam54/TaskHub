@@ -52,9 +52,6 @@
     <link rel="stylesheet" href="~/test/css/main.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha512-SfTiTlX6kk+qitfevl/7LibUOeJWlt9rbyDn92a1DqWOw9vWG2MFoays0sgObmWazO5BQPiFucnnEAjpAB+/Sw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
-@{
-    var userJson = HttpContext.Session.GetString("Account");}
-
 <body class="hold-transition sidebar-mini layout-fixed">
     <div class="wrapper">
         <!-- Preloader -->
@@ -96,13 +93,7 @@
                         <img src="~/test/icons/default-avatar.jpg" style="width: 40px;" class="img-circle elevation-2" alt="User Image">
                     </div>
                     <div class="info">
-                        @{
-                            if (user != null)
-                            {
-                                <a href="admin/admin-dashboard" class="d-block">@user.FullName</a>
-                            }
-                        }
-
+                        <a asp-controller="Accounts" class="d-block">phu Tam</a>
                     </div>
                 </div>
 
@@ -145,32 +136,25 @@
                                 <p>Users</p>
                             </a>
                         </li>
-
-                        @{
-                            if (user == null)
-                            {
-                                <li class="nav-item">
-                                    <a href="/Accounts/Register" class="nav-link {{request()->is('admin/admin-result') ? 'active' : '' }}">
-                                        <i class="fa fa-user nav-icon"></i>
-                                        <p>Register</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="/Accounts/Login" class="nav-link {{request()->is('admin/admin-result') ? 'active' : '' }}">
-                                        <i class="fa fa-user nav-icon"></i>
-                                        <p>Login</p>
-                                    </a>
-                                </li>
-                            }
-                            else
-                            {
-                                <li class="nav-item">
-                                    <a href="/Accounts/Logout" class="nav-link {{request()->is('admin/admin-result') ? 'active' : '' }}">
-                                        <i class="fa fa-user nav-icon"></i>
-                                        <p>Login</p>
-                                    </a>
-                                </li>
-                            }
+                      
+                        @if (@Context.Session.GetString("FullName") != null)
+                        {
+                            <span><i class="fa fa-user"></i> @Context.Session.GetString("FullName")</span>
+                            <li class="nav-item">
+                                <a asp-controller="Accounts" asp-action="Logout" class="nav-link">
+                                    <i class="fa fa-user nav-icon"></i>
+                                    <p>Logout</p>
+                                </a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a asp-controller="Accounts" asp-action="Login" class="nav-link {{request()->is('admin/admin-result') ? 'active' : '' }}">
+                                    <i class="fa fa-user nav-icon"></i>
+                                    <p>Login</p>
+                                </a>
+                            </li>
                         }
                         <li class="nav-header text-center" style="margin-left: -10px"><br><br><br><br>Phu Tam 54</li>
                     </ul>

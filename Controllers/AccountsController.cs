@@ -59,39 +59,43 @@ namespace TaskHub.Controllers
         {
             _context.Account.Add(account);
             _context.SaveChanges();
-
             return RedirectToAction("Login");
         }
 
         // Get: /Accounts/Login
         public ActionResult Login()
         {
-            return View();
+            if (HttpContext.Session.GetString("Email") == null)
+            {
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("Index", "Home");
+            }
         }
         // Post: /Accounts/Login
         [HttpPost]
         public ActionResult Login(Account account)
         {
-            var accountForm = account.Email;
-            var passForm = account.Password;
-            var userCheck = _context.Account.FirstOrDefault(x => x.Email.Equals(accountForm) && x.Password.Equals(passForm));
-            if (userCheck != null)
+            if (HttpContext.Session.GetString("Email") == null)
             {
-                
-                return RedirectToAction("Index", "Home");
+                var u = _context.Account.Where(x => x.Email.Equals(account.Email) && x.Password.Equals(account.Password)).FirstOrDefault();
+                if (u != null)
+                {
+                    HttpContext.Session.SetString("Email", u.Email.ToString());
+                    return RedirectToAction("Index", "Home");
+                }
             }
-            else
-            {
-                HttpContext.Session.SetString("Account", userCheck.ToString());
-                ViewBag.LoginFail = "Login failed, please check again!";
-                return View("Login");
-            }
+            return View();
+
         }
 
         // Post: /Accounts/Logout
-        public ActionResult Logout(Account account)
+        public ActionResult Logout()
         {
-            HttpContext.Session.Remove("Account");
+            HttpContext.Session.Clear();
+            HttpContext.Session.Remove("Accounts");
             return RedirectToAction("Index", "Home");
         }
 
