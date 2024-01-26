@@ -156,11 +156,14 @@ function listBoards() {
 
 function renderBoard(board) {
     appData.currentBoard = appData.boards.indexOf(board);
-    document.title = 'TaskHub | ' + currentBoard().name;
-    e_title.innerText = currentBoard().name;
-    //e_title.addEventListener('click'), allow editing board name
-    // To-Do: set theme
-    renderAllCards();
+    if (!board || !board.name) {
+        // Nếu không có dữ liệu hoặc không có tên cho bảng, hiển thị nội dung trong phần logo
+        document.getElementById('title').innerText = "TaskHub";
+    } else {
+        document.title = 'TaskHub | ' + currentBoard().name;
+        e_title.innerText = currentBoard().name;
+        // Nếu có dữ liệu, tiêu đề sẽ được hiển thị bình thường
+    }
 }
 
 function renderAllCards() {
