@@ -3,7 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using TaskHub.Data;
 using System;
 using System.Linq;
-using ContosoUniversity.Models;
+using TaskHub.Models;
 using System.Collections.Generic;
 using Microsoft.CodeAnalysis.Elfie.Diagnostics;
 using NuGet.Packaging.Signing;
@@ -66,8 +66,98 @@ public static class SeedData
                     UserName = "ronaldo",
                     Email = "ronaldo@gmail.com",
                     Password = "123456",
-                    FirstMidName = "Ronaldo",
-                    LastName = "Cristiano",
+                    FirstMidName = "Cristiano",
+                    LastName = "Ronaldo",
+                    EnrollmentDate = DateTime.Parse("2024-01-15")
+                },
+                new User
+                {
+                    UserName = "phutam2",
+                    Email = "phutam2@gmail.com",
+                    Password = "123456",
+                    FirstMidName = "Tam",
+                    LastName = "Phu 2",
+                    EnrollmentDate = DateTime.Parse("2024-01-01")
+                },
+                new User
+                {
+                    UserName = "tranthuy2",
+                    Email = "tranthuy2@gmail.com",
+                    Password = "123456",
+                    FirstMidName = "Thuy",
+                    LastName = "Tran 2",
+                    EnrollmentDate = DateTime.Parse("2024-01-01")
+                },
+                new User
+                {
+                    UserName = "peter2",
+                    Email = "peter2@gmail.com",
+                    Password = "123456",
+                    FirstMidName = "Peter",
+                    LastName = "Parker 2",
+                    EnrollmentDate = DateTime.Parse("2024-01-11")
+                },
+                new User
+                {
+                    UserName = "tom2",
+                    Email = "tom2@gmail.com",
+                    Password = "123456",
+                    FirstMidName = "Tom",
+                    LastName = "Holland 2",
+                    EnrollmentDate = DateTime.Parse("2024-01-11")
+                },
+                new User
+                {
+                    UserName = "ronaldo2",
+                    Email = "ronaldo2@gmail.com",
+                    Password = "123456",
+                    FirstMidName = "Cristiano",
+                    LastName = "Ronaldo 2",
+                    EnrollmentDate = DateTime.Parse("2024-01-15")
+                },
+                new User
+                {
+                    UserName = "phutam3",
+                    Email = "phutam3@gmail.com",
+                    Password = "123456",
+                    FirstMidName = "Tam",
+                    LastName = "Phu 3",
+                    EnrollmentDate = DateTime.Parse("2024-01-01")
+                },
+                new User
+                {
+                    UserName = "tranthuy3",
+                    Email = "tranthuy3@gmail.com",
+                    Password = "123456",
+                    FirstMidName = "Thuy",
+                    LastName = "Tran 3",
+                    EnrollmentDate = DateTime.Parse("2024-01-01")
+                },
+                new User
+                {
+                    UserName = "peter3",
+                    Email = "peter3@gmail.com",
+                    Password = "123456",
+                    FirstMidName = "Peter",
+                    LastName = "Parker 3",
+                    EnrollmentDate = DateTime.Parse("2024-01-11")
+                },
+                new User
+                {
+                    UserName = "tom3",
+                    Email = "tom3@gmail.com",
+                    Password = "123456",
+                    FirstMidName = "Tom",
+                    LastName = "Holland 3",
+                    EnrollmentDate = DateTime.Parse("2024-01-11")
+                },
+                new User
+                {
+                    UserName = "ronaldo3",
+                    Email = "ronaldo3@gmail.com",
+                    Password = "123456",
+                    FirstMidName = "Cristiano",
+                    LastName = "Ronaldo 3",
                     EnrollmentDate = DateTime.Parse("2024-01-15")
                 }
             };
@@ -81,16 +171,30 @@ public static class SeedData
              {
                 new WorkSpace
                 {
-                    WorkSpaceTitle = "WorkSpace number 1",
-                    WorkSpaceDescription = "Description For WorkSpace number 1",
+                    WorkSpaceTitle = "Group1's workspace",
+                    WorkSpaceDescription = "Description For Group1's workspace",
                     UserId = Users.Single( s => s.UserName == "phutam").ID,
                     Status = 1,
                 },
                 new WorkSpace
                 {
-                    WorkSpaceTitle = "WorkSpace number 2",
-                    WorkSpaceDescription = "Description For WorkSpace number 2",
+                    WorkSpaceTitle = "Group2's workspace",
+                    WorkSpaceDescription = "Description For Group2's workspace",
                     UserId = Users.Single( s => s.UserName == "phutam").ID,
+                    Status = 2,
+                },
+                new WorkSpace
+                {
+                    WorkSpaceTitle = "Group3's workspace",
+                    WorkSpaceDescription = "Description For WorkSpace number 3",
+                    UserId = Users.Single( s => s.UserName == "ronaldo").ID,
+                    Status = 1,
+                },
+                new WorkSpace
+                {
+                    WorkSpaceTitle = "Group4's workspace",
+                    WorkSpaceDescription = "Description For WorkSpace number 4",
+                    UserId = Users.Single( s => s.UserName == "tranthuy").ID,
                     Status = 2,
                 }
             };
@@ -104,32 +208,32 @@ public static class SeedData
              {
                 new Board
                 {
-                    WorkSpaceId = WorkSpaces.Single( s => s.WorkSpaceTitle == "WorkSpace number 1").WorkSpaceId,
-                    BoardTitle = "Board number 1",
+                    WorkSpaceId = WorkSpaces.Single( s => s.WorkSpaceTitle == "Group1's workspace").WorkSpaceId,
+                    BoardTitle = "TaskHub",
                     Status = 1,
                 },
                 new Board
                 {
-                    WorkSpaceId = WorkSpaces.Single( s => s.WorkSpaceTitle == "WorkSpace number 1").WorkSpaceId,
-                    BoardTitle = "Board number 2",
+                    WorkSpaceId = WorkSpaces.Single( s => s.WorkSpaceTitle == "Group1's workspace").WorkSpaceId,
+                    BoardTitle = "MvcMovie",
                     Status = 2,
                 },
                 new Board
                 {
-                    WorkSpaceId = WorkSpaces.Single( s => s.WorkSpaceTitle == "WorkSpace number 1").WorkSpaceId,
-                    BoardTitle = "Board number 3",
+                    WorkSpaceId = WorkSpaces.Single( s => s.WorkSpaceTitle == "Group1's workspace").WorkSpaceId,
+                    BoardTitle = "TaskHub",
                     Status = 3,
                 },
                 new Board
                 {
-                    WorkSpaceId = WorkSpaces.Single( s => s.WorkSpaceTitle == "WorkSpace number 2").WorkSpaceId,
-                    BoardTitle = "Board number 4",
+                    WorkSpaceId = WorkSpaces.Single( s => s.WorkSpaceTitle == "Group2's workspace").WorkSpaceId,
+                    BoardTitle = "Taskhub",
                     Status = 3,
                 },
                 new Board
                 {
-                    WorkSpaceId = WorkSpaces.Single( s => s.WorkSpaceTitle == "WorkSpace number 2").WorkSpaceId,
-                    BoardTitle = "Board number 5",
+                    WorkSpaceId = WorkSpaces.Single( s => s.WorkSpaceTitle == "Group2's workspace").WorkSpaceId,
+                    BoardTitle = "Mvcmovie",
                     Status = 2,
                 }
             };
@@ -143,49 +247,49 @@ public static class SeedData
              {
                 new List
                 {
-                    BoardId = Boards.Single( s => s.BoardTitle == "Board number 1").BoardId,
+                    BoardId = Boards.Single( s => s.BoardTitle == "TaskHub").BoardId,
                     ListTitle = "Todo",
                     Status = 1,
                 },
                 new List
                 {
-                    BoardId = Boards.Single( s => s.BoardTitle == "Board number 1").BoardId,
-                    ListTitle = "Done",
-                    Status = 1,
-                },
-                new List
-                {
-                    BoardId = Boards.Single( s => s.BoardTitle == "Board number 1").BoardId,
+                    BoardId = Boards.Single( s => s.BoardTitle == "TaskHub").BoardId,
                     ListTitle = "Doing",
                     Status = 1,
                 },
                 new List
                 {
-                    BoardId = Boards.Single( s => s.BoardTitle == "Board number 2").BoardId,
+                    BoardId = Boards.Single( s => s.BoardTitle == "TaskHub").BoardId,
+                    ListTitle = "Done",
+                    Status = 1,
+                },
+                new List
+                {
+                    BoardId = Boards.Single( s => s.BoardTitle == "TaskHub").BoardId,
                     ListTitle = "Done 2",
                     Status = 1,
                 },
                 new List
                 {
-                    BoardId = Boards.Single( s => s.BoardTitle == "Board number 2").BoardId,
+                    BoardId = Boards.Single( s => s.BoardTitle == "TaskHub").BoardId,
                     ListTitle = "Todo 2",
                     Status = 1,
                 },
                 new List
                 {
-                    BoardId = Boards.Single( s => s.BoardTitle == "Board number 3").BoardId,
+                    BoardId = Boards.Single( s => s.BoardTitle == "MvcMovie").BoardId,
                     ListTitle = "Done 3",
                     Status = 1,
                 },
                 new List
                 {
-                    BoardId = Boards.Single( s => s.BoardTitle == "Board number 3").BoardId,
+                    BoardId = Boards.Single( s => s.BoardTitle == "MvcMovie").BoardId,
                     ListTitle = "Doing 3",
                     Status = 1,
                 },
                 new List
                 {
-                    BoardId = Boards.Single( s => s.BoardTitle == "Board number 3").BoardId,
+                    BoardId = Boards.Single( s => s.BoardTitle == "MvcMovie").BoardId,
                     ListTitle = "Todo 3",
                     Status = 1,
                 }
@@ -200,17 +304,17 @@ public static class SeedData
              {
                 new TaskItem
                 {
-                    Title = "TaskItem number 1",
+                    Title = "Clone project on Github",
                     Description = "Description For TaskItem number 1",
                     Deadline = DateTime.Parse("2024-1-20"),
                     UserId = Users.Single( s => s.UserName == "phutam").ID,
-                    ListId = Lists.Single( s => s.ListTitle == "Todo").ListId,
+                    ListId = Lists.Single( s => s.ListTitle == "Done").ListId,
                     position = 1,
                     Status = 1,
                 },
                 new TaskItem
                 {
-                    Title = "TaskItem number 2",
+                    Title = "Database design",
                     Description = "Description For TaskItem number 2",
                     Deadline = DateTime.Parse("2024-1-21"),
                     UserId = Users.Single( s => s.UserName == "phutam").ID,
@@ -220,7 +324,7 @@ public static class SeedData
                 },
                 new TaskItem
                 {
-                    Title = "TaskItem number 3",
+                    Title = "UX/UI ( Dashboard )",
                     Description = "Description For TaskItem number 3",
                     Deadline = DateTime.Parse("2024-1-22"),
                     UserId = Users.Single( s => s.UserName == "tranthuy").ID,
@@ -230,7 +334,7 @@ public static class SeedData
                 },
                 new TaskItem
                 {
-                    Title = "TaskItem number 4",
+                    Title = "Add template",
                     Description = "Description For TaskItem number 4",
                     Deadline = DateTime.Parse("2024-1-21"),
                     UserId = Users.Single( s => s.UserName == "peter").ID,
@@ -240,7 +344,7 @@ public static class SeedData
                 },
                 new TaskItem
                 {
-                    Title = "TaskItem number 5",
+                    Title = "UX/UI ( User )",
                     Description = "Description For TaskItem number 5",
                     Deadline = DateTime.Parse("2024-1-20"),
                     UserId = Users.Single( s => s.UserName == "tom").ID,
@@ -250,7 +354,7 @@ public static class SeedData
                 },
                 new TaskItem
                 {
-                    Title = "TaskItem number 6",
+                    Title = "Clone project on Github.com",
                     Description = "Description For TaskItem number 6",
                     Deadline = DateTime.Parse("2024-1-21"),
                     UserId = Users.Single( s => s.UserName == "phutam").ID,
@@ -260,7 +364,7 @@ public static class SeedData
                 },
                 new TaskItem
                 {
-                    Title = "TaskItem number 7",
+                    Title = "UX/UI for the Products page",
                     Description = "Description For TaskItem number 7",
                     Deadline = DateTime.Parse("2024-1-20"),
                     UserId = Users.Single( s => s.UserName == "tom").ID,
@@ -270,7 +374,7 @@ public static class SeedData
                 },
                 new TaskItem
                 {
-                    Title = "TaskItem number 8",
+                    Title = "UX/UI ( Admin )",
                     Description = "Description For TaskItem number 8",
                     Deadline = DateTime.Parse("2024-1-22"),
                     UserId = Users.Single( s => s.UserName == "peter").ID,
@@ -289,34 +393,34 @@ public static class SeedData
              {
                 new Comment
                 {
-                    CommentContent = "Comment number 1",
+                    CommentContent = "Imediately",
                     Timestamp = DateTime.Now,
                     UserId = Users.Single( s => s.UserName == "phutam").ID,
-                    TaskItemId = TaskItems.Single( s => s.Title == "TaskItem number 1").Id,
+                    TaskItemId = TaskItems.Single( s => s.Title == "Clone project on Github").Id,
                     Status = 1,
                 },
                 new Comment
                 {
-                    CommentContent = "Comment number 2",
+                    CommentContent = "Good",
                     Timestamp = DateTime.Now,
                     UserId = Users.Single( s => s.UserName == "phutam").ID,
-                    TaskItemId = TaskItems.Single( s => s.Title == "TaskItem number 2").Id,
+                    TaskItemId = TaskItems.Single( s => s.Title == "Database design").Id,
                     Status = 1,
                 },
                 new Comment
                 {
-                    CommentContent = "Comment number 3",
+                    CommentContent = "Well done!",
                     Timestamp = DateTime.Now,
                     UserId = Users.Single( s => s.UserName == "tranthuy").ID,
-                    TaskItemId = TaskItems.Single( s => s.Title == "TaskItem number 1").Id,
+                    TaskItemId = TaskItems.Single( s => s.Title == "Clone project on Github").Id,
                     Status = 1,
                 },
                 new Comment
                 {
-                    CommentContent = "Comment number 4",
+                    CommentContent = "Yes",
                     Timestamp = DateTime.Now,
                     UserId = Users.Single( s => s.UserName == "peter").ID,
-                    TaskItemId = TaskItems.Single( s => s.Title == "TaskItem number 2").Id,
+                    TaskItemId = TaskItems.Single( s => s.Title == "Database design").Id,
                     Status = 1,
                 }
              };
@@ -330,32 +434,62 @@ public static class SeedData
              {
                 new WorkSpaceMember
                 {
-                    WorkSpaceId = WorkSpaces.Single( s => s.WorkSpaceTitle == "WorkSpace number 1").WorkSpaceId,
-                    UserId = Users.Single( s => s.UserName == "phutam").ID,
+                    WorkSpaceId = WorkSpaces.Single( s => s.WorkSpaceTitle == "Group1's workspace").WorkSpaceId,
+                    UserId = Users.Single( s => s.UserName == "ronaldo").ID,
                     Status = 1,
                 },
                 new WorkSpaceMember
                 {
-                    WorkSpaceId = WorkSpaces.Single( s => s.WorkSpaceTitle == "WorkSpace number 1").WorkSpaceId,
+                    WorkSpaceId = WorkSpaces.Single( s => s.WorkSpaceTitle == "Group1's workspace").WorkSpaceId,
                     UserId = Users.Single( s => s.UserName == "tranthuy").ID,
                     Status = 1,
                 },
                 new WorkSpaceMember
                 {
-                    WorkSpaceId = WorkSpaces.Single( s => s.WorkSpaceTitle == "WorkSpace number 1").WorkSpaceId,
+                    WorkSpaceId = WorkSpaces.Single( s => s.WorkSpaceTitle == "Group1's workspace").WorkSpaceId,
                     UserId = Users.Single( s => s.UserName == "peter").ID,
                     Status = 1,
                 },
                 new WorkSpaceMember
                 {
-                    WorkSpaceId = WorkSpaces.Single( s => s.WorkSpaceTitle == "WorkSpace number 1").WorkSpaceId,
+                    WorkSpaceId = WorkSpaces.Single( s => s.WorkSpaceTitle == "Group1's workspace").WorkSpaceId,
                     UserId = Users.Single( s => s.UserName == "tom").ID,
                     Status = 1,
                 },
                 new WorkSpaceMember
                 {
-                    WorkSpaceId = WorkSpaces.Single( s => s.WorkSpaceTitle == "WorkSpace number 2").WorkSpaceId,
-                    UserId = Users.Single( s => s.UserName == "ronaldo").ID,
+                    WorkSpaceId = WorkSpaces.Single( s => s.WorkSpaceTitle == "Group2's workspace").WorkSpaceId,
+                    UserId = Users.Single( s => s.UserName == "ronaldo2").ID,
+                    Status = 2,
+                },
+                new WorkSpaceMember
+                {
+                    WorkSpaceId = WorkSpaces.Single( s => s.WorkSpaceTitle == "Group3's workspace").WorkSpaceId,
+                    UserId = Users.Single( s => s.UserName == "ronaldo3").ID,
+                    Status = 1,
+                },
+                new WorkSpaceMember
+                {
+                    WorkSpaceId = WorkSpaces.Single( s => s.WorkSpaceTitle == "Group2's workspace").WorkSpaceId,
+                    UserId = Users.Single( s => s.UserName == "tranthuy2").ID,
+                    Status = 1,
+                },
+                new WorkSpaceMember
+                {
+                    WorkSpaceId = WorkSpaces.Single( s => s.WorkSpaceTitle == "Group3's workspace").WorkSpaceId,
+                    UserId = Users.Single( s => s.UserName == "peter2").ID,
+                    Status = 1,
+                },
+                new WorkSpaceMember
+                {
+                    WorkSpaceId = WorkSpaces.Single( s => s.WorkSpaceTitle == "Group3's workspace").WorkSpaceId,
+                    UserId = Users.Single( s => s.UserName == "tom2").ID,
+                    Status = 1,
+                },
+                new WorkSpaceMember
+                {
+                    WorkSpaceId = WorkSpaces.Single( s => s.WorkSpaceTitle == "Group4's workspace").WorkSpaceId,
+                    UserId = Users.Single( s => s.UserName == "ronaldo3").ID,
                     Status = 2,
                 }
             };

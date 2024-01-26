@@ -22,7 +22,7 @@ namespace TaskHub.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("ContosoUniversity.Models.User", b =>
+            modelBuilder.Entity("TaskHub.Models.User", b =>
                 {
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
@@ -267,7 +267,7 @@ namespace TaskHub.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ContosoUniversity.Models.User", "User")
+                    b.HasOne("TaskHub.Models.User", "User")
                         .WithMany("Comments")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -297,7 +297,7 @@ namespace TaskHub.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ContosoUniversity.Models.User", "User")
+                    b.HasOne("TaskHub.Models.User", "User")
                         .WithMany("TaskItems")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -310,7 +310,7 @@ namespace TaskHub.Migrations
 
             modelBuilder.Entity("TaskHub.Models.WorkSpace", b =>
                 {
-                    b.HasOne("ContosoUniversity.Models.User", "User")
+                    b.HasOne("TaskHub.Models.User", "User")
                         .WithMany("WorkSpaces")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -321,7 +321,7 @@ namespace TaskHub.Migrations
 
             modelBuilder.Entity("TaskHub.Models.WorkSpaceMember", b =>
                 {
-                    b.HasOne("ContosoUniversity.Models.User", "User")
+                    b.HasOne("TaskHub.Models.User", "User")
                         .WithMany("WorkSpaceMembers")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -338,7 +338,7 @@ namespace TaskHub.Migrations
                     b.Navigation("WorkSpace");
                 });
 
-            modelBuilder.Entity("ContosoUniversity.Models.User", b =>
+            modelBuilder.Entity("TaskHub.Models.User", b =>
                 {
                     b.Navigation("Comments");
 
