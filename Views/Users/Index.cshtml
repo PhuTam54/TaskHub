@@ -1,220 +1,237 @@
 ﻿@model TaskHub.Models.WorkSpaceViewModels.UserIndexData
 
 @{
-    ViewData["Title"] = "User";
+
+    ViewData["Title"] = "Admin | Users Table";
 }
 
-<h1>User</h1>
+@*
+//section("before_css")
+//    include("components.admin.embedded.table_head")
+*@
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>No.</th>
-            <th>UserName</th>
-            <th>Email</th>
-            <th>LastName</th>
-            <th>FirstMidName</th>
-            <th>WorkSpaces</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @{
-            var index = 0;
-        }
-        @foreach (var item in Model.Users) {
-            index++;
-            string selectedRow = "";
-            if (item.ID == (int?)ViewData["UserID"])
-            {
-                selectedRow = "table-success";
-            }
-            <tr class="@selectedRow">
-                <td>
-                    @index
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.UserName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Email)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.LastName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.FirstMidName)
-                </td>
-                <td>
-                    @foreach (var workspace in item.WorkSpaces)
-                    {
-                        @workspace.WorkSpaceTitle <br />
-                    }
-                </td>
-                <td>
-                    <a asp-action="Index" asp-route-id="@item.ID">Select</a> |
-                    <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.ID">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
-@if (Model.WorkSpaces != null)
-{
-    @if (Model.WorkSpaces.Count() > 0)
-    {
-        <h3>WorkSpaces created by Selected User</h3>
-        <table class="table">
-            <tr>
-                <th>No.</th>
-                <th>Title</th>
-                <th>Description</th>
-                <th colspan="2">Action</th>
-            </tr>
+<!-- Content Wrapper. Contains page content -->
+<div class="">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>Users Table</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="/">Home</a></li>
+                        <li class="breadcrumb-item active">Users Table</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+        <!-- /.container-fluid -->
+    </section>
 
-            @{
-                index = 0;
-            }
-            @foreach (var item in Model.WorkSpaces)
-            {
-                index++;
-                string selectedRow = "";
-                if (item.WorkSpaceId == (int?)ViewData["WorkSpaceIdForMember"] || item.WorkSpaceId == (int?)ViewData["WorkSpaceIdForDetails"])
-                {
-                    selectedRow = "table-success";
-                }
-                <tr class="@selectedRow">
-                    <td>
-                        @index
-                    </td>
-                    <td>
-                        @item.WorkSpaceTitle
-                    </td>
-                    <td>
-                        @item.WorkSpaceDescription
-                    </td>
-                    <td>
-                        @Html.ActionLink("Members", "Index", new { WorkSpaceIdForMember = item.WorkSpaceId })
-                    </td>
-                    <td>
-                        @Html.ActionLink("Boards/Lists/Tasks", "Index", new { WorkSpaceIdForDetails = item.WorkSpaceId })
-                    </td>
-                </tr>
-            }
+    <!-- Main content -->
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12">
 
-        </table>
-    }
-}
-@if (Model.WorkSpaceMembers != null)
-{
-    <h3>
-        Users Enrolled in Selected WorkSpace
-    </h3>
-    <table class="table">
-        <tr>
-            <th>No.</th>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Enrollment Date</th>
-        </tr>
-        @{
-            index = 0;
-        }
-        @foreach (var item in Model.WorkSpaceMembers)
-        {
-            index ++;
-            <tr>
-                <td>
-                    @* Hiển thị Index *@
-                    @index
-                </td>
-                <td>
-                    @item.User.FullName
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.User.Email)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.User.EnrollmentDate)
-                </td>
-            </tr>
-        }
-    </table>
-}
-
-@if (Model.Boards != null)
-{
-    <h3>
-        Boards in Selected WorkSpace
-    </h3>
-    <table class="table">
-        <tr>
-            <th>No.</th>
-            <th>Board Title</th>
-            <th colspan="3">Lists</th>
-        </tr>
-        @{
-            index = 0;
-        }
-        @foreach (var item in Model.Boards)
-        {
-            index++;
-            <tr>
-                <td>
-                    @* Hiển thị Index *@
-                    @index
-                </td>
-                <td>
-                    @item.BoardTitle
-                </td>
-                <td>
-                    <table class="table">
-                        <tr>
-                            <th>No.</th>
-                            <th>List Title</th>
-                            <th >Tasks</th>
-                        </tr>
-                        @{
-                            var indexForList = 0;
-                        }
-                        @foreach (var list in item.Lists)
-                        {
-                            indexForList++;
-                            <tr>
-                                <td>
-                                    @* Hiển thị Index *@
-                                    @indexForList
-                                </td>
-                                <td>
-                                    @list.ListTitle
-                                </td>
-                                <td>
-                                    <ul>
-                                    @foreach (var task in list.TaskItems)
-                                    {
-                                        <li>@task.Title - Deadline: @task.Deadline</li>
-                                        @if (task.Comments.Count() > 0 )
-                                        {
-                                            <span class="text-bold">Comments: </span>
-                                            <br>
-                                            @foreach (var cmt in task.Comments)
-                                            {
-                                                @cmt.CommentContent <br />
-                                            }
-                                        }
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="d-flex justify-content-between" style="margin-bottom: -2px">
+                                <a asp-action="Create" class="btn btn-success btn-md">
+                                    <i class="fas fa-plus">
+                                    </i>
+                                    Add new User
+                                </a>
+                                <a class="btn btn-danger btn-md" href="admin/user-trash">
+                                    <i class="fas fa-trash-alt">
+                                    </i>
+                                </a>
+                            </h3>
+                        </div>
+                        <!-- ./card-header -->
+                        <div class="card-body">
+                            <table id="example2" class="table table-bordered table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>No.</th>
+                                        <th>Avatar</th>
+                                        <th>Name</th>
+                                        <th>Email</th>
+                                        <th>WorkSpaces</th>
+                                        <th>Members</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @{
+                                        var index = 0;
                                     }
-                                    </ul>
-                                </td>
-                            </tr>
-                        }
-                    </table>
-                </td>
-            </tr>
-        }
-    </table>
-}
+                                    @foreach (var item in Model.Users)
+                                    {
+                                        index++;
+                                        string selectedRow = "";
+                                        if (item.ID == (int?)ViewData["UserID"])
+                                        {
+                                            selectedRow = "table-success";
+                                        }
+                                        <tr class="@selectedRow">
+                                            <td>@index</td>
+                                            <td class="">
+                                                <img src="~/test/icons/default-avatar.jpg" width="60" style="max-height: 100px; object-fit: cover" alt="img">
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.UserName)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Email)
+                                            </td>
+                                            <td>
+                                                @if (item.WorkSpaces.Count() > 0)
+                                                {
+                                                    <a asp-action="Index" asp-route-id="@item.ID">
+                                                        <!-- Trigger the modal with a button -->
+                                                        <a type="button" class="text text-info text-md" data-toggle="modal" data-target="#showWorkSpace-@item.ID">
+                                                            <i class="fa fa-eye"></i>
+                                                            <ul>
+                                                                @foreach (var workspace in item.WorkSpaces)
+                                                                {
+                                                                    <li>
+                                                                        @workspace.WorkSpaceTitle <br>
+                                                                    </li>
+
+                                                                }
+                                                            </ul>
+                                                        </a>
+                                                    </a>
+
+                                                    <!-- Modal -->
+                                                    <div id="showWorkSpace-@item.ID" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                                        <div class="modal-dialog modal-dialog-centered" role="document">
+
+                                                            <!-- Modal content-->
+                                                            <div class="modal-content" style="min-width: 700px; max-height: 600px">
+                                                                <div class="modal-header">
+                                                                    <h4 class="modal-title">WorkSpaces created by @item.FullName</h4>
+                                                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                                </div>
+                                                                <div class="modal-body overflow-auto">
+                                                                    <table class="table table-bordered table-striped">
+                                                                        @{
+                                                                            var indexInModel = 0;
+                                                                        }
+                                                                        <tr>
+                                                                            <th>No.</th>
+                                                                            <th>Title</th>
+                                                                            <th>Description</th>
+                                                                            <th colspan="2">Action</th>
+                                                                        </tr>
+
+
+                                                                        @foreach (var workSpace in item.WorkSpaces)
+                                                                        {
+                                                                            indexInModel++;
+                                                                            <tr>
+                                                                                <td>
+                                                                                    @indexInModel
+                                                                                </td>
+                                                                                <td>
+                                                                                    @workSpace.WorkSpaceTitle
+                                                                                </td>
+                                                                                <td>
+                                                                                    @workSpace.WorkSpaceDescription
+                                                                                </td>
+                                                                                <td>
+                                                                                    <a href="/WorkSpaces/Details/@workSpace.WorkSpaceId" class="btn btn-secondary btn-sm">
+                                                                                        <i class="fas fa-eye">
+                                                                                        </i>
+                                                                                        Details
+                                                                                    </a>
+                                                                                </td>
+                                                                            </tr>
+                                                                        }
+                                                                    </table>
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+                                                }
+                                            </td>
+                                            <td>
+                                                <ul>
+                                                    @foreach (var member in item.WorkSpaceMembers)
+                                                    {
+                                                        <li>
+                                                            @member.WorkSpace.WorkSpaceTitle <br>
+                                                        </li>
+
+                                                    }
+                                                </ul>
+                                            </td>
+                                            <td class="project-actions text-center">
+                                                @*@if($user->deleted_at != null)
+                                            <form action="admin/user-recover/{{ $user->id }}" method="get">
+                                            <button type="submit" class="btn btn-info btn-sm mb-2">
+                                            <i class="fas fa-redo-alt">
+                                            </i>
+                                            Recover
+                                            </button>
+                                            </form>
+                                            @else*@
+                                                <a asp-action="Details" asp-route-id="@item.ID" class="btn btn-secondary btn-sm">
+                                                    <i class="fas fa-eye">
+                                                    </i>
+                                                    Details
+                                                </a>
+                                                <a asp-action="Edit" asp-route-id="@item.ID" class="btn btn-info btn-sm">
+                                                    <i class="fas fa-pencil-alt">
+                                                    </i>
+                                                    Edit
+                                                </a>
+                                                <a asp-action="Delete" asp-route-id="@item.ID" class="btn">
+                                                    <button class="btn btn-danger btn-sm" style="margin-left: -12px" type="submit">
+                                                        <i class="fas fa-trash">
+                                                        </i>
+                                                        Delete
+                                                    </button>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <th>No.</th>
+                                        <th>Avatar</th>
+                                        <th>Name</th>
+                                        <th>Email</th>
+                                        <th>Workspaces</th>
+                                        <th>Members</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                        <!-- /.card-body -->
+                    </div>
+                    <!-- /.card -->
+                </div>
+                <!-- /.col -->
+            </div>
+            <!-- /.row -->
+        </div>
+        <!-- /.container-fluid -->
+    </section>
+    <!-- /.content -->
+</div>
+<!-- /.content-wrapper -->
+@*@endsection
+@section("after_js")
+    @include("components.admin.embedded.table_script")
+@endsection*@
+

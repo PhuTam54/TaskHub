@@ -1,9 +1,5 @@
 "use strict";
 
-console.log("╦╔═┌─┐┬─┐┌┬┐┌─┐");
-console.log("╠╩╗├─┤├┬┘ ││└─┐");
-console.log("╩ ╩┴ ┴┴└──┴┘└─┘");
-console.log("Alan | V1.5 2021")
 
 /* <=================================== Elements / Variables ===================================> */
 const e_mainContainer = document.getElementById('main-container');
@@ -35,7 +31,9 @@ const e_alerts = document.getElementById('alerts');
 const e_title = document.getElementById('title');
 
 // Auto save enabled as default
-let autoSaveInternalId = setInterval(function (){
+
+let autoSaveInternalId = setInterval(function () {
+
     saveData();
 }, 5000);
 
@@ -65,36 +63,21 @@ function currentBoard() {
         return [];
     }
 }
-document.addEventListener('DOMContentLoaded', function () {
-    var contentAddColumn = document.querySelector('.content-add-column');
-    contentAddColumn.style.display = 'none';
-});
-function toggleInputAndButton() {
-    var addCard = document.getElementById('add-card');
-    var contentAddColumn = document.querySelector('.content-add-column');
-    var addCardInput = document.getElementById('add-card-text');
 
-    if (addCard.style.display !== 'none') {
-        addCard.style.display = 'none';
-        contentAddColumn.style.display = 'block';
-        addCardInput.focus(); // Tự động focus vào ô input khi hiển thị
-    } else {
-        addCard.style.display = 'block';
-        contentAddColumn.style.display = 'none';
-    }
-}
 
 /* <=================================== Extensions ===================================> */
-Array.prototype.move = function(from, to) {
+Array.prototype.move = function (from, to) {
+
     /* Move an item from the array to a specific index of the array. */
 
     this.splice(to, 0, this.splice(from, 1)[0]);
 };
 
-Array.prototype.insert = function(index, item) {
+Array.prototype.insert = function (index, item) {
     /* Insert an item to a specific index of the array. */
 
-    this.splice( index, 0, item );
+    this.splice(index, 0, item);
+
 };
 
 /* <=================================== Utility Functions ===================================> */
@@ -156,14 +139,13 @@ function listBoards() {
 
 function renderBoard(board) {
     appData.currentBoard = appData.boards.indexOf(board);
-    if (!board || !board.name) {
-        // Nếu không có dữ liệu hoặc không có tên cho bảng, hiển thị nội dung trong phần logo
-        document.getElementById('title').innerText = "TaskHub";
-    } else {
-        document.title = 'TaskHub | ' + currentBoard().name;
-        e_title.innerText = currentBoard().name;
-        // Nếu có dữ liệu, tiêu đề sẽ được hiển thị bình thường
-    }
+
+    document.title = 'TaskHub | ' + currentBoard().name;
+    e_title.innerText = currentBoard().name;
+    //e_title.addEventListener('click'), allow editing board name
+    // To-Do: set theme
+    renderAllCards();
+
 }
 
 function renderAllCards() {
@@ -242,7 +224,9 @@ function addBoard() {
     if (appData.boards.length >= 512) return createAlert("Max limit for boards reached.")  // or if there are already too many boards
     e_addBoardText.value = '';
 
-    let _newBoard = new Board(_boardTitle, uniqueID(), {'theme': null});
+
+    let _newBoard = new Board(_boardTitle, uniqueID(), { 'theme': null });
+
     appData.boards.push(_newBoard);
     listBoards();
 }
@@ -250,7 +234,9 @@ function addBoard() {
 /* <=================================== Classes ===================================> */
 class Item {
 
-    constructor(title, description=null, id, parentCardId) {
+
+    constructor(title, description = null, id, parentCardId) {
+
         this.title = title;
         this.description = description;  // A field for a future version, perhaps v2
         this.id = id;
@@ -262,7 +248,9 @@ class Item {
         return document.getElementById(this.parentCardId);
     }
 
-    check(chk=true) {
+
+    check(chk = true) {
+
         this.isDone = chk;
         if (chk) {
 
@@ -323,12 +311,12 @@ class Card {
         for (let _item of this.items) {
             let _newItem = document.createElement('li');
             _newItem.id = _item.id;
-            
+
             // Item Title
             let _newItemTitle = document.createElement('p');
             _newItemTitle.innerText = _item.title;
             _newItemTitle.classList.add('item-title', 'text-fix', 'unselectable');
-            
+
             // Housing for the edit and delete buttons.
             let _newItemButtons = document.createElement('span');
 
@@ -337,7 +325,7 @@ class Card {
             _newItemEditButton.ariaHidden = true;
             _newItemEditButton.classList.add('fa', 'fa-pencil');
             _newItemEditButton.addEventListener('click', () => {
-                
+
                 // Card item editing functionality.
                 let _input = document.createElement('textarea');
                 _input.value = _newItemTitle.textContent;
@@ -391,7 +379,9 @@ class Card {
         //    <ul>
         //        <li><p>{this.items[0]}</p> <span></span>
         //        {more_items...}
-        //    </ul>  
+
+        //    </ul>
+
         //  </div>
 
         // This was somewhat of a bad idea...
@@ -484,7 +474,9 @@ class Card {
 
 class Board {
 
-    constructor(name, id, settings, identifier=0) {
+
+    constructor(name, id, settings, identifier = 0) {
+
         this.name = name;
         this.id = id;
         this.settings = settings;
@@ -500,10 +492,11 @@ class Board {
     addCard() {
         let _cardTitle = e_addCardText.value;
         e_addCardText.value = '';
-    
+
+
         // If the user pressed the button without typing any name, we'll default to "Untitled Card {cards length +1}"
         if (!_cardTitle) _cardTitle = `Untitled Card ${this.cards.length + 1}`;
-    
+
         let _card = new Card(_cardTitle, this.uniqueID(), this.id);
         this.cards.push(_card);
 
@@ -561,7 +554,7 @@ const cardDrag_stopDragging = (e) => {
         let _hoverCardObject = getCardFromElement(_hoverCard);
         // Get the object from the item element the mouse is holding.
         let _heldItemObject = getItemFromElement(cardDrag_mouseDownOn);
-        
+
         if (_hoverCard === _heldItemObject.getParentCard()) {
             // If the card the mouse is over is the same as the parent card of the item being held.
             // We only have to deal with vertical drag and drop.
@@ -572,7 +565,9 @@ const cardDrag_stopDragging = (e) => {
 
                 if (_hoverItem !== cardDrag_mouseDownOn) {
                     // As long as the mouse isn't over the item being dragged.
-                    // NOTE01: 
+
+                    // NOTE01:
+
                     // This check is in place because there is a chance that the '_hoverItem' ends up being the item being held.
                     // This hasn't actually happened to me yet but I've sort of emulated it, so I know that it could happen under certain circumstances.
                     // I haven't around to fixing this yet primarily because it is extremely rare, and doesn't affect the functioning of the app.
@@ -638,7 +633,9 @@ const cardDrag_stopDragging = (e) => {
 // Adding the event listeners.
 // NOTE03: It would be a better idea to make a single mouseMove/mouseLeave/mouseUp function
 // to handle both the drag scroll and card item dragging.
-// It'll save unnecessary processing + less event listeners. 
+
+// It'll save unnecessary processing + less event listeners.
+
 e_mainContainer.addEventListener('mousemove', cardDrag_update);
 e_mainContainer.addEventListener('mouseleave', cardDrag_stopDragging, false);
 window.addEventListener('mouseup', cardDrag_stopDragging, false);
@@ -662,7 +659,9 @@ const scroll_stopDragging = (e) => {
 
 const scroll_update = (e) => {
     e.preventDefault();
-    if(!scroll_mouseDown || cardDrag_mouseDown) return;
+
+    if (!scroll_mouseDown || cardDrag_mouseDown) return;
+
 
     let _scroll = (e.pageX - e_mainContainer.offsetLeft) - scroll_startX;
     e_mainContainer.scrollLeft = scroll_scrollLeft - _scroll;
@@ -719,7 +718,9 @@ const cardContextMenu_deleteCard = () => {
 
         // Remove the card from the cards list based on its index position.
         currentCards().splice(currentCards().indexOf(_currentCardObject), 1);
-        cardContextMenu_hide({target:{offsetParent:'n/a'}}); // this is really stupid but it works, LoL
+
+        cardContextMenu_hide({ target: { offsetParent: 'n/a' } }); // this is really stupid but it works, LoL
+
 
         renderCard(_currentCardObject.id);
     });
@@ -745,15 +746,61 @@ e_cardContextMenuDuplicate.addEventListener('click', cardContextMenu_duplicateCa
 
 /* <=================================== Persistent Data Storage ===================================> */
 function saveData() {
-    window.localStorage.setItem('kards-appData', JSON.stringify(appData));
+
+    window.localStorage.setItem('taskHub-appData', JSON.stringify(appData));
 }
 
 function getDataFromLocalStorage() {
-    return window.localStorage.getItem('kards-appData');
+    // Ví dụ cấu trúc dữ liệu JSON
+    let dataFromDatabase = {
+        settings: { theme: null },
+        currentBoard: 1,
+        identifier: 123,
+        boards: [
+            {
+                name: "TaskHub",
+                id: "b1",
+                settings: { /* Các cài đặt của Board 1 */ },
+                identifier: 456,
+                cards: [
+                    {
+                        name: "Todo",
+                        id: "c1",
+                        items: [
+                            { title: "Task 1", description: "Description 1", id: "i1" },
+                            { title: "Task 2", description: "Description 2", id: "i2" }
+                        ]
+                    },
+                    {
+                        name: "Done",
+                        id: "c2",
+                        items: [
+                            { title: "Task 3", description: "Description 3", id: "i3" },
+                            { title: "Task 4", description: "Description 4", id: "i4" }
+                        ]
+                    },
+                    // ... Các cards khác của Board 1
+                ]
+            },
+            {
+                name: "TaskHub",
+                id: "b2",
+                cards: []
+                // ... Các cài đặt và cards của Board 2
+            },
+            // ... Các boards khác
+        ]
+    };
+
+    // Lưu dữ liệu vào localStorage
+    window.localStorage.setItem('taskHub-appData', JSON.stringify(dataFromDatabase));
+
+    return window.localStorage.getItem('taskHub-appData');
 }
 
 function loadData() {
-    let _data = window.localStorage.getItem('kards-appData');
+    let _data = getDataFromLocalStorage()
+
     if (_data) {
         let _appData = JSON.parse(_data);
 
@@ -762,7 +809,7 @@ function loadData() {
         appData.settings = _appData.settings;
         appData.currentBoard = _appData.currentBoard >= 0 ? appData.currentBoard : 0;
         appData.identifier = _appData.identifier !== null ? appData.identifier : 0;
-        
+
         // Fill the data with boards.
         for (let _board of _appData.boards) {
             let _newBoard = new Board(_board.name, _board.id, _board.settings, _board.identifier);
@@ -788,10 +835,15 @@ function loadData() {
         renderBoard(appData.boards[appData.currentBoard]);
     } else {
         appData.currentBoard = 0;
-        let _defaultBoard = new Board("Untitled Board", 'b0', {'theme': null});
+
+        let _defaultBoard = new Board("TaskHub", 'b0', { 'theme': null });
         appData.boards.push(_defaultBoard);
+        alert("Else")
     }
+    console.log("Load done")
     listBoards();
+
+
 }
 
 function clearData() {
@@ -813,9 +865,11 @@ e_addBoardText.addEventListener('keyup', (e) => {
 
 e_addBoardButton.addEventListener('click', addBoard);
 
-e_autoSaveButton.addEventListener('change',  function (event) {
+
+e_autoSaveButton.addEventListener('change', function (event) {
     if (this.checked) {
-        autoSaveInternalId = setInterval(function (){
+        autoSaveInternalId = setInterval(function () {
+
             saveData();
         }, 5000);
     } else {
@@ -823,7 +877,9 @@ e_autoSaveButton.addEventListener('change',  function (event) {
     }
 })
 //e_saveButton.addEventListener('click', saveData);
-e_saveButton.addEventListener('click', () => {saveData(); createAlert("Data successfully saved.")});
+
+e_saveButton.addEventListener('click', () => { saveData(); createAlert("Data successfully saved.") });
+
 
 e_deleteButton.addEventListener('click', () => {
     createConfirmDialog('Are you sure to delete this board?', () => {
@@ -836,7 +892,9 @@ e_deleteButton.addEventListener('click', () => {
         }
 
         if (appData.boards.length === 0) {
-            let _defaultBoard = new Board("Untitled Board", 'b0', {'theme': null});
+
+            let _defaultBoard = new Board("Untitled Board", 'b0', { 'theme': null });
+
             appData.boards.push(_defaultBoard);
             appData.currentBoard = 0;
         }
@@ -886,10 +944,12 @@ function createAlert(text) {
     _e.appendChild(_p);
 
     e_alerts.appendChild(_e);
-    setTimeout(function(){
+
+    setTimeout(function () {
         _e.classList.add('animate-hidden');
     }, 3500);
-    setTimeout(function(){
+    setTimeout(function () {
+
         _e.parentNode.removeChild(_e);
     }, 4500);
 }
@@ -904,7 +964,9 @@ function listenClickOutside(event) {
 function createConfirmDialog(text, onConfirm) {
 
     // Hide any context menus that might be open.
-    cardContextMenu_hide({target:{offsetParent:'n/a'}});
+
+    cardContextMenu_hide({ target: { offsetParent: 'n/a' } });
+
 
     var _modal = document.getElementById("confirm-dialog");
     var _span = document.getElementById("confirm-dialog-close");
@@ -915,10 +977,12 @@ function createConfirmDialog(text, onConfirm) {
     _modal.style.display = "block";
     _dialogText.textContent = text;
 
-    _span.onclick = function() {
+
+    _span.onclick = function () {
         _modal.style.display = "none";
     }
-    
+
+
     _cancelButton.onclick = () => {
         _modal.style.display = "none";
     }

@@ -1,58 +1,85 @@
-﻿@model ContosoUniversity.Models.User
+
+﻿@model TaskHub.Models.User
+
 
 @{
     ViewData["Title"] = "Create";
 }
 
-<h1>Create</h1>
 
-<h4>User</h4>
-<hr />
+<h4 class="p-3">User</h4>
 <div class="row">
-    <div class="col-md-4">
+    <!-- Main content -->
+    <section class="content">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="UserName" class="control-label"></label>
-                <input asp-for="UserName" class="form-control" />
-                <span asp-validation-for="UserName" class="text-danger"></span>
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card card-success">
+                            <div class="card-header">
+                                <h3 class="card-title">Add new User</h3>
+                            </div>
+                            <div class="card-body d-flex">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label asp-for="UserName" class="control-label"></label>
+                                        <input asp-for="UserName" class="form-control" />
+                                        <span asp-validation-for="UserName" class="text-danger"></span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label asp-for="Email" class="control-label"></label>
+                                        <input asp-for="Email" class="form-control" />
+                                        <span asp-validation-for="Email" class="text-danger"></span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label asp-for="Password" class="control-label"></label>
+                                        <input asp-for="Password" class="form-control" />
+                                        <span asp-validation-for="Password" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label asp-for="LastName" class="control-label"></label>
+                                        <input asp-for="LastName" class="form-control" />
+                                        <span asp-validation-for="LastName" class="text-danger"></span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label asp-for="FirstMidName" class="control-label"></label>
+                                        <input asp-for="FirstMidName" class="form-control" />
+                                        <span asp-validation-for="FirstMidName" class="text-danger"></span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label asp-for="EnrollmentDate" class="control-label"></label>
+                                        <input asp-for="EnrollmentDate" class="form-control" />
+                                        <span asp-validation-for="EnrollmentDate" class="text-danger"></span>
+                                    </div>
+                                    <!-- /.form group -->
+                                </div>
+                            </div>
+
+                            <!-- /.card-body -->
+                        </div>
+                        <!-- /.card -->
+                    </div>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="Email" class="control-label"></label>
-                <input asp-for="Email" class="form-control" />
-                <span asp-validation-for="Email" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Password" class="control-label"></label>
-                <input asp-for="Password" class="form-control" />
-                <span asp-validation-for="Password" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="LastName" class="control-label"></label>
-                <input asp-for="LastName" class="form-control" />
-                <span asp-validation-for="LastName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="FirstMidName" class="control-label"></label>
-                <input asp-for="FirstMidName" class="form-control" />
-                <span asp-validation-for="FirstMidName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="EnrollmentDate" class="control-label"></label>
-                <input asp-for="EnrollmentDate" class="form-control" />
-                <span asp-validation-for="EnrollmentDate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-12">
+                        <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+                        <input type="submit" value="Create" class="btn btn-success float-right" />
+                    </div>
+                </div>
             </div>
         </form>
-    </div>
-</div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
+    </section>
+    <!-- /.content -->
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
 }

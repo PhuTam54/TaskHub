@@ -2,11 +2,17 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+
+using TaskHub.Models;
+
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using TaskHub.Data;
 using TaskHub.Models;
+
+using TaskHub.Models.WorkSpaceViewModels;
+
 
 namespace TaskHub.Controllers
 {
@@ -22,29 +28,44 @@ namespace TaskHub.Controllers
         // GET: WorkSpaces
         public async Task<IActionResult> Index()
         {
-            var workSpaces = _context.WorkSpace
-                .Include(w => w.User)
-                .AsNoTracking();
-            return View(await workSpaces.ToListAsync());
+
+            var viewModel = new WorkSpaceIndexData();
+            viewModel.WorkSpaces = await _context.WorkSpace
+                .Include(i => i.User)
+                .Include(i => i.WorkSpaceMembers)
+                    .ThenInclude(i => i.User)
+                .Include(i => i.Boards)
+                    .ThenInclude(i => i.Lists)
+                        .ThenInclude(i => i.TaskItems)
+                            .ThenInclude(i => i.Comments)
+                .AsNoTracking()
+                .OrderBy(i => i.WorkSpaceId)
+                .ToListAsync();
+
+            return View(viewModel);
+
         }
 
         // GET: WorkSpaces/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || _context.WorkSpace == null)
-            {
-                return NotFound();
-            }
 
-            var workSpace = await _context.WorkSpace
-                .Include(w => w.User)
-                .FirstOrDefaultAsync(m => m.WorkSpaceId == id);
-            if (workSpace == null)
-            {
-                return NotFound();
-            }
+            ViewBag.WorkSpaceId = id;
+            var viewModel = new WorkSpaceIndexData();
+            viewModel.WorkSpaces = await _context.WorkSpace
+                .Include(i => i.User)
+                .Include(i => i.WorkSpaceMembers)
+                    .ThenInclude(i => i.User)
+                .Include(i => i.Boards)
+                    .ThenInclude(i => i.Lists)
+                        .ThenInclude(i => i.TaskItems)
+                            .ThenInclude(i => i.Comments)
+                .AsNoTracking()
+                .OrderBy(i => i.WorkSpaceId)
+                .ToListAsync();
 
-            return View(workSpace);
+            return View(viewModel);
+
         }
 
         // GET: WorkSpaces/Create
@@ -127,20 +148,23 @@ namespace TaskHub.Controllers
         // GET: WorkSpaces/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.WorkSpace == null)
-            {
-                return NotFound();
-            }
 
-            var workSpace = await _context.WorkSpace
-                .Include(w => w.User)
-                .FirstOrDefaultAsync(m => m.WorkSpaceId == id);
-            if (workSpace == null)
-            {
-                return NotFound();
-            }
+            ViewBag.WorkSpaceId = id;
+            var viewModel = new WorkSpaceIndexData();
+            viewModel.WorkSpaces = await _context.WorkSpace
+                .Include(i => i.User)
+                .Include(i => i.WorkSpaceMembers)
+                    .ThenInclude(i => i.User)
+                .Include(i => i.Boards)
+                    .ThenInclude(i => i.Lists)
+                        .ThenInclude(i => i.TaskItems)
+                            .ThenInclude(i => i.Comments)
+                .AsNoTracking()
+                .OrderBy(i => i.WorkSpaceId)
+                .ToListAsync();
 
-            return View(workSpace);
+            return View(viewModel);
+
         }
 
         // POST: WorkSpaces/Delete/5

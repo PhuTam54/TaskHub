@@ -4,46 +4,67 @@
     ViewData["Title"] = "Edit";
 }
 
-<h1>Edit</h1>
-
-<h4>WorkSpace</h4>
-<hr />
+<h4 class="p-3">WorkSpace</h4>
 <div class="row">
-    <div class="col-md-4">
+    <!-- Main content -->
+    <section class="content">
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="WorkSpaceId" />
-            <div class="form-group">
-                <label asp-for="WorkSpaceTitle" class="control-label"></label>
-                <input asp-for="WorkSpaceTitle" class="form-control" />
-                <span asp-validation-for="WorkSpaceTitle" class="text-danger"></span>
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card card-info">
+                            <div class="card-header">
+                                <h3 class="card-title">Edit a WorkSpace</h3>
+                            </div>
+                            <div class="card-body d-flex">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label asp-for="WorkSpaceTitle" class="control-label"></label>
+                                        <input asp-for="WorkSpaceTitle" class="form-control" />
+                                        <span asp-validation-for="WorkSpaceTitle" class="text-danger"></span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label asp-for="WorkSpaceDescription" class="control-label"></label>
+                                        <input asp-for="WorkSpaceDescription" class="form-control" />
+                                        <span asp-validation-for="WorkSpaceDescription" class="text-danger"></span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label asp-for="Status" class="control-label"></label>
+                                        <input asp-for="Status" class="form-control" />
+                                        <span asp-validation-for="Status" class="text-danger"></span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label asp-for="UserId" class="control-label"></label>
+                                        <select asp-for="UserId" class="form-control" asp-items="ViewBag.UserId"></select>
+                                    </div>
+                                    <!-- /.form group -->
+                                </div>
+
+                                <!-- /.card-body -->
+                            </div>
+                            <!-- /.card -->
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="WorkSpaceDescription" class="control-label"></label>
-                <input asp-for="WorkSpaceDescription" class="form-control" />
-                <span asp-validation-for="WorkSpaceDescription" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Status" class="control-label"></label>
-                <input asp-for="Status" class="form-control" />
-                <span asp-validation-for="Status" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="UserId" class="control-label"></label>
-                <select asp-for="UserId" class="form-control" asp-items="ViewBag.UserId"></select>
-                <span asp-validation-for="UserId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-12">
+                        <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+                        <input type="submit" value="Edit" class="btn btn-info float-right" />
+                    </div>
+                </div>
             </div>
         </form>
-    </div>
-</div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
+    </section>
+    <!-- /.content -->
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
 }

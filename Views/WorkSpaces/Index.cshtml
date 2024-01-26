@@ -1,59 +1,271 @@
-﻿@model IEnumerable<TaskHub.Models.WorkSpace>
+
+﻿@model TaskHub.Models.WorkSpaceViewModels.WorkSpaceIndexData
 
 @{
-    ViewData["Title"] = "WorkSpace";
+    ViewData["Title"] = "WorkSpaces Table";
 }
 
-<h1>WorkSpace</h1>
+<!-- Content Wrapper. Contains page content -->
+<div class="">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>WorkSpaces Table</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="/">Home</a></li>
+                        <li class="breadcrumb-item active">WorkSpaces Table</li>
+                    </ol>
+                </div>
+            </div>
+        </div><!-- /.container-fluid -->
+    </section>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.WorkSpaceId)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.WorkSpaceTitle)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.WorkSpaceDescription)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Status)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.User)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.WorkSpaceId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.WorkSpaceTitle)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.WorkSpaceDescription)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Status)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.User.UserName)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.WorkSpaceId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.WorkSpaceId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.WorkSpaceId">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+    @*
+    //section("before_css")
+    //    include("components.admin.embedded.table_head")
+    *@
+    @*!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    //include("components.admin.tables.user.content_header")
+    <!-- /.content-header -->
+    if(session()->has("add-success"))
+    <div class="alert alert-success" role="alert">
+    {{ session("add-success") }}
+    </div>
+    elseif(session()->has("edit-success"))
+    <div class="alert alert-info" role="alert">
+    {{ session("edit-success") }}
+    </div>
+    elseif(session()->has("delete-success"))
+    <div class="alert alert-danger" role="alert">
+    {{ session("delete-success") }}
+    </div>
+    endif*@
+    <!-- Main content -->
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12">
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="d-flex justify-content-between" style="margin-bottom: -2px">
+                                <a asp-action="Create" class="btn btn-success btn-md">
+                                    <i class="fas fa-plus">
+                                    </i>
+                                    Add new WorkSpace
+                                </a>
+                                <a class="btn btn-danger btn-md" href="admin/user-trash">
+                                    <i class="fas fa-trash-alt">
+                                    </i>
+                                </a>
+                            </h3>
+                        </div>
+                        <!-- ./card-header -->
+                        <div class="card-body">
+                            <table id="example2" class="table table-bordered table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>No.</th>
+                                        <th>Title</th>
+                                        <th>Members</th>
+                                        <th>Boards</th>
+                                        <th>Owner</th>
+                                        <th>Status</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @{
+                                        var index = 0;
+                                    }
+                                    @foreach (var item in Model.WorkSpaces)
+                                    {
+                                        index++;
+                                        <tr>
+                                            <td>
+                                                @index
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.WorkSpaceTitle)
+                                            </td>
+                                            <td>
+                                                <ul>
+                                                @foreach (var member in item.WorkSpaceMembers)
+                                                {
+                                                    <li>@member.User.FullName <br /></li>
+                                                }
+                                                </ul>
+                                            </td>
+                                            <td>
+                                                @if (item.Boards.Count() > 0)
+                                                {
+                                                    <a asp-action="Index" asp-route-id="@item.WorkSpaceId">
+                                                        <!-- Trigger the modal with a button -->
+                                                        <a type="button" class="text text-info text-md" data-toggle="modal" data-target="#showWorkSpace-@item.WorkSpaceId">
+                                                            <i class="fa fa-eye"></i>
+                                                            <ul>
+                                                                @foreach (var board in item.Boards)
+                                                                {
+                                                                    <li>
+                                                                        @board.BoardTitle <br>
+                                                                    </li>
+
+                                                                }
+                                                            </ul>
+                                                        </a>
+                                                    </a>
+
+                                                    <!-- Modal -->
+                                                    <div id="showWorkSpace-@item.WorkSpaceId" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                                        <div class="modal-dialog modal-dialog-centered" role="document">
+
+                                                            <!-- Modal content-->
+                                                            <div class="modal-content" style="min-width: 700px; max-height: 600px">
+                                                                <div class="modal-header">
+                                                                    <h4 class="modal-title">Boards in @item.WorkSpaceTitle</h4>
+                                                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                                </div>
+                                                                <div class="modal-body overflow-auto">
+                                                                    <table class="table table-bordered">
+                                                                        <tr>
+                                                                            <th>No.</th>
+                                                                            <th>Board Title</th>
+                                                                            <th colspan="3">Lists</th>
+                                                                        </tr>
+                                                                        @{
+                                                                            var indexInModel = 0;
+                                                                        }
+                                                                        @foreach (var board in item.Boards)
+                                                                        {
+                                                                            indexInModel++;
+                                                                            <tr>
+                                                                                <td>
+                                                                                    @indexInModel
+                                                                                </td>
+                                                                                <td>
+                                                                                    @board.BoardTitle
+                                                                                </td>
+                                                                                <td>
+                                                                                    @if (board.Lists.Count() > 0)
+                                                                                    {
+                                                                                        <table class="table">
+                                                                                            <tr>
+                                                                                                <th>No.</th>
+                                                                                                <th>List Title</th>
+                                                                                                <th>Tasks</th>
+                                                                                            </tr>
+                                                                                            @{
+                                                                                                var indexForList = 0;
+                                                                                            }
+                                                                                            @foreach (var list in board.Lists)
+                                                                                            {
+                                                                                                indexForList++;
+                                                                                                <tr>
+                                                                                                    <td>
+                                                                                                        @* Hiển thị Index *@
+                                                                                                        @indexForList
+                                                                                                    </td>
+                                                                                                    <td>
+                                                                                                        @list.ListTitle
+                                                                                                    </td>
+                                                                                                    <td>
+                                                                                                        <ul>
+                                                                                                            @foreach (var task in list.TaskItems)
+                                                                                                            {
+                                                                                                                <li>@task.Title</li>
+                                                                                                                @if (task.Comments.Count() > 0)
+                                                                                                                {
+                                                                                                                    <span class="text-bold">Comments: </span>
+                                                                                                                    <br>
+                                                                                                                    @foreach (var cmt in task.Comments)
+                                                                                                                    {
+                                                                                                                        @cmt.CommentContent
+                                                                                                                        <br />
+                                                                                                                    }
+                                                                                                                }
+                                                                                                            }
+                                                                                                        </ul>
+                                                                                                    </td>
+                                                                                                </tr>
+                                                                                            }
+                                                                                        </table>
+                                                                                    }
+                                                                                </td>
+                                                                            </tr>
+                                                                        }
+                                                                    </table>
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+                                                }
+                                            </td>
+                                            <td>
+                                                @item.User.FullName
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Status)
+                                            </td>
+                                            <td>
+                                                <a asp-action="Details" asp-route-id="@item.WorkSpaceId" class="btn btn-secondary btn-sm">
+                                                    <i class="fas fa-eye">
+                                                    </i>
+                                                    Details
+                                                </a>
+                                                <a asp-action="Edit" asp-route-id="@item.WorkSpaceId" class="btn btn-info btn-sm">
+                                                    <i class="fas fa-pencil-alt">
+                                                    </i>
+                                                    Edit
+                                                </a>
+                                                <a asp-action="Delete" asp-route-id="@item.WorkSpaceId" class="btn">
+                                                    <button class="btn btn-danger btn-sm" style="margin-left: -12px" type="submit">
+                                                        <i class="fas fa-trash">
+                                                        </i>
+                                                        Delete
+                                                    </button>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <th>No.</th>
+                                        <th>Title</th>
+                                        <th>Members</th>
+                                        <th>Boards</th>
+                                        <th>Owner</th>
+                                        <th>Status</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                        <!-- /.card-body -->
+                    </div>
+                    <!-- /.card -->
+                </div>
+                <!-- /.col -->
+            </div>
+            <!-- /.row -->
+        </div>
+        <!-- /.container-fluid -->
+    </section>
+    <!-- /.content -->
+</div>
+<!-- /.content-wrapper -->
+@*@endsection
+@section("after_js")
+    @include("components.admin.embedded.table_script")
+@endsection*@
+

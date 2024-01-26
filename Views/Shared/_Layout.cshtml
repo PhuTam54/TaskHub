@@ -1,28 +1,30 @@
 ﻿
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <base href="/">
 
-        <link rel="apple-touch-icon" sizes="180x180" href="~/test/icons/apple-touch-icon.png">
-        <link rel="icon" type="image/png" sizes="32x32" href="~/test/icons/favicon-32x32.png">
-        <link rel="icon" type="image/png" sizes="16x16" href="~/test/icons/favicon-16x16.png">
-        <link rel="manifest" href="icons/site.webmanifest">
-        <link rel="mask-icon" href="~/test/icons/safari-pinned-tab.svg" color="#5bbad5">
-        <link rel="shortcut icon" href="~/test/icons/favicon.ico">
-        <meta name="apple-mobile-web-app-title" content="TaskHub">
-        <meta name="application-name" content="TaskHub">
-        <meta name="msapplication-TileColor" content="#2b5797">
-        <meta name="msapplication-config" content="~/test/icons/browserconfig.xml">
-        <meta name="theme-color" content="#ffffff">
-        
-        <title>@ViewData["Title"] - TaskHub</title>
-        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-        <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-        <link rel="stylesheet" href="~/TaskHub.styles.css" asp-append-version="true" />
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <base href="/">
+
+    <link rel="apple-touch-icon" sizes="180x180" href="~/test/icons/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="~/test/icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="~/test/icons/favicon-16x16.png">
+
+    <link rel="mask-icon" href="~/test/icons/safari-pinned-tab.svg" color="#5bbad5">
+    <link rel="shortcut icon" href="~/test/icons/favicon.ico">
+    <meta name="apple-mobile-web-app-title" content="TaskHub">
+    <meta name="application-name" content="TaskHub">
+    <meta name="msapplication-TileColor" content="#2b5797">
+    <meta name="msapplication-config" content="~/test/icons/browserconfig.xml">
+    <meta name="theme-color" content="#ffffff">
+
+    <title>@ViewData["Title"] - TaskHub</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/TaskHub.styles.css" asp-append-version="true" />
+
 
     <!-- Google Font: Source Sans Pro -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -47,10 +49,15 @@
     <!-- Theme style -->
     <link rel="stylesheet" href="~/css/admin-css/dist/adminlte.min.css">
 
-    <link rel="stylesheet" href="~/test/css/main.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha512-SfTiTlX6kk+qitfevl/7LibUOeJWlt9rbyDn92a1DqWOw9vWG2MFoays0sgObmWazO5BQPiFucnnEAjpAB+/Sw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    </head>
+    @*Admin table *@
+    <!-- DataTables -->
+    <link rel="stylesheet" href="~/css/admin-css/plugins/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="~/css/admin-css/plugins/responsive.bootstrap4.min.css">
+    <link rel="stylesheet" href="~/css/admin-css/plugins/buttons.bootstrap4.min.css">
 
+</head>
+
+<body>
     <body class="hold-transition sidebar-mini layout-fixed">
         <div class="wrapper">
             <!-- Preloader -->
@@ -101,6 +108,7 @@
 
         
             <!-- /.navbar -->
+
         <!-- Main Sidebar Container -->
         <aside class="main-sidebar sidebar-dark-primary elevation-4">
             <!-- Brand Logo -->
@@ -123,79 +131,101 @@
                     </div>
                 </div>
 
-                <!-- SidebarSearch Form -->
-                <div class="form-inline">
-                    <div class="input-group" data-widget="sidebar-search">
-                        <input class="form-control form-control-sidebar" type="search" placeholder="Search" aria-label="Search">
-                        <div class="input-group-append">
-                            <button class="btn btn-sidebar">
-                                <i class="fas fa-search fa-fw"></i>
-                            </button>
+
+            <div class="content-wrapper">
+                @RenderBody()
+            </div>
+
+            <!-- Main Sidebar Container -->
+            <aside class="main-sidebar sidebar-dark-primary elevation-4">
+                <!-- Brand Logo -->
+                <a href="/TaskItems" class="brand-link navbar-brand d-flex align-items-center px-4 px-lg-5" style="margin-right: -8px">
+                    <h3 class="" style="color: #c2c7d0; margin: 0 0 0 -30px">
+                        <img class="rounded-3" style="width: 55px;" src="~/test/icons/favicon.ico" alt="" />
+                        </i>TaskHub
+                    </h3>
+                </a>
+
+                <!-- Sidebar -->
+                <div class="sidebar">
+                    <!-- Sidebar user panel (optional) -->
+                    <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+                        <div class="image">
+                            <img src="~/test/icons/default-avatar.jpg" style="width: 40px;" class="img-circle elevation-2" alt="User Image">
+                        </div>
+                        <div class="info">
+                            <a href="admin/admin-dashboard" class="d-block">Phu Tam</a>
                         </div>
                     </div>
+
+
+                    <!-- SidebarSearch Form -->
+                    <div class="form-inline">
+                        <div class="input-group" data-widget="sidebar-search">
+                            <input class="form-control form-control-sidebar" type="search" placeholder="Search" aria-label="Search">
+                            <div class="input-group-append">
+                                <button class="btn btn-sidebar">
+                                    <i class="fas fa-search fa-fw"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Sidebar Menu -->
+                    <nav class="mt-2">
+                        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+                            <!-- Add icons to the links using the .nav-icon class
+                                    with font-awesome or any other icon font library -->
+                            <li class="nav-item menu-ope {{ request()->is('admin/admin-dashboard') ? 'menu-open' : '' }}">
+                                <a href="/Dashboard"
+                                    class="nav-link active
+                                    {{request()->
+                                    is('admin/admin-dashboard') ? 'active' : '' }}"
+                                    >
+                                    <i class="fa fa-chart-bar nav-icon"></i>
+                                    <p>My Dashboard</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="/WorkSpaces" class="nav-link {{request()->is('admin/admin-result') ? 'active' : '' }}">
+                                    <i class="fa fa-layer-group nav-icon"></i>
+                                    <p>WorkSpaces</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="/Users" class="nav-link {{request()->is('admin/admin-result') ? 'active' : '' }}">
+                                    <i class="fa fa-users nav-icon"></i>
+                                    <p>Users</p>
+                                </a>
+                            </li>
+
+                            <li class="nav-header text-center" style="margin-left: -10px"><br><br><br><br>Phu Tam 54</li>
+                        </ul>
+                    </nav>
+                    <!-- /.sidebar-menu -->
                 </div>
+                <!-- /.sidebar -->
+            </aside>
 
-                <!-- Sidebar Menu -->
-                <nav class="mt-2">
-                    <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-                        <!-- Add icons to the links using the .nav-icon class
-                             with font-awesome or any other icon font library -->
-                        <li class="nav-item menu-ope {{ request()->is('admin/admin-dashboard') ? 'menu-open' : '' }}">
-                            <a href="/TaskItems"
-                               class="nav-link active
-                               {{request()->
-                                is('admin/admin-dashboard') ? 'active' : '' }}"
-                                >
-                                <i class="fa fa-chart-bar nav-icon"></i>
-                                <p>My Workspace</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a id="sidebar-button" class="nav-link {{request()->is('admin/admin-result') ? 'active' : '' }}">
-                                <i class="fa fa-clipboard nav-icon"></i>
-                                <p>Boards</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="/Users" class="nav-link {{request()->is('admin/admin-result') ? 'active' : '' }}">
-                                <i class="fa fa-user nav-icon"></i>
-                                <p>Users</p>
-                            </a>
-                        </li>
-                       
-                        <li class="nav-header text-center" style="margin-left: -10px"><br><br><br><br>Phu Tam 54</li>
-                    </ul>
-                </nav>
-                <!-- /.sidebar-menu -->
-            </div>
-            <!-- /.sidebar -->
-        </aside>
+            <!-- <footer -->
+            <footer class="main-footer">
+                <strong>Copyright &copy; 2014-2021 <a href="https://adminlte.io">AdminLTE.io</a>.</strong>
+                All rights reserved.
+                <div class="float-right d-none d-sm-inline-block">
+                    <b>Version</b> 3.2.0
+                </div>
+            </footer>
+            <!-- </footer -->
 
-        <div class="content-wrapper ">
-            @RenderBody()
+            <!-- Control Sidebar -->
+            <aside class="control-sidebar control-sidebar-dark">
+                <!-- Control sidebar content goes here -->
+            </aside>
+            <!-- /.control-sidebar -->
+
         </div>
-
-        <footer class="main-footer">
-            <strong>Copyright &copy; 2014-2021 <a href="https://adminlte.io">AdminLTE.io</a>.</strong>
-            All rights reserved.
-            <div class="float-right d-none d-sm-inline-block">
-                <b>Version</b> 3.2.0
-            </div>
-        </footer>
-
-        <!-- Control Sidebar -->
-        <aside class="control-sidebar control-sidebar-dark">
-            <!-- Control sidebar content goes here -->
-        </aside>
-        <!-- /.control-sidebar -->
-    </div>
-    <!-- ./wrapper -->
-
-        <!-- <footer class="border-top footer text-muted">
-            <div class="container">
-                &copy; 2024 - TaskHub - <a asp-area="" asp-page="/Privacy">Privacy</a>
-            </div>
-        </footer>-->
+        <!-- ./wrapper -->
+    </body>
 
     <!-- jQuery -->
     <script src="~/js/admin-js/plugins/jquery.min.js"></script>
@@ -233,8 +263,31 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 
+    @* Table admin *@
+    <!-- DataTables  & Plugins -->
+    <script src="~/js/admin-js/plugins/jquery.dataTables.min.js"></script>
+    <script src="~/js/admin-js/plugins/dataTables.bootstrap4.min.js"></script>
+    <script src="~/js/admin-js/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="~/js/admin-js/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+    <script src="~/js/admin-js/plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
+
+    <!-- Page specific script -->
+    <script>
+        $(function () {
+            $('#example2').DataTable({
+                "paging": true,
+                "lengthChange": false,
+                "searching": true,
+                "ordering": true,
+                "info": false,
+                "autoWidth": false,
+                "responsive": true,
+            });
+        });
+    </script>
+
     <script src="~/test/js/main.js"></script>
     @await RenderSectionAsync("Scripts", required: false)
 
-    </body>
+</body>
 </html>

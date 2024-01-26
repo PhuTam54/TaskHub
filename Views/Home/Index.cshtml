@@ -1,0 +1,111 @@
+﻿@model TaskHub.Models.WorkSpaceViewModels.WorkSpaceIndexData
+
+@{
+    Layout = "_Layout-Home";
+}
+
+@{
+    ViewData["Title"] = "Home page";
+}
+
+<!-- ./card-header -->
+<div class="card-body">
+    WorkSpace:
+    <ul>
+        @{
+            var WorkSpaceTitle = "";
+        }
+        @foreach (var item in Model.WorkSpaces)
+        {
+            WorkSpaceTitle = @item.WorkSpaceTitle;
+            <li>@item.WorkSpaceTitle</li>
+        }
+        @{
+            ViewData["WorkSpace"] = WorkSpaceTitle;
+        }
+    </ul>
+    @foreach (var item in Model.WorkSpaces)
+    {
+        @if (item.WorkSpaceId == 1)
+        {
+            <span>Boards:</span>
+            <ul>
+                @foreach (var board in item.Boards)
+                {
+                    <li>
+                        @board.BoardTitle <br>
+                    </li>
+                }
+            </ul>
+            <table id="example2" class="table table-bordered table-striped">
+                <tr>
+                    <th>Board Title</th>
+                    <th colspan="3">Lists</th>
+                </tr>
+                @foreach (var board in item.Boards)
+                {
+                    {
+                        <tr>
+                            <td>
+                                @board.BoardTitle
+                            </td>
+                            <td>
+                                @if (board.Lists.Count() > 0)
+                                {
+                                    <table class="table">
+                                        <tr>
+                                            <th>No.</th>
+                                            <th>List Title</th>
+                                            <th>Tasks</th>
+                                        </tr>
+                                        @{
+                                            var indexForList = 0;
+                                        }
+                                        @foreach (var list in board.Lists)
+                                        {
+                                            indexForList++;
+                                            <tr>
+                                                <td>
+                                                    @* Hiển thị Index *@
+                                                    @indexForList
+                                                </td>
+                                                <td>
+                                                    @list.ListTitle
+                                                </td>
+                                                <td>
+                                                    <ul>
+                                                        @foreach (var task in list.TaskItems)
+                                                        {
+                                                            <li>@task.Title</li>
+                                                            @if (task.Comments.Count() > 0)
+                                                            {
+                                                                <span class="text-bold">Comments: </span>
+                                                                <br>
+                                                                @foreach (var cmt in task.Comments)
+                                                                {
+                                                                    @cmt.CommentContent
+                                                                    <br />
+                                                                }
+                                                            }
+                                                        }
+                                                    </ul>
+                                                </td>
+                                            </tr>
+                                        }
+                                    </table>
+                                }
+                            </td>
+                        </tr>
+                    }
+                }
+                <tfoot>
+                    <tr>
+                        <th>Board Title</th>
+                        <th colspan="3">Lists</th>
+                    </tr>
+                </tfoot>
+            </table>
+        }
+    }
+</div>
+<!-- /.card-body -->
