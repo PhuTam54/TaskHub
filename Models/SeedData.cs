@@ -145,11 +145,6 @@ public static class SeedData
                     Password = "123456",
                     FirstMidName = "Cristiano",
                     LastName = "Ronaldo 3",
-<<<<<<< HEAD
-=======
-
-                    EnrollmentDate = DateTime.Parse("2024-01-15")
->>>>>>> 667ff3b7ab4113b7345ec56f479742a8bda6a6cd
                 }
             };
             foreach (User s in Users)
@@ -551,11 +546,7 @@ public static class SeedData
                 {
                     WorkSpaceId = WorkSpaces.Single( s => s.WorkSpaceTitle == "Group4's workspace").WorkSpaceId,
                     UserId = Users.Single( s => s.UserName == "ronaldo3").ID,
-<<<<<<< HEAD
                     EnrollmentDate = DateTime.Now,
-=======
-
->>>>>>> 667ff3b7ab4113b7345ec56f479742a8bda6a6cd
                     Status = 2,
                 }
             };
