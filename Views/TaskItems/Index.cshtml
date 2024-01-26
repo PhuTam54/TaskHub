@@ -4,22 +4,7 @@
     ViewData["Title"] = "Index";
 }
 
-<header>
-    <div class="header-flex">
-        <span></span>
-        <h1 id="title" class="text-align-center">TaskHub</h1>
-        <span class="title-actions-container" style="font-size:25px;cursor:pointer;letter-spacing: 1ch;">
-            <label for="auto-save" class="auto-save-text">Auto Save</label>
-            <label class="switch" id="auto-save-label">
-                <input id="auto-save" type="checkbox" checked>
-                <span class="slider round"></span>
-            </label>
-            <i title="Delete this board." id="delete-button" class="fa fa-trash"></i>
-            <i title="Save all boards." id="save-button" class="fa fa-floppy-o"></i>
-            <i title="Settings" id="settings-button" class="fa fa-gear"></i>
-        </span>
-    </div>
-</header>
+
 
 <div id="sidebar" class="sidenav">
     <span id="sidebar-close">&times;</span>
@@ -43,14 +28,25 @@
     </ul>
 </div>
 
-<div class="container" id="main-container">
-    <div id="cards-container">
-        <div id="add-card">
-            <input maxlength="128" type="text" id="add-card-text" name="add-card" placeholder="Add Card..." autofocus>
-            <button id="add-card-button" class="plus-button">+</button>
+    <div class="container" id="main-container">
+        <div id="cards-container">
+            <div>
+                <div id="add-card" class="add-new-column" onclick="toggleInputAndButton()">
+                    <!--<input maxlength="128" type="text" id="add-card-text" name="add-card" placeholder="Add Card..." autofocus>-->
+                    <!--<button id="add-card-button" class="plus-button">+</button>-->
+                    <span>+ Thên Danh Sách</span>
+                </div>
+                <div class="content-add-column">
+                    <input maxlength="128" type="text" id="add-card-text" class="form-control" placeholder="Add Card..." autofocus>
+                    <div class="group-btn">
+                        <button class="btn btn-success"  id="add-card-button">addlist</button>
+                        <i onclick ="toggleInputAndButton()" class="onclik-delete2">*</i>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-</div>
+
 
 <div id="alert-container">
     <div id="alerts">

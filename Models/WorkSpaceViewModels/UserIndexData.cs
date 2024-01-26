@@ -1,4 +1,6 @@
+
 ﻿using TaskHub.Models;
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +12,7 @@ namespace TaskHub.Models.WorkSpaceViewModels
 {
         public IEnumerable<User> Users { get; set; }
         public IEnumerable<WorkSpace> WorkSpaces { get; set; }
+
         public IEnumerable<WorkSpaceMember> WorkSpaceMembers { get; set; }
     }
 }
