@@ -2,17 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-
 using TaskHub.Models;
-
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using TaskHub.Data;
 using TaskHub.Models;
-
 using TaskHub.Models.WorkSpaceViewModels;
-
 
 namespace TaskHub.Controllers
 {
@@ -28,7 +24,6 @@ namespace TaskHub.Controllers
         // GET: WorkSpaces
         public async Task<IActionResult> Index()
         {
-
             var viewModel = new WorkSpaceIndexData();
             viewModel.WorkSpaces = await _context.WorkSpace
                 .Include(i => i.User)
@@ -43,13 +38,11 @@ namespace TaskHub.Controllers
                 .ToListAsync();
 
             return View(viewModel);
-
         }
 
         // GET: WorkSpaces/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-
             ViewBag.WorkSpaceId = id;
             var viewModel = new WorkSpaceIndexData();
             viewModel.WorkSpaces = await _context.WorkSpace
@@ -65,7 +58,6 @@ namespace TaskHub.Controllers
                 .ToListAsync();
 
             return View(viewModel);
-
         }
 
         // GET: WorkSpaces/Create
@@ -148,7 +140,6 @@ namespace TaskHub.Controllers
         // GET: WorkSpaces/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-
             ViewBag.WorkSpaceId = id;
             var viewModel = new WorkSpaceIndexData();
             viewModel.WorkSpaces = await _context.WorkSpace
@@ -164,7 +155,6 @@ namespace TaskHub.Controllers
                 .ToListAsync();
 
             return View(viewModel);
-
         }
 
         // POST: WorkSpaces/Delete/5

@@ -5,9 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-
 using TaskHub.Models;
-
 using TaskHub.Data;
 using TaskHub.Models.WorkSpaceViewModels;
 
@@ -23,7 +21,6 @@ namespace TaskHub.Controllers
         }
 
         // GET: Users
-
         public async Task<IActionResult> Index(int? id)
         {
             var viewModel = new UserIndexData();
@@ -31,7 +28,6 @@ namespace TaskHub.Controllers
                 .Include(i => i.WorkSpaceMembers)
                     .ThenInclude(i => i.WorkSpace)
                 .Include(i => i.WorkSpaces)
-
                 .AsNoTracking()
                 .OrderBy(i => i.LastName)
                 .ToListAsync();
@@ -43,7 +39,6 @@ namespace TaskHub.Controllers
                     i => i.ID == id.Value).Single();
                 viewModel.WorkSpaces = user.WorkSpaces;
             }
-
 
             return View(viewModel);
         }

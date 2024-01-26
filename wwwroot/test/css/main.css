@@ -1,162 +1,3 @@
-﻿
-.main-header {
-    border-bottom: 0px solid #dee2e6;
-    z-index: 1034;
-}
-.navbar-white {
-    background-color: #0067a3;
-    color: #1f2d3d;
-}
-.masthead {
-    flex-basis: 4rem;
-    display: flex;
-    align-items: center;
-    padding: 0 0.8rem;
-    background-color: #0067a3;
-    box-shadow: 0 0.1rem 0.1rem rgba(0, 0, 0, 0.1);
-}
-
-    .masthead .btn {
-        background-color: #4c94be;
-        border-radius: 0.3rem;
-        transition: background-color 150ms;
-    }
-
-        .masthead .btn:hover {
-            background-color: #3385b5;
-        }
-
-.boards-menu {
-    display: flex;
-    flex-shrink: 0;
-}
-
-.boards-btn {
-    flex-basis: 9rem;
-    font-size: 1.4rem;
-    font-weight: 700;
-    color: #fff;
-    margin-right: 0.8rem;
-    padding: 0.6rem 0.8rem;
-}
-
-.boards-btn-icon {
-    font-size: 1.7rem;
-    padding-right: 1.2rem;
-}
-
-.board-search {
-    flex-basis: 18rem;
-    position: relative;
-}
-
-.board-search-input {
-    height: 3rem;
-    border: none;
-    border-radius: 0.3rem;
-    background-color: #4c94be;
-    width: 100%;
-    padding: 0 3rem 0 1rem;
-    color: #fff;
-}
-
-    .board-search-input:hover {
-        background-color: #66a4c8;
-    }
-
-.search-icon {
-    font-size: 1.5rem;
-    position: absolute;
-    top: 50%;
-    right: 0.8rem;
-    transform: translateY(-50%) rotate(90deg);
-    color: #fff;
-}
-
-.logo {
-    flex: 1;
-    font-family: "Courgette", cursive;
-    font-size: 2.2rem;
-    font-weight: 700;
-    color: rgba(255, 255, 255, 0.5);
-    margin: 0 2rem;
-    transition: color 150ms;
-    text-align: center;
-    white-space: nowrap;
-    cursor: pointer;
-}
-
-    .logo:hover {
-        color: rgba(255, 255, 255, 0.8);
-    }
-
-.logo-icon {
-    padding-right: 0.4rem;
-}
-
-.user-settings {
-    display: flex;
-    height: 3rem;
-    color: #fff;
-}
-
-.user-settings-btn {
-    font-size: 1.5rem;
-    width: 3rem;
-    margin-right: 0.8rem;
-}
-
-    .user-settings-btn:last-of-type {
-        margin-right: 0;
-    }
-
-.board-info-bar {
-    flex-basis: 3rem;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin: 0.8rem 0;
-    padding: 0 1rem;
-    color: #f6f6f6;
-}
-
-.board-controls {
-    display: flex;
-}
-
-    .board-controls .btn {
-        margin-right: 1rem;
-    }
-
-        .board-controls .btn:last-of-type {
-            margin-right: 0;
-        }
-
-.board-info-bar .btn {
-    font-size: 1.4rem;
-    font-weight: 400;
-    transition: background-color 150ms;
-    padding: 0 0.6rem;
-    border-radius: 0.3rem;
-    height: 3rem;
-}
-
-    .board-info-bar .btn:hover {
-        background-color: #006aa8;
-    }
-
-.private-btn-icon,
-.menu-btn-icon {
-    padding-right: 0.6rem;
-    white-space: nowrap;
-}
-
-.board-title h2 {
-    font-size: 1.8rem;
-    font-weight: 700;
-    white-space: nowrap;
-}
-
 
 :root {
     --primary-color-light: fff;
@@ -168,7 +9,7 @@
 ::-webkit-scrollbar {
     width: 10px;
     height: 10px;
-    background:red; /* Màu n?n c?a thanh cu?n */
+    background: var(--primary-color-dark);
     border-radius: 10px;
 }
 
@@ -177,7 +18,7 @@
 }
 
 ::-webkit-scrollbar-thumb {
-    background: blue;
+    background: var(--primary-color-light);
     border-radius: 10px;
 }
 
@@ -185,139 +26,92 @@
     box-sizing: border-box;
 }
 
-html, body {
+html {
     height: 100%;
-    margin: 0;
 }
 
-.add-new-column {
-    border: none;
-    font-size: 1.5em;
-    border-radius: 7px;
-    background-color: rgba(14, 14, 14, 28%);
-    color: white;
-    width: 237px;
-    cursor: pointer;
-    transition: 0.3s;
-    
-}
-
-.add-new-column:hover {
-        background-color: rgba(14, 14, 14, 0.15);
-
-}
-.content-add-column {
-    border-radius: 7px;
-    background-color: rgba(14, 14, 14, 28%);
-    padding:5px;
-}
-
-.group-btn {
-    padding-top:5px;
-}
-
-.onclik-delete2 {
-    cursor: pointer;
-    padding: 6px 14px;
-    border-radius: 5px;
-}
-    .onclik-delete2:hover {
-        background-color: rgba(14, 14, 14, 0.20)
-    }
-.main-footer {
-    background: #0067a3;
-}
 .content-wrapper {
-    background: #0067a3;
+    background-color: var(--primary-color);
     font-family: Roboto, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     height: 100%;
     margin: 0;
-    overflow-y: auto;
+    overflow-y: hidden; /* Hide vertical scrollbar */
 }
-.container {
-    width: min(99%, 90.5rem);
-    margin: 0 auto; /* Để căn giữa container theo chiều ngang */
-    position: relative; /* Đặt container làm phần tử tương đối */
-    top: 0; /* Đặt container ở trên cùng của màn hình */
-    left: 0; /* Đặt container ở bên trái của màn hình */
-    right: 0; /* Đảm bảo container chiếm toàn bộ chiều rộng */
-    max-height: calc(100vh - 4rem); /* Giữ cho container không vượt quá chiều cao của màn hình trừ đi chiều cao của header */
-    /* Cho phép container cuộn khi nội dung vượt quá kích thước */
-    padding-top: 4rem; /* Để tránh nội dung bị che phủ bởi header */
-    padding-bottom: 2rem; /* Để tạo ra một khoảng trống dưới cùng */
-    box-sizing: border-box;
-   
-    margin: 0
-}
+
 .sidenav {
     height: 100%;
     width: 0;
     position: fixed;
     z-index: 1;
-    top: 4rem; /* ?i?u ch?nh giá tr? này ?? di chuy?n thanh cu?n g?n "food ter" */
+    top: 0;
     background-color: #343a40;
     overflow-x: hidden;
     transition: width 0.5s;
     padding-top: 4rem;
 }
 
-    .sidenav p.is-title {
-        font-size: 1.5rem;
-        color: #818181;
-        display: block;
-        transition: 0.3s;
-        text-align: center;
-    }
+.sidenav p.is-title {
+    font-size: 1.5rem;
+    color: #818181;
+    display: block;
+    transition: 0.3s;
+    text-align: center;
+}
 
-    .sidenav p:hover {
-        color: white;
-    }
+.sidenav p:hover {
+    color: white;
+}
 
-    .sidenav > ul {
-        list-style: none;
-        padding-left: 0;
-    }
+.sidenav > ul {
+    list-style: none;
+    padding-left: 0;
+}
 
-        .sidenav > ul > li {
-            font-size: 1rem;
-            color: black;
-            background-color: #f3f3f3;
-            padding: 0.5rem;
-            margin-inline: 1em;
-            margin-bottom: 1rem;
-            border-radius: 0.5rem;
-            box-shadow: 3px 3px var(--primary-color-light);
-        }
+.sidenav > ul > li {
+    font-size: 1rem;
+    color: black;
+    background-color: #f3f3f3;
+    padding: 0.5rem;
+    margin-inline: 1em;
+    margin-bottom: 1rem;
+    border-radius: 0.5rem;
+    box-shadow: 3px 3px var(--primary-color-light);
+}
 
-            .sidenav > ul > li.is-active {
-                box-shadow: 3px 3px yellow;
-            }
+.sidenav > ul > li.is-active {
+    box-shadow: 3px 3px yellow;
+}
 
-                .sidenav > ul > li.is-active:hover {
-                    box-shadow: 3px 3px orange;
-                }
+.sidenav > ul > li.is-active:hover {
+    box-shadow: 3px 3px orange;
+}
 
-            .sidenav > ul > li:hover {
-                color: var(--primary-color-dark);
-                cursor: pointer;
-                box-shadow: 3px 3px var(--primary-color-dark);
-            }
+.sidenav > ul > li:hover {
+    color: var(--primary-color-dark);
+    cursor: pointer;
+    box-shadow: 3px 3px var(--primary-color-dark);
+}
+  
+.sidenav #sidebar-close {
+    color: gray;
+    cursor: pointer;
+    position: absolute;
+    top: 0;
+    right: 25px;
+    font-size: 2.25rem;
+    margin-left: 50px;
+}
 
-    .sidenav #sidebar-close {
-        color: gray;
-        cursor: pointer;
-        position: absolute;
-        top: 0;
-        right: 25px;
-        font-size: 2.25rem;
-        margin-left: 50px;
-    }
-
-
+.container {
+    width: min(99%, 90.5rem);
+    margin-inline: auto;
+    overflow-x: auto;
+    min-height: 85%;
+}
 
 #cards-container {
     display: flex;
-    flex-wrap: nowrap;
+    flex-wrap:nowrap;
     flex-direction: row;
     align-items: flex-start;
     gap: 0.85rem;
@@ -327,7 +121,7 @@ html, body {
     flex-shrink: 0;
     padding: 1rem 0.5rem;
     background-color: #d9dfe9;
-    border-radius: 1.3rem;
+    border-radius: 0.3rem;
     width: 18.5rem;
     box-shadow: 3px 3px 3px rgba(17, 17, 17, 0.150);
 }
@@ -369,18 +163,18 @@ html, body {
     width: 17rem;
 }
 
-    .parent-card > ul > li > span {
-        letter-spacing: 0.7rem;
-    }
+.parent-card > ul > li > span {
+    letter-spacing: 0.7rem;
+}
 
 .fa {
     display: block;
     left: 50%;
 }
 
-    .fa:hover, #sidebar-button:hover {
-        cursor: pointer;
-    }
+.fa:hover, #sidebar-button:hover {
+    cursor: pointer;
+}
 
 .parent-card > ul > li > p {
     margin: 0;
@@ -391,7 +185,7 @@ html, body {
 }
 
 .text-fix {
-    word-break: break-all;
+	word-break: break-all;
     text-overflow: ellipsis;
     margin: 15.936px 0px;
 }
@@ -404,6 +198,7 @@ html, body {
     color: white;
     margin: 0;
     font-weight: 600;
+
     background-color: rgba(14, 14, 14, 0.15);
     padding-inline: 1rem;
     border-radius: 1rem;
@@ -417,11 +212,11 @@ input[type="text"] {
     background-color: transparent;
 }
 
-    input[type="text"]:focus {
-        border: none;
-        border-bottom: 2px solid var(--primary-color);
-        outline: none;
-    }
+input[type="text"]:focus {
+    border: none;
+    border-bottom: 2px solid var(--primary-color);
+    outline: none;
+}
 
 #add-card > input[type="text"]::placeholder {
     color: black;
@@ -444,40 +239,39 @@ input[type="text"] {
     margin-bottom: 2rem;
 }
 
-    #add-board-button:hover {
-        cursor: pointer;
-        color: white;
-        box-shadow: 0px 2px white;
-    }
+#add-board-button:hover {
+    cursor: pointer;
+    color: white;
+    box-shadow: 0px 2px white;
+}
 
 #add-board-text {
-    width: 100%;
-    color: white;
+    width:100%;
+    color:white;
 }
 
 .plus-button {
     border: none;
     font-size: 1.5em;
-    border-radius: 7px;
-    background-color: rgba(14, 14, 14, 28%);
+    border-radius: 100%;
+    background-color: var(--primary-color-dark);
     color: white;
-    margin-top: 5%;
+    padding: 0.2em 0.5em;
     cursor: pointer;
     transition: 0.3s;
-    width: 100%;
 }
 
-    .plus-button:hover {
-        background-color: rgba(14, 14, 14, 0.15);
-    }
+.plus-button:hover {
+    background-color: var(--primary-color-light);
+}
 
 .header-flex {
+    margin-inline: 2%;
     display: flex;
     justify-content: space-between;
     flex-direction: row;
     padding-block: 0.75rem 0.1rem;
-    
-    background-color: #0067a3;
+    margin-bottom: 1rem;
 }
 
 .flex-col {
@@ -493,34 +287,36 @@ input[type="text"] {
     background: #ebebeb;
     border-radius: 0.2rem;
     box-shadow: 1px 1px 5px rgba(17, 17, 17, 0.200);
+
     position: fixed;
     z-index: 15;
     width: 150px;
     display: none;
+
     transform: scale(0);
     transform-origin: top left;
 }
 
-    .context-menu.visible {
-        display: block;
-        transform: scale(1);
-        transition: transform 200ms ease-in-out;
-    }
+.context-menu.visible {
+    display: block;
+    transform: scale(1);
+    transition: transform 200ms ease-in-out;
+}
 
-    .context-menu ul li {
-        cursor: pointer;
-        padding-inline: 0.5rem;
-        padding-block: 0.2rem;
-    }
+.context-menu ul li {
+    cursor: pointer;
+    padding-inline: 0.5rem;
+    padding-block: 0.2rem;
+}
 
-        .context-menu ul li:hover {
-            background: #d9d9d9;
-        }
+.context-menu ul li:hover {
+    background:#d9d9d9;
+}
 
-    .context-menu ul {
-        list-style-type: none;
-        padding: 0;
-    }
+.context-menu ul {
+    list-style-type: none;
+    padding: 0;
+}
 
 #alert-container {
     position: relative;
@@ -529,7 +325,7 @@ input[type="text"] {
 #alerts {
     position: absolute;
     bottom: 20px;
-    right: 40px;
+    right:40px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -625,6 +421,7 @@ input[type="text"] {
     justify-content: center;
     align-items: center;
     gap: 0.5rem;
+
     background-color: rgba(14, 14, 14, 0.15);
     padding-inline: 1rem;
     border-radius: 1rem;
@@ -642,11 +439,11 @@ input[type="text"] {
     height: 1.2rem;
 }
 
-    .switch input {
-        opacity: 0;
-        width: 0;
-        height: 0;
-    }
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
 
 .slider {
     position: absolute;
@@ -660,17 +457,18 @@ input[type="text"] {
     border-radius: 34px;
 }
 
-    .slider:before {
-        position: absolute;
-        content: "";
-        height: 0.75rem;
-        width: 0.75rem;
-        left: 0.2rem;
-        bottom: 0.25rem;
-        background-color: white;
-        transition: .4s;
-        border-radius: 50%;
-    }
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 0.75rem;
+    width: 0.75rem;
+    left: 0.2rem;
+    bottom: 0.25rem;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+
+}
 
 input:checked + .slider {
     background-color: #2196F3;
