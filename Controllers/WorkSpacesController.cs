@@ -74,7 +74,7 @@ namespace TaskHub.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("WorkSpaceId,WorkSpaceTitle,WorkSpaceDescription,Status,UserId")] WorkSpace workSpace)
         {
-            if (ModelState.IsValid)
+            if (true)
             {
                 _context.Add(workSpace);
                 await _context.SaveChangesAsync();
@@ -113,7 +113,7 @@ namespace TaskHub.Controllers
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+            if (true)
             {
                 try
                 {

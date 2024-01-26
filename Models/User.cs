@@ -32,11 +32,6 @@ namespace TaskHub.Models
             }
         }
 
-        [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
-        [Display(Name = "Enrollment Date")]
-        public DateTime EnrollmentDate { get; set; }
-
         public ICollection<WorkSpaceMember> WorkSpaceMembers { get; set; }
         public ICollection<Comment> Comments { get; set; }
         public ICollection<TaskItem> TaskItems { get; set; }

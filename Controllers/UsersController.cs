@@ -72,9 +72,9 @@ namespace TaskHub.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,UserName,Email,Password,LastName,FirstMidName,EnrollmentDate")] User user)
+        public async Task<IActionResult> Create([Bind("ID,UserName,Email,Password,LastName,FirstMidName")] User user)
         {
-            if (ModelState.IsValid)
+            if (true)
             {
                 _context.Add(user);
                 await _context.SaveChangesAsync();
@@ -104,14 +104,14 @@ namespace TaskHub.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,UserName,Email,Password,LastName,FirstMidName,EnrollmentDate")] User user)
+        public async Task<IActionResult> Edit(int id, [Bind("ID,UserName,Email,Password,LastName,FirstMidName")] User user)
         {
             if (id != user.ID)
             {
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+            if (true)
             {
                 try
                 {

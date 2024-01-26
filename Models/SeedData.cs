@@ -32,7 +32,6 @@ public static class SeedData
                     Password = "123456",
                     FirstMidName = "Tam",
                     LastName = "Phu",
-                    EnrollmentDate = DateTime.Parse("2024-01-01")
                 },
                 new User
                 {
@@ -41,7 +40,6 @@ public static class SeedData
                     Password = "123456",
                     FirstMidName = "Thuy",
                     LastName = "Tran",
-                    EnrollmentDate = DateTime.Parse("2024-01-01")
                 },
                 new User
                 {
@@ -50,7 +48,6 @@ public static class SeedData
                     Password = "123456",
                     FirstMidName = "Peter",
                     LastName = "Parker",
-                    EnrollmentDate = DateTime.Parse("2024-01-11")
                 },
                 new User
                 {
@@ -59,7 +56,6 @@ public static class SeedData
                     Password = "123456",
                     FirstMidName = "Tom",
                     LastName = "Holland",
-                    EnrollmentDate = DateTime.Parse("2024-01-11")
                 },
                 new User
                 {
@@ -68,7 +64,6 @@ public static class SeedData
                     Password = "123456",
                     FirstMidName = "Cristiano",
                     LastName = "Ronaldo",
-                    EnrollmentDate = DateTime.Parse("2024-01-15")
                 },
                 new User
                 {
@@ -77,7 +72,6 @@ public static class SeedData
                     Password = "123456",
                     FirstMidName = "Tam",
                     LastName = "Phu 2",
-                    EnrollmentDate = DateTime.Parse("2024-01-01")
                 },
                 new User
                 {
@@ -86,7 +80,6 @@ public static class SeedData
                     Password = "123456",
                     FirstMidName = "Thuy",
                     LastName = "Tran 2",
-                    EnrollmentDate = DateTime.Parse("2024-01-01")
                 },
                 new User
                 {
@@ -95,7 +88,6 @@ public static class SeedData
                     Password = "123456",
                     FirstMidName = "Peter",
                     LastName = "Parker 2",
-                    EnrollmentDate = DateTime.Parse("2024-01-11")
                 },
                 new User
                 {
@@ -104,7 +96,6 @@ public static class SeedData
                     Password = "123456",
                     FirstMidName = "Tom",
                     LastName = "Holland 2",
-                    EnrollmentDate = DateTime.Parse("2024-01-11")
                 },
                 new User
                 {
@@ -113,7 +104,6 @@ public static class SeedData
                     Password = "123456",
                     FirstMidName = "Cristiano",
                     LastName = "Ronaldo 2",
-                    EnrollmentDate = DateTime.Parse("2024-01-15")
                 },
                 new User
                 {
@@ -122,7 +112,6 @@ public static class SeedData
                     Password = "123456",
                     FirstMidName = "Tam",
                     LastName = "Phu 3",
-                    EnrollmentDate = DateTime.Parse("2024-01-01")
                 },
                 new User
                 {
@@ -131,7 +120,6 @@ public static class SeedData
                     Password = "123456",
                     FirstMidName = "Thuy",
                     LastName = "Tran 3",
-                    EnrollmentDate = DateTime.Parse("2024-01-01")
                 },
                 new User
                 {
@@ -140,7 +128,6 @@ public static class SeedData
                     Password = "123456",
                     FirstMidName = "Peter",
                     LastName = "Parker 3",
-                    EnrollmentDate = DateTime.Parse("2024-01-11")
                 },
                 new User
                 {
@@ -149,7 +136,6 @@ public static class SeedData
                     Password = "123456",
                     FirstMidName = "Tom",
                     LastName = "Holland 3",
-                    EnrollmentDate = DateTime.Parse("2024-01-11")
                 },
                 new User
                 {
@@ -158,7 +144,6 @@ public static class SeedData
                     Password = "123456",
                     FirstMidName = "Cristiano",
                     LastName = "Ronaldo 3",
-                    EnrollmentDate = DateTime.Parse("2024-01-15")
                 }
             };
             foreach (User s in Users)
@@ -221,7 +206,7 @@ public static class SeedData
                 new Board
                 {
                     WorkSpaceId = WorkSpaces.Single( s => s.WorkSpaceTitle == "Group1's workspace").WorkSpaceId,
-                    BoardTitle = "TaskHub",
+                    BoardTitle = "ContosoUniversity",
                     Status = 3,
                 },
                 new Board
@@ -319,7 +304,7 @@ public static class SeedData
                     Deadline = DateTime.Parse("2024-1-21"),
                     UserId = Users.Single( s => s.UserName == "phutam").ID,
                     ListId = Lists.Single( s => s.ListTitle == "Done").ListId,
-                    position = 1,
+                    position = 2,
                     Status = 1,
                 },
                 new TaskItem
@@ -329,7 +314,7 @@ public static class SeedData
                     Deadline = DateTime.Parse("2024-1-22"),
                     UserId = Users.Single( s => s.UserName == "tranthuy").ID,
                     ListId = Lists.Single( s => s.ListTitle == "Todo").ListId,
-                    position = 2,
+                    position = 1,
                     Status = 1,
                 },
                 new TaskItem
@@ -349,7 +334,7 @@ public static class SeedData
                     Deadline = DateTime.Parse("2024-1-20"),
                     UserId = Users.Single( s => s.UserName == "tom").ID,
                     ListId = Lists.Single( s => s.ListTitle == "Todo").ListId,
-                    position = 3,
+                    position = 2,
                     Status = 1,
                 },
                 new TaskItem
@@ -436,60 +421,70 @@ public static class SeedData
                 {
                     WorkSpaceId = WorkSpaces.Single( s => s.WorkSpaceTitle == "Group1's workspace").WorkSpaceId,
                     UserId = Users.Single( s => s.UserName == "ronaldo").ID,
+                    EnrollmentDate = DateTime.Now,
                     Status = 1,
                 },
                 new WorkSpaceMember
                 {
                     WorkSpaceId = WorkSpaces.Single( s => s.WorkSpaceTitle == "Group1's workspace").WorkSpaceId,
                     UserId = Users.Single( s => s.UserName == "tranthuy").ID,
+                    EnrollmentDate = DateTime.Now,
                     Status = 1,
                 },
                 new WorkSpaceMember
                 {
                     WorkSpaceId = WorkSpaces.Single( s => s.WorkSpaceTitle == "Group1's workspace").WorkSpaceId,
                     UserId = Users.Single( s => s.UserName == "peter").ID,
+                    EnrollmentDate = DateTime.Now,
                     Status = 1,
                 },
                 new WorkSpaceMember
                 {
                     WorkSpaceId = WorkSpaces.Single( s => s.WorkSpaceTitle == "Group1's workspace").WorkSpaceId,
                     UserId = Users.Single( s => s.UserName == "tom").ID,
+                    EnrollmentDate = DateTime.Now,
                     Status = 1,
                 },
                 new WorkSpaceMember
                 {
                     WorkSpaceId = WorkSpaces.Single( s => s.WorkSpaceTitle == "Group2's workspace").WorkSpaceId,
                     UserId = Users.Single( s => s.UserName == "ronaldo2").ID,
+                    EnrollmentDate = DateTime.Now,
                     Status = 2,
                 },
                 new WorkSpaceMember
                 {
                     WorkSpaceId = WorkSpaces.Single( s => s.WorkSpaceTitle == "Group3's workspace").WorkSpaceId,
                     UserId = Users.Single( s => s.UserName == "ronaldo3").ID,
+                    EnrollmentDate = DateTime.Now,
                     Status = 1,
                 },
                 new WorkSpaceMember
                 {
                     WorkSpaceId = WorkSpaces.Single( s => s.WorkSpaceTitle == "Group2's workspace").WorkSpaceId,
                     UserId = Users.Single( s => s.UserName == "tranthuy2").ID,
+                    EnrollmentDate = DateTime.Now,
                     Status = 1,
                 },
                 new WorkSpaceMember
                 {
                     WorkSpaceId = WorkSpaces.Single( s => s.WorkSpaceTitle == "Group3's workspace").WorkSpaceId,
                     UserId = Users.Single( s => s.UserName == "peter2").ID,
+                    EnrollmentDate = DateTime.Now,
                     Status = 1,
                 },
                 new WorkSpaceMember
                 {
                     WorkSpaceId = WorkSpaces.Single( s => s.WorkSpaceTitle == "Group3's workspace").WorkSpaceId,
                     UserId = Users.Single( s => s.UserName == "tom2").ID,
+                    EnrollmentDate = DateTime.Now,
                     Status = 1,
                 },
                 new WorkSpaceMember
                 {
                     WorkSpaceId = WorkSpaces.Single( s => s.WorkSpaceTitle == "Group4's workspace").WorkSpaceId,
                     UserId = Users.Single( s => s.UserName == "ronaldo3").ID,
+                    EnrollmentDate = DateTime.Now,
                     Status = 2,
                 }
             };
