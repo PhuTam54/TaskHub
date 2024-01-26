@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using TaskHub.Models;
 
-namespace ContosoUniversity.Models
+namespace TaskHub.Models
 {
     public class User
     {

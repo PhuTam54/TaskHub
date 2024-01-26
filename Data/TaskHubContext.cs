@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using ContosoUniversity.Models;
+using TaskHub.Models;
 using Microsoft.EntityFrameworkCore;
 using TaskHub.Models;
 

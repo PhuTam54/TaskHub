@@ -1,42 +1,130 @@
-﻿@model TaskHub.Models.WorkSpace
+﻿@model TaskHub.Models.WorkSpaceViewModels.WorkSpaceIndexData
 
 @{
     ViewData["Title"] = "Details";
 }
 
-<h1>Details</h1>
+<h1 class="p-3 pb-0">Details</h1>
 
 <div>
-    <h4>WorkSpace</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.WorkSpaceTitle)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.WorkSpaceTitle)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.WorkSpaceDescription)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.WorkSpaceDescription)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Status)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Status)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.User)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.User.ID)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.WorkSpaceId">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <h4 class="pl-3">WorkSpace</h4>
+    <!-- ./card-header -->
+    <div class="card-body">
+        @{
+            var index = 0;
+        }
+        @foreach (var item in Model.WorkSpaces)
+        {
+            @if (item.WorkSpaceId == ViewBag.WorkSpaceId)
+            {
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>Members</th>
+                            <th>Owner</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.WorkSpaceTitle)
+                            </td>
+                            <td>
+                                <ul>
+                                    @foreach (var member in item.WorkSpaceMembers)
+                                    {
+                                        <li>@member.User.FullName <br /></li>
+                                    }
+                                </ul>
+                            </td>
+                            <td>
+                                @item.User.FullName
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Status)
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <table id="example2" class="table table-bordered table-striped">
+                    <tr>
+                        <th>No.</th>
+                        <th>Board Title</th>
+                        <th colspan="3">Lists</th>
+                    </tr>
+                    @if (item.Boards.Count() > 0)
+                    {
+                        @foreach (var board in item.Boards)
+                        {
+                            index++;
+                            <tr>
+                                <td>
+                                    @index
+                                </td>
+                                <td>
+                                    @board.BoardTitle
+                                </td>
+                                <td>
+                                    @if (board.Lists.Count() > 0)
+                                    {
+                                        <table class="table">
+                                            <tr>
+                                                <th>List Title</th>
+                                                <th>Tasks</th>
+                                            </tr>
+                                            @foreach (var list in board.Lists)
+                                            {
+                                                <tr>
+                                                    <td>
+                                                        @list.ListTitle
+                                                    </td>
+                                                    <td>
+                                                        <ul>
+                                                            @foreach (var task in list.TaskItems)
+                                                            {
+                                                                <li>@task.Title</li>
+                                                                @if (task.Comments.Count() > 0)
+                                                                {
+                                                                    <span class="text-bold">Comments: </span>
+                                                                    <br>
+                                                                    @foreach (var cmt in task.Comments)
+                                                                    {
+                                                                        @cmt.CommentContent
+                                                                        <br />
+                                                                    }
+                                                                }
+                                                            }
+                                                        </ul>
+                                                    </td>
+                                                </tr>
+                                            }
+                                        </table>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                    <td colspan="3" class="text text-center">There is no Board</td>
+                    }
+                    <tfoot>
+                        <tr>
+                            <th>No.</th>
+                            <th>Board Title</th>
+                            <th colspan="3">Lists</th>
+                        </tr>
+                    </tfoot>
+                </table>
+                <div>
+                    <a asp-action="Edit" class="btn btn-primary" asp-route-id="@item.WorkSpaceId">Edit</a> |
+                    <a asp-action="Index">Back to List</a>
+                </div>
+
+            }
+        }
+    </div>
+    <!-- /.card-body -->
 </div>
