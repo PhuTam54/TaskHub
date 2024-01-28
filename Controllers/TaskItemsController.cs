@@ -20,29 +20,10 @@ namespace TaskHub.Controllers
         }
 
         // GET: TaskItems
-        public async Task<IActionResult> Index(string searchString)
+        public async Task<IActionResult> Index()
         {
-            if (_context.TaskItem == null)
-            {
-                return Problem("Entity set 'MvcTaskItemContext.TaskItem'  is null.");
-            }
-
-            var taskItems = from m in _context.TaskItem
-                         select m;
-
-            if (!String.IsNullOrEmpty(searchString))
-            {
-                taskItems = taskItems.Where(s => s.Title!.Contains(searchString));
-            }
-
-            return View(await taskItems.ToListAsync());
-        }
-
-        // Search
-        [HttpPost]
-        public string Index(string searchString, bool notUsed)
-        {
-            return "From [HttpPost]Index: filter on " + searchString;
+            var taskHubContext = _context.TaskItem.Include(t => t.List).Include(t => t.User);
+            return View(await taskHubContext.ToListAsync());
         }
 
         // GET: TaskItems/Details/5
@@ -54,6 +35,8 @@ namespace TaskHub.Controllers
             }
 
             var taskItem = await _context.TaskItem
+                .Include(t => t.List)
+                .Include(t => t.User)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (taskItem == null)
             {
@@ -66,6 +49,8 @@ namespace TaskHub.Controllers
         // GET: TaskItems/Create
         public IActionResult Create()
         {
+            ViewData["ListId"] = new SelectList(_context.List, "ListId", "ListTitle");
+            ViewData["UserId"] = new SelectList(_context.User, "ID", "ID");
             return View();
         }
 
@@ -74,14 +59,16 @@ namespace TaskHub.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Title,Description,Deadline,UserId,Status")] TaskItem taskItem)
+        public async Task<IActionResult> Create([Bind("Id,Title,Description,Deadline,UserId,ListId,position,Status")] TaskItem taskItem)
         {
-            if (ModelState.IsValid)
+            if (true)
             {
                 _context.Add(taskItem);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["ListId"] = new SelectList(_context.List, "ListId", "ListTitle", taskItem.ListId);
+            ViewData["UserId"] = new SelectList(_context.User, "ID", "ID", taskItem.UserId);
             return View(taskItem);
         }
 
@@ -98,6 +85,8 @@ namespace TaskHub.Controllers
             {
                 return NotFound();
             }
+            ViewData["ListId"] = new SelectList(_context.List, "ListId", "ListTitle", taskItem.ListId);
+            ViewData["UserId"] = new SelectList(_context.User, "ID", "ID", taskItem.UserId);
             return View(taskItem);
         }
 
@@ -106,14 +95,14 @@ namespace TaskHub.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Description,Deadline,UserId,Status")] TaskItem taskItem)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Description,Deadline,UserId,ListId,position,Status")] TaskItem taskItem)
         {
             if (id != taskItem.Id)
             {
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+            if (true)
             {
                 try
                 {
@@ -133,6 +122,8 @@ namespace TaskHub.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["ListId"] = new SelectList(_context.List, "ListId", "ListTitle", taskItem.ListId);
+            ViewData["UserId"] = new SelectList(_context.User, "ID", "ID", taskItem.UserId);
             return View(taskItem);
         }
 
@@ -145,6 +136,8 @@ namespace TaskHub.Controllers
             }
 
             var taskItem = await _context.TaskItem
+                .Include(t => t.List)
+                .Include(t => t.User)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (taskItem == null)
             {

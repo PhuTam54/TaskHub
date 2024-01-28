@@ -17,50 +17,10 @@ namespace TaskHub.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.12")
+                .HasAnnotation("ProductVersion", "7.0.15")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
-
-            modelBuilder.Entity("TaskHub.Models.User", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<DateTime>("EnrollmentDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("FirstMidName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("FirstName");
-
-                    b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("Password")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UserName")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.HasKey("ID");
-
-                    b.ToTable("User", (string)null);
-                });
 
             modelBuilder.Entity("TaskHub.Models.Board", b =>
                 {
@@ -190,6 +150,48 @@ namespace TaskHub.Migrations
                     b.ToTable("TaskItem", (string)null);
                 });
 
+            modelBuilder.Entity("TaskHub.Models.User", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
+
+                    b.Property<string>("Avatar")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("FirstMidName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("FirstName");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserName")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("User", (string)null);
+                });
+
             modelBuilder.Entity("TaskHub.Models.WorkSpace", b =>
                 {
                     b.Property<int>("WorkSpaceId")
@@ -229,6 +231,9 @@ namespace TaskHub.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("MemberId"));
+
+                    b.Property<DateTime>("EnrollmentDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
@@ -338,17 +343,6 @@ namespace TaskHub.Migrations
                     b.Navigation("WorkSpace");
                 });
 
-            modelBuilder.Entity("TaskHub.Models.User", b =>
-                {
-                    b.Navigation("Comments");
-
-                    b.Navigation("TaskItems");
-
-                    b.Navigation("WorkSpaceMembers");
-
-                    b.Navigation("WorkSpaces");
-                });
-
             modelBuilder.Entity("TaskHub.Models.Board", b =>
                 {
                     b.Navigation("Lists");
@@ -362,6 +356,17 @@ namespace TaskHub.Migrations
             modelBuilder.Entity("TaskHub.Models.TaskItem", b =>
                 {
                     b.Navigation("Comments");
+                });
+
+            modelBuilder.Entity("TaskHub.Models.User", b =>
+                {
+                    b.Navigation("Comments");
+
+                    b.Navigation("TaskItems");
+
+                    b.Navigation("WorkSpaceMembers");
+
+                    b.Navigation("WorkSpaces");
                 });
 
             modelBuilder.Entity("TaskHub.Models.WorkSpace", b =>

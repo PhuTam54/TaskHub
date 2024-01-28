@@ -32,6 +32,7 @@ public static class SeedData
                     Password = "123456",
                     FirstMidName = "Tam",
                     LastName = "Phu",
+                    Avatar = "https://img.meta.com.vn/Data/image/2021/09/22/anh-meo-cute-de-thuong-dang-yeu-42.jpg",
                 },
                 new User
                 {
@@ -40,6 +41,7 @@ public static class SeedData
                     Password = "123456",
                     FirstMidName = "Thuy",
                     LastName = "Tran",
+                    Avatar = "https://img.meta.com.vn/Data/image/2021/09/22/anh-meo-cute-de-thuong-dang-yeu-42.jpg",
                 },
                 new User
                 {
@@ -48,6 +50,7 @@ public static class SeedData
                     Password = "123456",
                     FirstMidName = "Peter",
                     LastName = "Parker",
+                    Avatar = "https://img.meta.com.vn/Data/image/2021/09/22/anh-meo-cute-de-thuong-dang-yeu-42.jpg",
                 },
                 new User
                 {
@@ -56,15 +59,16 @@ public static class SeedData
                     Password = "123456",
                     FirstMidName = "Tom",
                     LastName = "Holland",
+                    Avatar = "https://img.meta.com.vn/Data/image/2021/09/22/anh-meo-cute-de-thuong-dang-yeu-42.jpg",
                 },
                 new User
                 {
                     UserName = "ronaldo",
                     Email = "ronaldo@gmail.com",
                     Password = "123456",
-
                     FirstMidName = "Cristiano",
                     LastName = "Ronaldo",
+                    Avatar = "https://img.meta.com.vn/Data/image/2021/09/22/anh-meo-cute-de-thuong-dang-yeu-42.jpg",
                 },
                 new User
                 {
@@ -73,6 +77,7 @@ public static class SeedData
                     Password = "123456",
                     FirstMidName = "Tam",
                     LastName = "Phu 2",
+                    Avatar = "https://img.meta.com.vn/Data/image/2021/09/22/anh-meo-cute-de-thuong-dang-yeu-42.jpg",
                 },
                 new User
                 {
@@ -81,6 +86,7 @@ public static class SeedData
                     Password = "123456",
                     FirstMidName = "Thuy",
                     LastName = "Tran 2",
+                    Avatar = "https://img.meta.com.vn/Data/image/2021/09/22/anh-meo-cute-de-thuong-dang-yeu-42.jpg",
                 },
                 new User
                 {
@@ -89,6 +95,7 @@ public static class SeedData
                     Password = "123456",
                     FirstMidName = "Peter",
                     LastName = "Parker 2",
+                    Avatar = "https://img.meta.com.vn/Data/image/2021/09/22/anh-meo-cute-de-thuong-dang-yeu-42.jpg",
                 },
                 new User
                 {
@@ -97,6 +104,7 @@ public static class SeedData
                     Password = "123456",
                     FirstMidName = "Tom",
                     LastName = "Holland 2",
+                    Avatar = "https://img.meta.com.vn/Data/image/2021/09/22/anh-meo-cute-de-thuong-dang-yeu-42.jpg",
                 },
                 new User
                 {
@@ -105,6 +113,7 @@ public static class SeedData
                     Password = "123456",
                     FirstMidName = "Cristiano",
                     LastName = "Ronaldo 2",
+                    Avatar = "https://img.meta.com.vn/Data/image/2021/09/22/anh-meo-cute-de-thuong-dang-yeu-42.jpg",
                 },
                 new User
                 {
@@ -113,6 +122,7 @@ public static class SeedData
                     Password = "123456",
                     FirstMidName = "Tam",
                     LastName = "Phu 3",
+                    Avatar = "https://img.meta.com.vn/Data/image/2021/09/22/anh-meo-cute-de-thuong-dang-yeu-42.jpg",
                 },
                 new User
                 {
@@ -121,6 +131,7 @@ public static class SeedData
                     Password = "123456",
                     FirstMidName = "Thuy",
                     LastName = "Tran 3",
+                    Avatar = "https://img.meta.com.vn/Data/image/2021/09/22/anh-meo-cute-de-thuong-dang-yeu-42.jpg",
                 },
                 new User
                 {
@@ -129,6 +140,7 @@ public static class SeedData
                     Password = "123456",
                     FirstMidName = "Peter",
                     LastName = "Parker 3",
+                    Avatar = "https://img.meta.com.vn/Data/image/2021/09/22/anh-meo-cute-de-thuong-dang-yeu-42.jpg",
                 },
                 new User
                 {
@@ -137,6 +149,7 @@ public static class SeedData
                     Password = "123456",
                     FirstMidName = "Tom",
                     LastName = "Holland 3",
+                    Avatar = "https://img.meta.com.vn/Data/image/2021/09/22/anh-meo-cute-de-thuong-dang-yeu-42.jpg",
                 },
                 new User
                 {
@@ -145,8 +158,7 @@ public static class SeedData
                     Password = "123456",
                     FirstMidName = "Cristiano",
                     LastName = "Ronaldo 3",
-
-                    EnrollmentDate = DateTime.Parse("2024-01-15")
+                    Avatar = "https://img.meta.com.vn/Data/image/2021/09/22/anh-meo-cute-de-thuong-dang-yeu-42.jpg",
                 }
             };
             foreach (User s in Users)
@@ -223,24 +235,6 @@ public static class SeedData
                     WorkSpaceId = WorkSpaces.Single( s => s.WorkSpaceTitle == "Group2's workspace").WorkSpaceId,
                     BoardTitle = "Mvcmovie",
                     Status = 2,
-                },
-                new Board
-                {
-                    WorkSpaceId = WorkSpaces.Single( s => s.WorkSpaceTitle == "WorkSpace number 1").WorkSpaceId,
-                    BoardTitle = "Board number 3",
-                    Status = 3,
-                },
-                new Board
-                {
-                    WorkSpaceId = WorkSpaces.Single( s => s.WorkSpaceTitle == "WorkSpace number 2").WorkSpaceId,
-                    BoardTitle = "Board number 4",
-                    Status = 3,
-                },
-                new Board
-                {
-                    WorkSpaceId = WorkSpaces.Single( s => s.WorkSpaceTitle == "WorkSpace number 2").WorkSpaceId,
-                    BoardTitle = "Board number 5",
-                    Status = 2,
                 }
             };
             foreach (Board s in Boards)
@@ -271,41 +265,31 @@ public static class SeedData
                 },
                 new List
                 {
-
                     BoardId = Boards.Single( s => s.BoardTitle == "TaskHub").BoardId,
-
                     ListTitle = "Done 2",
                     Status = 1,
                 },
                 new List
                 {
-
                     BoardId = Boards.Single( s => s.BoardTitle == "TaskHub").BoardId,
-
                     ListTitle = "Todo 2",
                     Status = 1,
                 },
                 new List
                 {
-
                     BoardId = Boards.Single( s => s.BoardTitle == "MvcMovie").BoardId,
-
                     ListTitle = "Done 3",
                     Status = 1,
                 },
                 new List
                 {
-
                     BoardId = Boards.Single( s => s.BoardTitle == "MvcMovie").BoardId,
-
                     ListTitle = "Doing 3",
                     Status = 1,
                 },
                 new List
                 {
-
                     BoardId = Boards.Single( s => s.BoardTitle == "MvcMovie").BoardId,
-
                     ListTitle = "Todo 3",
                     Status = 1,
                 }
@@ -340,9 +324,7 @@ public static class SeedData
                 },
                 new TaskItem
                 {
-
                     Title = "UX/UI ( Dashboard )",
-
                     Description = "Description For TaskItem number 3",
                     Deadline = DateTime.Parse("2024-1-22"),
                     UserId = Users.Single( s => s.UserName == "tranthuy").ID,
@@ -352,9 +334,7 @@ public static class SeedData
                 },
                 new TaskItem
                 {
-
                     Title = "Add template",
-
                     Description = "Description For TaskItem number 4",
                     Deadline = DateTime.Parse("2024-1-21"),
                     UserId = Users.Single( s => s.UserName == "peter").ID,
@@ -364,9 +344,7 @@ public static class SeedData
                 },
                 new TaskItem
                 {
-
                     Title = "UX/UI ( User )",
-
                     Description = "Description For TaskItem number 5",
                     Deadline = DateTime.Parse("2024-1-20"),
                     UserId = Users.Single( s => s.UserName == "tom").ID,
@@ -376,9 +354,7 @@ public static class SeedData
                 },
                 new TaskItem
                 {
-
                     Title = "Clone project on Github.com",
-
                     Description = "Description For TaskItem number 6",
                     Deadline = DateTime.Parse("2024-1-21"),
                     UserId = Users.Single( s => s.UserName == "phutam").ID,
@@ -388,9 +364,7 @@ public static class SeedData
                 },
                 new TaskItem
                 {
-
                     Title = "UX/UI for the Products page",
-
                     Description = "Description For TaskItem number 7",
                     Deadline = DateTime.Parse("2024-1-20"),
                     UserId = Users.Single( s => s.UserName == "tom").ID,
@@ -400,9 +374,7 @@ public static class SeedData
                 },
                 new TaskItem
                 {
-
                     Title = "UX/UI ( Admin )",
-
                     Description = "Description For TaskItem number 8",
                     Deadline = DateTime.Parse("2024-1-22"),
                     UserId = Users.Single( s => s.UserName == "peter").ID,
@@ -450,22 +422,6 @@ public static class SeedData
                     UserId = Users.Single( s => s.UserName == "peter").ID,
                     TaskItemId = TaskItems.Single( s => s.Title == "Database design").Id,
                     Status = 1,
-                },
-                new Comment
-                {
-                    CommentContent = "Comment number 3",
-                    Timestamp = DateTime.Now,
-                    UserId = Users.Single( s => s.UserName == "tranthuy").ID,
-                    TaskItemId = TaskItems.Single( s => s.Title == "TaskItem number 1").Id,
-                    Status = 1,
-                },
-                new Comment
-                {
-                    CommentContent = "Comment number 4",
-                    Timestamp = DateTime.Now,
-                    UserId = Users.Single( s => s.UserName == "peter").ID,
-                    TaskItemId = TaskItems.Single( s => s.Title == "TaskItem number 2").Id,
-                    Status = 1,
                 }
              };
             foreach (Comment s in Comments)
@@ -492,25 +448,20 @@ public static class SeedData
                 },
                 new WorkSpaceMember
                 {
-
                     WorkSpaceId = WorkSpaces.Single( s => s.WorkSpaceTitle == "Group1's workspace").WorkSpaceId,
-
                     UserId = Users.Single( s => s.UserName == "peter").ID,
                     EnrollmentDate = DateTime.Now,
                     Status = 1,
                 },
                 new WorkSpaceMember
                 {
-
                     WorkSpaceId = WorkSpaces.Single( s => s.WorkSpaceTitle == "Group1's workspace").WorkSpaceId,
-
                     UserId = Users.Single( s => s.UserName == "tom").ID,
                     EnrollmentDate = DateTime.Now,
                     Status = 1,
                 },
                 new WorkSpaceMember
                 {
-
                     WorkSpaceId = WorkSpaces.Single( s => s.WorkSpaceTitle == "Group2's workspace").WorkSpaceId,
                     UserId = Users.Single( s => s.UserName == "ronaldo2").ID,
                     EnrollmentDate = DateTime.Now,
@@ -548,6 +499,7 @@ public static class SeedData
                 {
                     WorkSpaceId = WorkSpaces.Single( s => s.WorkSpaceTitle == "Group4's workspace").WorkSpaceId,
                     UserId = Users.Single( s => s.UserName == "ronaldo3").ID,
+                    EnrollmentDate = DateTime.Now,
                     Status = 2,
                 }
             };

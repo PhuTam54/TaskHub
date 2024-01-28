@@ -34,7 +34,7 @@ namespace TaskHub.Controllers
                         .ThenInclude(i => i.TaskItems)
                             .ThenInclude(i => i.Comments)
                 .AsNoTracking()
-                .OrderBy(i => i.WorkSpaceId)
+                .OrderByDescending(i => i.WorkSpaceId)
                 .ToListAsync();
 
             return View(viewModel);

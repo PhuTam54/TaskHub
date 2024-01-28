@@ -11,6 +11,9 @@ namespace TaskHub.Models
         [StringLength(50)]
         public string UserName { get; set; }
 
+        [StringLength(255)]
+        public string Avatar { get; set; }
+
         [StringLength(50)]
         public string Email { get; set; }
         public string Password { get; set; }

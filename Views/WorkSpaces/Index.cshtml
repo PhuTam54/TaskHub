@@ -94,30 +94,76 @@
                                                 @Html.DisplayFor(modelItem => item.WorkSpaceTitle)
                                             </td>
                                             <td>
-                                                <ul>
-                                                @foreach (var member in item.WorkSpaceMembers)
+                                                @if (item.WorkSpaceMembers.Count() > 0)
                                                 {
-                                                    <li>@member.User.FullName <br /></li>
+                                                    <!-- Trigger the modal with a button -->
+                                                    <a type="button" class="text text-info text-md" data-toggle="modal" data-target="#showWorkSpaceMember-@item.WorkSpaceId">
+                                                        <i class="fa fa-eye"></i>
+                                                        @item.WorkSpaceMembers.Count() Members
+                                                    </a>
+
+                                                    <!-- Modal -->
+                                                    <div id="showWorkSpaceMember-@item.WorkSpaceId" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                                        <div class="modal-dialog modal-dialog-centered" role="document">
+
+                                                            <!-- Modal content-->
+                                                            <div class="modal-content" style="min-width: 700px; max-height: 600px">
+                                                                <div class="modal-header">
+                                                                    <h4 class="modal-title">Members in WorkSpace @item.WorkSpaceTitle</h4>
+                                                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                                </div>
+                                                                <div class="modal-body overflow-auto">
+                                                                    <table class="table table-bordered table-striped">
+                                                                        @{
+                                                                            var indexInModel = 0;
+                                                                        }
+                                                                        <tr>
+                                                                            <th>No.</th>
+                                                                            <th>Fullname</th>
+                                                                            <th>UserName</th>
+                                                                            <th colspan="2">Action</th>
+                                                                        </tr>
+
+                                                                        @foreach (var member in item.WorkSpaceMembers)
+                                                                        {
+                                                                            indexInModel++;
+                                                                            <tr>
+                                                                                <td>
+                                                                                    @indexInModel
+                                                                                </td>
+                                                                                <td>
+                                                                                    @member.User.FullName
+                                                                                </td>
+                                                                                <td>
+                                                                                    @member.User.UserName
+                                                                                </td>
+                                                                                <td>
+                                                                                    <a href="/Users/Details/@member.User.ID" class="btn btn-secondary btn-sm">
+                                                                                        <i class="fas fa-eye">
+                                                                                        </i>
+                                                                                        Details
+                                                                                    </a>
+                                                                                </td>
+                                                                            </tr>
+                                                                        }
+                                                                    </table>
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
                                                 }
-                                                </ul>
                                             </td>
                                             <td>
                                                 @if (item.Boards.Count() > 0)
                                                 {
-                                                    <a asp-action="Index" asp-route-id="@item.WorkSpaceId">
-                                                        <!-- Trigger the modal with a button -->
-                                                        <a type="button" class="text text-info text-md" data-toggle="modal" data-target="#showWorkSpace-@item.WorkSpaceId">
-                                                            <i class="fa fa-eye"></i>
-                                                            <ul>
-                                                                @foreach (var board in item.Boards)
-                                                                {
-                                                                    <li>
-                                                                        @board.BoardTitle <br>
-                                                                    </li>
-
-                                                                }
-                                                            </ul>
-                                                        </a>
+                                                    <!-- Trigger the modal with a button -->
+                                                    <a type="button" class="text text-info text-md" data-toggle="modal" data-target="#showWorkSpace-@item.WorkSpaceId">
+                                                        <i class="fa fa-eye"></i>
+                                                        @item.Boards.Count() Boards
                                                     </a>
 
                                                     <!-- Modal -->
@@ -151,50 +197,7 @@
                                                                                     @board.BoardTitle
                                                                                 </td>
                                                                                 <td>
-                                                                                    @if (board.Lists.Count() > 0)
-                                                                                    {
-                                                                                        <table class="table">
-                                                                                            <tr>
-                                                                                                <th>No.</th>
-                                                                                                <th>List Title</th>
-                                                                                                <th>Tasks</th>
-                                                                                            </tr>
-                                                                                            @{
-                                                                                                var indexForList = 0;
-                                                                                            }
-                                                                                            @foreach (var list in board.Lists)
-                                                                                            {
-                                                                                                indexForList++;
-                                                                                                <tr>
-                                                                                                    <td>
-                                                                                                        @* Hiển thị Index *@
-                                                                                                        @indexForList
-                                                                                                    </td>
-                                                                                                    <td>
-                                                                                                        @list.ListTitle
-                                                                                                    </td>
-                                                                                                    <td>
-                                                                                                        <ul>
-                                                                                                            @foreach (var task in list.TaskItems)
-                                                                                                            {
-                                                                                                                <li>@task.Title</li>
-                                                                                                                @if (task.Comments.Count() > 0)
-                                                                                                                {
-                                                                                                                    <span class="text-bold">Comments: </span>
-                                                                                                                    <br>
-                                                                                                                    @foreach (var cmt in task.Comments)
-                                                                                                                    {
-                                                                                                                        @cmt.CommentContent
-                                                                                                                        <br />
-                                                                                                                    }
-                                                                                                                }
-                                                                                                            }
-                                                                                                        </ul>
-                                                                                                    </td>
-                                                                                                </tr>
-                                                                                            }
-                                                                                        </table>
-                                                                                    }
+                                                                                    @board.Lists.Count() Lists
                                                                                 </td>
                                                                             </tr>
                                                                         }

@@ -21,7 +21,6 @@ public class WorkSpace
     //(1.Public, 2.Private, ...)
 
     [Required]
-    [StringLength(50)]
     public int UserId { get; set; }
     public User User { get; set; }
     public ICollection<WorkSpaceMember> WorkSpaceMembers { get; set; }

@@ -78,7 +78,7 @@
                                         <tr class="@selectedRow">
                                             <td>@index</td>
                                             <td class="">
-                                                <img src="~/test/icons/default-avatar.jpg" width="60" style="max-height: 100px; object-fit: cover" alt="img">
+                                                <img src="@Html.DisplayFor(modelItem => item.Avatar)" width="60" style="max-height: 100px; object-fit: cover" alt="img">
                                             </td>
                                             <td>
                                                 @Html.DisplayFor(modelItem => item.UserName)
@@ -89,20 +89,10 @@
                                             <td>
                                                 @if (item.WorkSpaces.Count() > 0)
                                                 {
-                                                    <a asp-action="Index" asp-route-id="@item.ID">
-                                                        <!-- Trigger the modal with a button -->
-                                                        <a type="button" class="text text-info text-md" data-toggle="modal" data-target="#showWorkSpace-@item.ID">
-                                                            <i class="fa fa-eye"></i>
-                                                            <ul>
-                                                                @foreach (var workspace in item.WorkSpaces)
-                                                                {
-                                                                    <li>
-                                                                        @workspace.WorkSpaceTitle <br>
-                                                                    </li>
-
-                                                                }
-                                                            </ul>
-                                                        </a>
+                                                    <!-- Trigger the modal with a button -->
+                                                    <a type="button" class="text text-info text-md" data-toggle="modal" data-target="#showWorkSpace-@item.ID">
+                                                        <i class="fa fa-eye"></i>
+                                                        @item.WorkSpaces.Count() Workspaces
                                                     </a>
 
                                                     <!-- Modal -->
@@ -162,15 +152,68 @@
                                                 }
                                             </td>
                                             <td>
-                                                <ul>
-                                                    @foreach (var member in item.WorkSpaceMembers)
-                                                    {
-                                                        <li>
-                                                            @member.WorkSpace.WorkSpaceTitle <br>
-                                                        </li>
+                                                @if (item.WorkSpaceMembers.Count() > 0)
+                                                {
+                                                    <!-- Trigger the modal with a button -->
+                                                    <a type="button" class="text text-info text-md" data-toggle="modal" data-target="#showWorkSpaceMember-@item.ID">
+                                                        <i class="fa fa-eye"></i>
+                                                        @item.WorkSpaceMembers.Count() Workspaces
+                                                    </a>
 
-                                                    }
-                                                </ul>
+                                                    <!-- Modal -->
+                                                    <div id="showWorkSpaceMember-@item.ID" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                                        <div class="modal-dialog modal-dialog-centered" role="document">
+
+                                                            <!-- Modal content-->
+                                                            <div class="modal-content" style="min-width: 700px; max-height: 600px">
+                                                                <div class="modal-header">
+                                                                    <h4 class="modal-title">WorkSpaces enrolled by @item.FullName</h4>
+                                                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                                </div>
+                                                                <div class="modal-body overflow-auto">
+                                                                    <table class="table table-bordered table-striped">
+                                                                        @{
+                                                                            var indexInModel = 0;
+                                                                        }
+                                                                        <tr>
+                                                                            <th>No.</th>
+                                                                            <th>Title</th>
+                                                                            <th>Description</th>
+                                                                            <th colspan="2">Action</th>
+                                                                        </tr>
+
+                                                                        @foreach (var member in item.WorkSpaceMembers)
+                                                                        {
+                                                                            indexInModel++;
+                                                                            <tr>
+                                                                                <td>
+                                                                                    @indexInModel
+                                                                                </td>
+                                                                                <td>
+                                                                                    @member.WorkSpace.WorkSpaceTitle
+                                                                                </td>
+                                                                                <td>
+                                                                                    @member.WorkSpace.WorkSpaceDescription
+                                                                                </td>
+                                                                                <td>
+                                                                                    <a href="/WorkSpaces/Details/@member.WorkSpace.WorkSpaceId" class="btn btn-secondary btn-sm">
+                                                                                        <i class="fas fa-eye">
+                                                                                        </i>
+                                                                                        Details
+                                                                                    </a>
+                                                                                </td>
+                                                                            </tr>
+                                                                        }
+                                                                    </table>
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+                                                }
                                             </td>
                                             <td class="project-actions text-center">
                                                 @*@if($user->deleted_at != null)
