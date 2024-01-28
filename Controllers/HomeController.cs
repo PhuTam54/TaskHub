@@ -41,11 +41,11 @@ namespace TaskHub.Controllers
             return View(viewModel);
         }
 
-        // GET: Home/MyBoard/1
-        public async Task<IActionResult> MyBoard(int id = 1)
+        // GET: Home/MyBoards/:WorkSpaceId
+        public async Task<IActionResult> MyBoards(int? id)
         {
-            ViewBag.BoardId = id;
-            var memberId = 2;
+            ViewBag.WorkSpaceId = id;
+            var userId = 2; // Default value - just for the testing...
             var viewModel = new WorkSpaceIndexData();
             viewModel.WorkSpaces = await _context.WorkSpace
                 .Include(i => i.User)
@@ -56,8 +56,7 @@ namespace TaskHub.Controllers
                         .ThenInclude(i => i.TaskItems)
                             .ThenInclude(i => i.Comments)
                 .AsNoTracking()
-                .Where(i => i.WorkSpaceMembers.Any(wm => wm.MemberId == memberId))
-                .Where(i => i.Boards.Any(b => b.BoardId == id))
+                .Where(i => i.WorkSpaceMembers.Any(wm => wm.User.ID == userId))
                 .ToListAsync();
 
             ViewBag.DataFromDatabase = viewModel.WorkSpaces;

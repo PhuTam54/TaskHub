@@ -5,7 +5,7 @@
 }
 
 @{
-    ViewData["Title"] = "My Board";
+    ViewData["Title"] = "My Boards";
 }
 
 @*<!-- ./card-header -->
@@ -78,29 +78,31 @@
 </div>
 <!-- /.card-body -->*@
 
-<header>
-    <div class="header-flex">
-        <span></span>
-        <h1 id="title" class="text-align-center">TaskHub</h1>
-        <span class="title-actions-container" style="font-size:25px;cursor:pointer;letter-spacing: 1ch;">
-            <label for="auto-save" class="auto-save-text">Auto Save</label>
-            <label class="switch" id="auto-save-label">
-                <input id="auto-save" type="checkbox" checked>
-                <span class="slider round"></span>
-            </label>
-            <i title="Delete this board." id="delete-button" class="fa fa-trash"></i>
-            <i title="Save all boards." id="save-button" class="fa fa-floppy-o"></i>
-            <i title="Settings" id="settings-button" class="fa fa-gear"></i>
-        </span>
+<section class="board-info-bar">
+
+    <div class="board-controls">
+
+        <button class="board-title btn">
+            <h2 id="title"></h2>
+        </button>
+
+        <button class="star-btn btn" aria-label="Star Board">
+            <i class="fa fa-star" aria-hidden="true"></i>
+        </button>
+
+        <button class="personal-btn btn">Personal</button>
+
+        <button class="private-btn btn"><i class="fa fa-briefcase private-btn-icon" aria-hidden="true"></i>Private</button>
+
     </div>
-</header>
+
+    <button class="menu-btn btn"><i class="fa fa-ellipsis-h menu-btn-icon" aria-hidden="true"></i>Show Menu</button>
+
+</section>
 
 <div id="sidebar" class="sidenav">
     <span id="sidebar-close">&times;</span>
     <p class="is-title">Boards</p>
-    <ul id="boards-list">
-        <!-- Boards will be listed here... -->
-    </ul>
 
     <div class="flex-col">
         <input type="text" id="add-board-text" name="add-board" placeholder="Add Board...">
@@ -263,20 +265,34 @@
 
         function listBoards() {
             /* List all the boards in the sidebar. */
-
             e_boardsList.innerHTML = '';
             for (let _board of appData.boards) {
-                let _boardTitle = document.createElement('li');
-                _boardTitle.innerText = _board.name;
-                _boardTitle.id = _board.id;
-                if (_board.id === currentBoard().id) _boardTitle.classList.add('is-active');
-                _boardTitle.addEventListener('click', () => {
+                let isActive = _board.id === currentBoard().id ? 'active' : '';
+
+                let _boardElement = document.createElement('li');
+                _boardElement.classList.add('nav-item');
+
+                let _link = document.createElement('a');
+                _link.classList.add('nav-link');
+                if (isActive) {
+                    _link.classList.add(isActive);
+                }
+                _link.innerHTML = `
+                                                                        <i class="fa fa-clipboard nav-icon"></i>
+                                                                        <p>${_board.name}</p>
+                                                                    `;
+                _link.onclick = function () {
                     renderBoard(_board);
                     listBoards();
-                });
-                e_boardsList.appendChild(_boardTitle);
+                };
+                _link.style.cursor = 'pointer';
+
+                _boardElement.appendChild(_link);
+
+                e_boardsList.appendChild(_boardElement);
             }
         }
+
 
         function renderBoard(board) {
             appData.currentBoard = appData.boards.indexOf(board);
@@ -867,60 +883,88 @@
         /* <=================================== Persistent Data Storage ===================================> */
         function saveData() {
             window.localStorage.setItem('taskHub-appData', JSON.stringify(appData));
+            // Dữ liệu bạn muốn gửi đến server (ví dụ: một đối tượng JSON)
+            const dataToSend = {
+                name: 'John',
+                age: 30,
+                email: 'john@example.com'
+            };
+
+            // URL của endpoint trên server
+            const url = '/Boards/Create'; // Địa chỉ endpoint tương ứng với API của bạn
+
+            // Tạo yêu cầu HTTP bằng phương thức POST
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json', // Loại dữ liệu gửi đi là JSON
+                },
+                body: JSON.stringify(dataToSend), // Chuyển đổi dữ liệu sang định dạng JSON
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json(); // Chuyển đổi phản hồi từ server thành đối tượng JSON
+                })
+                .then(data => {
+                    console.log('Server response:', data); // Xử lý phản hồi từ server
+                })
+                .catch(error => {
+                    console.error('There was a problem with your fetch operation:', error);
+                });
+
         }
 
         function getDataFromLocalStorage() {
-
             let dataFromDatabase = {
                 settings: { theme: null },
                 currentBoard: 1,
                 identifier: 123,
                 boards: [
-                    {
-                        name: "TaskHub",
-                        id: "b1",
-                        settings: { /* Các cài đặt của Board 1 */ },
-                        identifier: 456,
-                        cards: [
-                            {
-                                name: "Todo",
-                                id: "c1",
-                                items: [
-                                    { title: "Task 1", description: "Description 1", id: "i1" },
-                                    { title: "Task 2", description: "Description 2", id: "i2" }
-                                ]
-                            },
-                            {
-                                name: "Done",
-                                id: "c2",
-                                items: [
-                                    { title: "Task 3", description: "Description 3", id: "i3" },
-                                    { title: "Task 4", description: "Description 4", id: "i4" }
-                                ]
-                            },
-                            // ... Các cards khác của Board 1
-                        ]
-                    },
-                    {
-                        name: "ContosoUniversity",
-                        id: "b2",
-                        cards: []
-                        // ... Các cài đặt và cards của Board 2
-                    },
-                    // ... Các boards khác
-                ]
+        @foreach (var item in Model.WorkSpaces)
+        {
+            @if (item.WorkSpaceId == ViewBag.WorkSpaceId)
+            {
+                @foreach (var board in item.Boards)
+                {
+                    <text>{
+                                    name: "@board.BoardTitle",
+                                    id: "@board.BoardId",
+                                    settings: { /* Các cài đặt của Board */ },
+                                    identifier: 54,
+                                    cards: [
+                        @foreach (var list in board.Lists)
+                        {
+                            <text>{
+                                                name: "@list.ListTitle",
+                                                id: "@list.ListId",
+                                                items: [
+                                @foreach (var taskItem in list.TaskItems)
+                                {
+                                    <text>{ title: "@taskItem.Title", description: "@taskItem.Description", id: "@taskItem.Id" }, </text>
+                                }
+                                                                                                                                                                                                                                ]
+                                            }, </text>
+                        }
+                                                                                                                                                                                    ]
+                                }, </text>
+                }
+            }
+
+        }
+                                 ]
             };
 
             // Lưu dữ liệu vào localStorage
-            window.localStorage.setItem('taskHub-appData', JSON.stringify(dataFromDatabase));
-
-            return window.localStorage.getItem('taskHub-appData');
+            return dataFromDatabase;
         }
+
 
         function loadData() {
             let _data = getDataFromLocalStorage()
             if (_data) {
-                let _appData = JSON.parse(_data);
+                let _appData = _data;
 
                 // Since JSON doesn't store functions and such.
                 // We'll have to reinitailize the classes with the loaded data.
