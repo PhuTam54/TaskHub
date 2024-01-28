@@ -22,6 +22,33 @@ namespace TaskHub.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("TaskHub.Models.Account", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("Account");
+                });
+
             modelBuilder.Entity("TaskHub.Models.Board", b =>
                 {
                     b.Property<int>("BoardId")
@@ -204,7 +231,6 @@ namespace TaskHub.Migrations
                         .HasColumnType("int");
 
                     b.Property<int>("UserId")
-                        .HasMaxLength(50)
                         .HasColumnType("int");
 
                     b.Property<string>("WorkSpaceDescription")

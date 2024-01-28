@@ -33,5 +33,7 @@ namespace TaskHub.Data
             modelBuilder.Entity<WorkSpaceMember>().ToTable("WorkSpaceMember");
             modelBuilder.Entity<Comment>().ToTable("Comment");
         }
+
+        public DbSet<TaskHub.Models.Account> Account { get; set; } = default!;
     }
 }

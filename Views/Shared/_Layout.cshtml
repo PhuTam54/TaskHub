@@ -102,7 +102,7 @@
                             <img src="~/test/icons/default-avatar.jpg" style="width: 40px;" class="img-circle elevation-2" alt="User Image">
                         </div>
                         <div class="info">
-                            <a href="admin/admin-dashboard" class="d-block">Phu Tam</a>
+                            <a asp-controller="Accounts" asp-action="Edit" class="d-block">Phu Tam</a>
                         </div>
                     </div>
 
@@ -143,6 +143,18 @@
                                 <a href="/Users" class="nav-link {{request()->is('admin/admin-result') ? 'active' : '' }}">
                                     <i class="fa fa-users nav-icon"></i>
                                     <p>Users</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a asp-controller="Accounts" class="nav-link">
+                                    <i class="fa fa-users nav-icon"></i>
+                                    <p>Accounts</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a asp-controller="Accounts" asp-action="Logout" class="nav-link">
+                                    <i class="fa fa-user"></i>
+                                        <p>Logout</p>
                                 </a>
                             </li>
 
