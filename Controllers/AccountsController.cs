@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Security.Cryptography;
 using TaskHub.Data;
 using TaskHub.Models;
 using BCryptNet = BCrypt.Net.BCrypt;
@@ -10,12 +9,10 @@ namespace TaskHub.Controllers
     public class AccountsController : Controller
     {
         private readonly TaskHubContext _context;
-        private readonly ILogger<AccountsController> _logger;
 
-        public AccountsController(TaskHubContext context, ILogger<AccountsController> logger)
+        public AccountsController(TaskHubContext context)
         {
             _context = context;
-            _logger = logger;
         }
 
         // GET: Accounts
@@ -87,25 +84,18 @@ namespace TaskHub.Controllers
         [HttpPost]
         public IActionResult Login(Account account)
         {
-            try
+            if (HttpContext.Session.GetString("UserName") == null)
             {
-                if (HttpContext.Session.GetString("UserName") == null)
+                var user = _context.Account.Where
+                    (x => x.Username.Equals(account.Username) && 
+                    x.Password.Equals(account.Password)).FirstOrDefault();
+                if (user != null && BCryptNet.Verify(account.Password, user.Password))
                 {
-                    var user = _context.Account.FirstOrDefault(x => x.Username == account.Username);
-                    if (user != null && BCryptNet.Verify(account.Password, user.Password))
-                    {
                         HttpContext.Session.SetString("UserName", user.Username.ToString());
                         return RedirectToAction("Index", "Home");
-                    }
                 }
             }
-            catch (CryptographicException ex)
-            {
-                _logger.LogError(ex, "Error during session cookie unprotection");
-                ModelState.AddModelError(string.Empty, "Error during login. Please try again.");
-            }
             return View();
-
         }
         public IActionResult Logout()
         {
