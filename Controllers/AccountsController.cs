@@ -87,11 +87,11 @@ namespace TaskHub.Controllers
             if (HttpContext.Session.GetString("UserName") == null)
             {
                 var user = _context.Account.Where
-                    (x => x.Username.Equals(account.Username) && 
+                    (x => x.Email.Equals(account.Email) && 
                     x.Password.Equals(account.Password)).FirstOrDefault();
-                if (user != null && BCryptNet.Verify(account.Password, user.Password))
+                if (user != null )
                 {
-                        HttpContext.Session.SetString("UserName", user.Username.ToString());
+                        HttpContext.Session.SetString("UserName", user.Email.ToString());
                         return RedirectToAction("Index", "Home");
                 }
             }
@@ -131,7 +131,7 @@ namespace TaskHub.Controllers
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+            if (true)
             {
                 try
                 {
