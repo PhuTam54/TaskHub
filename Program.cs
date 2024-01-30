@@ -9,7 +9,7 @@ builder.Services.AddRazorPages();
 builder.Services.AddDbContext<TaskHubContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("TaskHubContext") ?? throw new InvalidOperationException("Connection string 'TaskHubContext' not found.")));
 builder.Services.AddSession();
-
+builder.Services.AddHttpContextAccessor();
 
 var app = builder.Build();
 

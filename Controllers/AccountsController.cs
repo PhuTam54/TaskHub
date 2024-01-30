@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using TaskHub.Data;
 using TaskHub.Models;
-using BCryptNet = BCrypt.Net.BCrypt;
 
 namespace TaskHub.Controllers
 {
@@ -16,11 +16,23 @@ namespace TaskHub.Controllers
         }
 
         // GET: Accounts
-        public async Task<IActionResult> Index()
+        // GET: Movies
+        public async Task<IActionResult> Index(string searchString)
         {
-              return _context.Account != null ? 
-                          View(await _context.Account.ToListAsync()) :
-                          Problem("Entity set 'TaskHubContext.Account'  is null.");
+            if (_context.Account == null)
+            {
+                return Problem("Entity set 'MvcMovieContext.Movie'  is null.");
+            }
+
+            var accounts = from m in _context.Account
+                         select m;
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                accounts = accounts.Where(s => s.Username!.Contains(searchString));
+            }
+
+            return View(await accounts.ToListAsync());
         }
 
         // GET: Accounts/Details/5
@@ -50,8 +62,8 @@ namespace TaskHub.Controllers
         // POST: Accounts/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
+      [HttpPost]
+      [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register([Bind("ID,Username,Email,Password")] Account account)
         {
             var existingEmail = await _context.Account.AnyAsync(a => a.Email == account.Email);
@@ -60,14 +72,18 @@ namespace TaskHub.Controllers
                 ModelState.AddModelError("Email", "Email already exists.");
                 return View(account);
             }
-            else if(ModelState.IsValid)
+            else if (ModelState.IsValid)
             {
+                // Hash the password before saving it
+                account.Password = BCrypt.Net.BCrypt.HashPassword(account.Password);
+        
                 _context.Add(account);
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Login");
             }
             return View(account);
         }
+
 
         [HttpGet]
         public IActionResult Login()
@@ -78,7 +94,7 @@ namespace TaskHub.Controllers
             }
             else
             {
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "TaskItems");
             }
         }
         [HttpPost]
@@ -86,17 +102,18 @@ namespace TaskHub.Controllers
         {
             if (HttpContext.Session.GetString("UserName") == null)
             {
-                var user = _context.Account.Where
-                    (x => x.Email.Equals(account.Email) && 
-                    x.Password.Equals(account.Password)).FirstOrDefault();
-                if (user != null )
+                var user = _context.Account.Where(x => x.Email.Equals(account.Email)).FirstOrDefault();
+                if (user != null && BCrypt.Net.BCrypt.Verify(account.Password, user.Password))
                 {
-                        HttpContext.Session.SetString("UserName", user.Email.ToString());
-                        return RedirectToAction("Index", "Home");
+                    HttpContext.Session.SetString("UserName", user.Email.ToString());
+                    ViewBag.Username = user.Username;
+                    return RedirectToAction("Index", "TaskItems");
                 }
             }
             return View();
         }
+
+
         public IActionResult Logout()
         {
             HttpContext.Session.Clear();

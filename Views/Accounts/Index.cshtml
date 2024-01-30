@@ -9,9 +9,16 @@
 <p>
     <a asp-action="Register">Create New</a>
 </p>
+<form asp-controller="Accounts" asp-action="Index" method="get">
+    <p>
+        User: <input type="text" name="SearchString" />
+        <input type="submit" value="Filter" />
+    </p>
+</form>
 <table class="table">
     <thead>
         <tr>
+            <th>No.</th>
             <th>
                 @Html.DisplayNameFor(model => model.Username)
             </th>
@@ -27,6 +34,9 @@
     <tbody>
 @foreach (var item in Model) {
         <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ID)
+                </td>
             <td>
                     @Html.DisplayFor(modelItem => item.Username)
             </td>
