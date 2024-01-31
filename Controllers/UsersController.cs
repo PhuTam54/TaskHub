@@ -9,6 +9,7 @@ using TaskHub.Models;
 using TaskHub.Data;
 using TaskHub.Models.WorkSpaceViewModels;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.CodeAnalysis.Scripting;
 
 namespace TaskHub.Controllers
 {
@@ -21,6 +22,81 @@ namespace TaskHub.Controllers
         {
             _context = context;
             _hostingEnvironment = hostingEnvironment;
+        }
+
+        // GET: Users/Register
+        public IActionResult Register()
+        {
+            return View();
+        }
+
+        // POST: Users/Register
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Register([Bind("ID,UserName,Email,Password,LastName,FirstMidName")] User user)
+        {
+            var existingEmail = await _context.User.AnyAsync(a => a.Email == user.Email);
+            if (existingEmail)
+            {
+                ModelState.AddModelError("Email", "Email already exists.");
+                return View(user);
+            }
+            else if (true)
+            {
+                // Hash the password before saving it
+                user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
+                user.Avatar = "https://img.meta.com.vn/Data/image/2021/09/22/anh-meo-cute-de-thuong-dang-yeu-42.jpg";
+                user.FirstMidName = user.UserName;
+                user.LastName = "";
+
+                _context.Add(user);
+                await _context.SaveChangesAsync();
+                return RedirectToAction("Login");
+            }
+            return View(user);
+        }
+
+
+        [HttpGet]
+        public IActionResult Login()
+        {
+            if (HttpContext.Session.GetString("UserName") == null)
+            {
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("MyBoards", "Home");
+            }
+        }
+        [HttpPost]
+        public IActionResult Login(User user)
+        {
+            if (HttpContext.Session.GetString("UserName") == null)
+            {
+                var account = _context.User.Where(x => x.Email.Equals(user.Email)).FirstOrDefault();
+                if (account != null && BCrypt.Net.BCrypt.Verify(user.Password, account.Password))
+                {
+                    HttpContext.Session.SetInt32("UserID", account.ID);
+                    HttpContext.Session.SetString("UserName", account.UserName);
+                    HttpContext.Session.SetString("Avatar", account.Avatar);
+                    ViewBag.Username = account.UserName;
+                    ViewBag.UserId = account.ID;
+                    ViewBag.Avatar = account.Avatar;
+                    return RedirectToAction("MyBoards", "Home");
+                }
+            }
+            return View();
+        }
+
+        public IActionResult Logout()
+        {
+            HttpContext.Session.Clear();
+            HttpContext.Session.Remove("UserId");
+            HttpContext.Session.Remove("UserName");
+            return RedirectToAction("Login", "Users");
         }
 
         // GET: Users

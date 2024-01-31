@@ -83,10 +83,10 @@
             <!-- Main Sidebar Container -->
             <aside class="main-sidebar sidebar-dark-primary elevation-4">
                 <!-- Brand Logo -->
-                <a href="/TaskItems" class="brand-link navbar-brand d-flex align-items-center px-4 px-lg-5" style="margin-right: -8px">
+                <a href="/Home/MyBoards" class="brand-link navbar-brand d-flex align-items-center px-4 px-lg-5" style="margin-right: -8px">
                     <h3 class="" style="color: #c2c7d0; margin: 0 0 0 -30px">
                         <img class="rounded-3" style="width: 55px;" src="~/test/icons/favicon.ico" alt="" />
-                        </i>TaskHub
+                        TaskHub
                     </h3>
                 </a>
 
@@ -95,10 +95,10 @@
                     <!-- Sidebar user panel (optional) -->
                     <div class="user-panel mt-3 pb-3 mb-3 d-flex">
                         <div class="image">
-                            <img src="~/test/icons/default-avatar.jpg" style="width: 40px;" class="img-circle elevation-2" alt="User Image">
+                            <img src="@ViewBag.Avatar" style="width: 40px;" class="img-circle elevation-2" alt="User Image">
                         </div>
                         <div class="info">
-                            <a href="admin/admin-dashboard" class="d-block">Phu Tam</a>
+                            <a href="/Users/Edit/@ViewBag.UserId" class="d-block">@ViewBag.Username</a>
                         </div>
                     </div>
 
@@ -129,6 +129,12 @@
                                     </p>
                                 </a>
                                 <ul class="nav nav-treeview">
+                                    <li class="nav-item">
+                                        <a href="/Users/CreateWorkSpaces" class="nav-link d-flex justify-content-between">
+                                            <p>Add a new workSpace</p>
+                                            <i class="fa fa-plus nav-icon"></i>
+                                        </a>
+                                    </li>
                                     @foreach (var item in Model.WorkSpaces)
                                     {
                                         <li class="nav-item">
@@ -137,17 +143,20 @@
                                                 <p>@item.WorkSpaceTitle</p>
                                             </a>
                                         </li>
-
                                     }
                                 </ul>
                             </li>
 
-                            <li class="nav-item">
-                                <a id="sidebar-button" class="nav-link d-flex justify-content-between">
-                                    <p>My Boards</p>
-                                    <i class="fa fa-plus nav-icon"></i>
-                                </a>
-                            </li>
+                            @if (Model.WorkSpaces.Count() > 0)
+                            {
+                                <li class="nav-item">
+                                    <a id="sidebar-button" class="nav-link d-flex justify-content-between">
+                                        <p>My Boards</p>
+                                        <i class="fa fa-plus nav-icon"></i>
+                                    </a>
+                                </li>
+                            }
+                            
 
                             <div id="boards-list">
                                 <!-- Boards will be listed here... -->

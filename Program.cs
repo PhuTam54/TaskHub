@@ -9,6 +9,8 @@ builder.Services.AddRazorPages();
 builder.Services.AddDbContext<TaskHubContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("TaskHubContext") ?? throw new InvalidOperationException("Connection string 'TaskHubContext' not found.")));
 
+builder.Services.AddSession();
+
 var app = builder.Build();
 
 // Seed data
@@ -35,6 +37,7 @@ app.UseRouting();
 app.UseAuthorization();
 
 app.MapRazorPages();
+app.UseSession();
 
 app.MapControllerRoute(
     name: "default",

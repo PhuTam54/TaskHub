@@ -29,7 +29,7 @@ public static class SeedData
                 {
                     UserName = "phutam",
                     Email = "phutam@gmail.com",
-                    Password = "123456",
+                    Password = BCrypt.Net.BCrypt.HashPassword("123456"),
                     FirstMidName = "Tam",
                     LastName = "Phu",
                     Avatar = "https://img.meta.com.vn/Data/image/2021/09/22/anh-meo-cute-de-thuong-dang-yeu-42.jpg",
@@ -38,7 +38,7 @@ public static class SeedData
                 {
                     UserName = "tranthuy",
                     Email = "tranthuy@gmail.com",
-                    Password = "123456",
+                    Password = BCrypt.Net.BCrypt.HashPassword("123456"),
                     FirstMidName = "Thuy",
                     LastName = "Tran",
                     Avatar = "https://img.meta.com.vn/Data/image/2021/09/22/anh-meo-cute-de-thuong-dang-yeu-42.jpg",
@@ -47,7 +47,7 @@ public static class SeedData
                 {
                     UserName = "peter",
                     Email = "peter@gmail.com",
-                    Password = "123456",
+                    Password = BCrypt.Net.BCrypt.HashPassword("123456"),
                     FirstMidName = "Peter",
                     LastName = "Parker",
                     Avatar = "https://img.meta.com.vn/Data/image/2021/09/22/anh-meo-cute-de-thuong-dang-yeu-42.jpg",
@@ -56,7 +56,7 @@ public static class SeedData
                 {
                     UserName = "tom",
                     Email = "tom@gmail.com",
-                    Password = "123456",
+                    Password = BCrypt.Net.BCrypt.HashPassword("123456"),
                     FirstMidName = "Tom",
                     LastName = "Holland",
                     Avatar = "https://img.meta.com.vn/Data/image/2021/09/22/anh-meo-cute-de-thuong-dang-yeu-42.jpg",
@@ -65,7 +65,7 @@ public static class SeedData
                 {
                     UserName = "ronaldo",
                     Email = "ronaldo@gmail.com",
-                    Password = "123456",
+                    Password = BCrypt.Net.BCrypt.HashPassword("123456"),
                     FirstMidName = "Cristiano",
                     LastName = "Ronaldo",
                     Avatar = "https://img.meta.com.vn/Data/image/2021/09/22/anh-meo-cute-de-thuong-dang-yeu-42.jpg",
@@ -74,7 +74,7 @@ public static class SeedData
                 {
                     UserName = "phutam2",
                     Email = "phutam2@gmail.com",
-                    Password = "123456",
+                    Password = BCrypt.Net.BCrypt.HashPassword("123456"),
                     FirstMidName = "Tam",
                     LastName = "Phu 2",
                     Avatar = "https://img.meta.com.vn/Data/image/2021/09/22/anh-meo-cute-de-thuong-dang-yeu-42.jpg",
@@ -83,7 +83,7 @@ public static class SeedData
                 {
                     UserName = "tranthuy2",
                     Email = "tranthuy2@gmail.com",
-                    Password = "123456",
+                    Password = BCrypt.Net.BCrypt.HashPassword("123456"),
                     FirstMidName = "Thuy",
                     LastName = "Tran 2",
                     Avatar = "https://img.meta.com.vn/Data/image/2021/09/22/anh-meo-cute-de-thuong-dang-yeu-42.jpg",
@@ -92,7 +92,7 @@ public static class SeedData
                 {
                     UserName = "peter2",
                     Email = "peter2@gmail.com",
-                    Password = "123456",
+                    Password = BCrypt.Net.BCrypt.HashPassword("123456"),
                     FirstMidName = "Peter",
                     LastName = "Parker 2",
                     Avatar = "https://img.meta.com.vn/Data/image/2021/09/22/anh-meo-cute-de-thuong-dang-yeu-42.jpg",
@@ -101,7 +101,7 @@ public static class SeedData
                 {
                     UserName = "tom2",
                     Email = "tom2@gmail.com",
-                    Password = "123456",
+                    Password = BCrypt.Net.BCrypt.HashPassword("123456"),
                     FirstMidName = "Tom",
                     LastName = "Holland 2",
                     Avatar = "https://img.meta.com.vn/Data/image/2021/09/22/anh-meo-cute-de-thuong-dang-yeu-42.jpg",
@@ -110,7 +110,7 @@ public static class SeedData
                 {
                     UserName = "ronaldo2",
                     Email = "ronaldo2@gmail.com",
-                    Password = "123456",
+                    Password = BCrypt.Net.BCrypt.HashPassword("123456"),
                     FirstMidName = "Cristiano",
                     LastName = "Ronaldo 2",
                     Avatar = "https://img.meta.com.vn/Data/image/2021/09/22/anh-meo-cute-de-thuong-dang-yeu-42.jpg",
@@ -119,7 +119,7 @@ public static class SeedData
                 {
                     UserName = "phutam3",
                     Email = "phutam3@gmail.com",
-                    Password = "123456",
+                    Password = BCrypt.Net.BCrypt.HashPassword("123456"),
                     FirstMidName = "Tam",
                     LastName = "Phu 3",
                     Avatar = "https://img.meta.com.vn/Data/image/2021/09/22/anh-meo-cute-de-thuong-dang-yeu-42.jpg",
@@ -128,7 +128,7 @@ public static class SeedData
                 {
                     UserName = "tranthuy3",
                     Email = "tranthuy3@gmail.com",
-                    Password = "123456",
+                    Password = BCrypt.Net.BCrypt.HashPassword("123456"),
                     FirstMidName = "Thuy",
                     LastName = "Tran 3",
                     Avatar = "https://img.meta.com.vn/Data/image/2021/09/22/anh-meo-cute-de-thuong-dang-yeu-42.jpg",
@@ -137,7 +137,7 @@ public static class SeedData
                 {
                     UserName = "peter3",
                     Email = "peter3@gmail.com",
-                    Password = "123456",
+                    Password = BCrypt.Net.BCrypt.HashPassword("123456"),
                     FirstMidName = "Peter",
                     LastName = "Parker 3",
                     Avatar = "https://img.meta.com.vn/Data/image/2021/09/22/anh-meo-cute-de-thuong-dang-yeu-42.jpg",
@@ -146,7 +146,7 @@ public static class SeedData
                 {
                     UserName = "tom3",
                     Email = "tom3@gmail.com",
-                    Password = "123456",
+                    Password = BCrypt.Net.BCrypt.HashPassword("123456"),
                     FirstMidName = "Tom",
                     LastName = "Holland 3",
                     Avatar = "https://img.meta.com.vn/Data/image/2021/09/22/anh-meo-cute-de-thuong-dang-yeu-42.jpg",
@@ -155,7 +155,7 @@ public static class SeedData
                 {
                     UserName = "ronaldo3",
                     Email = "ronaldo3@gmail.com",
-                    Password = "123456",
+                    Password = BCrypt.Net.BCrypt.HashPassword("123456"),
                     FirstMidName = "Cristiano",
                     LastName = "Ronaldo 3",
                     Avatar = "https://img.meta.com.vn/Data/image/2021/09/22/anh-meo-cute-de-thuong-dang-yeu-42.jpg",
@@ -265,13 +265,13 @@ public static class SeedData
                 },
                 new List
                 {
-                    BoardId = Boards.Single( s => s.BoardTitle == "TaskHub").BoardId,
+                    BoardId = Boards.Single( s => s.BoardTitle == "Taskhub").BoardId,
                     ListTitle = "Done 2",
                     Status = 1,
                 },
                 new List
                 {
-                    BoardId = Boards.Single( s => s.BoardTitle == "TaskHub").BoardId,
+                    BoardId = Boards.Single( s => s.BoardTitle == "Taskhub").BoardId,
                     ListTitle = "Todo 2",
                     Status = 1,
                 },

@@ -45,7 +45,10 @@ namespace TaskHub.Controllers
         public async Task<IActionResult> MyBoards(int? id)
         {
             ViewBag.WorkSpaceId = id;
-            var userId = 2; // Default value - just for the testing...
+            var userId = HttpContext.Session.GetInt32("UserID");
+            var userName = HttpContext.Session.GetString("UserName");
+            var userAvatar = HttpContext.Session.GetString("Avatar");
+
             var viewModel = new WorkSpaceIndexData();
             viewModel.WorkSpaces = await _context.WorkSpace
                 .Include(i => i.User)
@@ -60,6 +63,9 @@ namespace TaskHub.Controllers
                 .ToListAsync();
 
             ViewBag.DataFromDatabase = viewModel.WorkSpaces;
+            ViewBag.Username = userName;
+            ViewBag.UserId = userId;
+            ViewBag.Avatar = userAvatar;
             return View(viewModel);
         }
     }
