@@ -11,6 +11,8 @@ builder.Services.AddDbContext<TaskHubContext>(options =>
 builder.Services.AddSession();
 builder.Services.AddHttpContextAccessor();
 
+builder.Services.AddSession();
+
 var app = builder.Build();
 
 // Seed data

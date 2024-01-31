@@ -48,7 +48,7 @@
                 <img class="animation__shake" src="~/test/icons/favicon.ico" alt="AdminLTELogo" height="60" width="60">
             </div>
 
-            <!-- Navbar -->
+            <!-- Dung / Nam -->
             <nav class="main-header navbar navbar-expand navbar-white navbar-light">
                 <!-- Left navbar links -->
                 <ul class="navbar-nav">
@@ -62,15 +62,31 @@
                         <a href="#" class="nav-link">Contact</a>
                     </li>
                 </ul>
+                <div class="logo">
+                    <h1><i class="fa fa-trello" aria-hidden="true"></i>TaskHub</h1>
+                </div>
+
+                <div class="user-settings">
+                    <span class="title-actions-container" style="font-size:25px;cursor:pointer;letter-spacing: 1ch;">
+                        <label for="auto-save" class="auto-save-text">Auto Save</label>
+                        <label class="switch" id="auto-save-label">
+                            <input id="auto-save" type="checkbox" checked>
+                            <span class="slider round"></span>
+                        </label>
+                        <i title="Delete this board." id="delete-button" class="fa fa-trash"></i>
+                        <i title="Save all boards." id="save-button" class="fa fa-floppy-o"></i>
+                        <i title="Settings" id="settings-button" class="fa fa-gear"></i>
+                    </span>
+                </div>
             </nav>
-            <!-- /.navbar -->
+
             <!-- Main Sidebar Container -->
             <aside class="main-sidebar sidebar-dark-primary elevation-4">
                 <!-- Brand Logo -->
-                <a href="/TaskItems" class="brand-link navbar-brand d-flex align-items-center px-4 px-lg-5" style="margin-right: -8px">
+                <a href="/Home/MyBoards" class="brand-link navbar-brand d-flex align-items-center px-4 px-lg-5" style="margin-right: -8px">
                     <h3 class="" style="color: #c2c7d0; margin: 0 0 0 -30px">
                         <img class="rounded-3" style="width: 55px;" src="~/test/icons/favicon.ico" alt="" />
-                        </i>TaskHub
+                        TaskHub
                     </h3>
                 </a>
 
@@ -79,10 +95,10 @@
                     <!-- Sidebar user panel (optional) -->
                     <div class="user-panel mt-3 pb-3 mb-3 d-flex">
                         <div class="image">
-                            <img src="~/test/icons/default-avatar.jpg" style="width: 40px;" class="img-circle elevation-2" alt="User Image">
+                            <img src="@ViewBag.Avatar" style="width: 40px;" class="img-circle elevation-2" alt="User Image">
                         </div>
                         <div class="info">
-                            <a href="admin/admin-dashboard" class="d-block">Phu Tam</a>
+                            <a href="/Users/Edit/@ViewBag.UserId" class="d-block">@ViewBag.Username</a>
                         </div>
                     </div>
 
@@ -104,8 +120,8 @@
                             <!-- Add icons to the links using the .nav-icon class
                                  with font-awesome or any other icon font library -->
 
-                            <li class="nav-item {{request()->is('admin/course-add') ? 'menu-open' : '' }}">
-                                <a href="/WorkSpaces" class="nav-link active">
+                            <li class="nav-item menu-open">
+                                <a href="/Home/MyBoards/" class="nav-link active">
                                     <i class="fa fa-chart-bar nav-icon"></i>
                                     <p>
                                         My WorkSpace
@@ -113,10 +129,16 @@
                                     </p>
                                 </a>
                                 <ul class="nav nav-treeview">
+                                    <li class="nav-item">
+                                        <a href="/Users/CreateWorkSpaces" class="nav-link d-flex justify-content-between">
+                                            <p>Add a new workSpace</p>
+                                            <i class="fa fa-plus nav-icon"></i>
+                                        </a>
+                                    </li>
                                     @foreach (var item in Model.WorkSpaces)
                                     {
                                         <li class="nav-item">
-                                            <a href="/WorkSpaces/@item.WorkSpaceId" class="nav-link {{request()->is('admin/admin-courses') ? 'active' : '' }}">
+                                            <a href="/Home/MyBoards/@item.WorkSpaceId" class="nav-link @(item.WorkSpaceId == ViewBag.WorkSpaceId ? "active" : "")">
                                                 <i class="fa fa-eye nav-icon"></i>
                                                 <p>@item.WorkSpaceTitle</p>
                                             </a>
@@ -125,28 +147,20 @@
                                 </ul>
                             </li>
 
-                            <li class="nav-item">
-                                <a id="sidebar-button" class="nav-link d-flex justify-content-between">
-                                    <p>My Boards</p>
-                                    <i class="fa fa-plus nav-icon"></i>
-                                </a>
-                            </li>
-
-                            @foreach (var item in Model.WorkSpaces)
+                            @if (Model.WorkSpaces.Count() > 0)
                             {
-                                @if (item.WorkSpaceId == 1)
-                                {
-                                    @foreach (var board in item.Boards)
-                                    {
-                                        <li class="nav-item">
-                                            <a href="/Home/MyBoard/@board.BoardId" class="nav-link {{request()->is('admin/admin-result') ? 'active' : '' }}">
-                                                <i class="fa fa-clipboard nav-icon"></i>
-                                                <p>@board.BoardTitle</p>
-                                            </a>
-                                        </li>
-                                    }
-                                }
+                                <li class="nav-item">
+                                    <a id="sidebar-button" class="nav-link d-flex justify-content-between">
+                                        <p>My Boards</p>
+                                        <i class="fa fa-plus nav-icon"></i>
+                                    </a>
+                                </li>
                             }
+                            
+
+                            <div id="boards-list">
+                                <!-- Boards will be listed here... -->
+                            </div>
 
                             <li class="nav-header text-center" style="margin-left: -10px"><br><br><br><br>Phu Tam 54</li>
                         </ul>
