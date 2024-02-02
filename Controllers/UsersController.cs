@@ -57,7 +57,13 @@ namespace TaskHub.Controllers
             }
             return View(user);
         }
-
+        [HttpGet]
+        public IActionResult ForgotPassword()
+        {
+            
+                return View();
+           
+        }
 
         [HttpGet]
         public IActionResult Login()
