@@ -33,6 +33,17 @@ public static class SeedData
                     FirstMidName = "Tam",
                     LastName = "Phu",
                     Avatar = "https://img.meta.com.vn/Data/image/2021/09/22/anh-meo-cute-de-thuong-dang-yeu-42.jpg",
+                    Role = "Admin"
+                },
+                  new User
+                {
+                    UserName = "Admin",
+                    Email = "admin@gmail.com",
+                    Password = BCrypt.Net.BCrypt.HashPassword("123456"),
+                    FirstMidName = "Admin",
+                    LastName = "Admin",
+                    Avatar = "https://img.meta.com.vn/Data/image/2021/09/22/anh-meo-cute-de-thuong-dang-yeu-42.jpg",
+                    Role = "Admin"
                 },
                 new User
                 {

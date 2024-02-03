@@ -50,9 +50,12 @@ namespace TaskHub.Controllers
                 user.Avatar = "https://img.meta.com.vn/Data/image/2021/09/22/anh-meo-cute-de-thuong-dang-yeu-42.jpg";
                 user.FirstMidName = user.UserName;
                 user.LastName = "";
+                user.Role = "User";
 
                 _context.Add(user);
                 await _context.SaveChangesAsync();
+                HttpContext.Session.SetString("UserName", user.UserName);
+                HttpContext.Session.SetString("Role", user.Role);
                 return RedirectToAction("Login");
             }
             return View(user);
@@ -83,15 +86,33 @@ namespace TaskHub.Controllers
             if (HttpContext.Session.GetString("UserName") == null)
             {
                 var account = _context.User.Where(x => x.Email.Equals(user.Email)).FirstOrDefault();
+
                 if (account != null && BCrypt.Net.BCrypt.Verify(user.Password, account.Password))
                 {
+                    if (account.Role != "Admin")
+                    {
+                        ModelState.AddModelError(string.Empty, "You are not authorized to access this page.");
+                        return View();
+                    }
+
                     HttpContext.Session.SetInt32("UserID", account.ID);
                     HttpContext.Session.SetString("UserName", account.UserName);
                     HttpContext.Session.SetString("Avatar", account.Avatar);
+
+                    HttpContext.Session.SetString("UserName", account.UserName.ToString());
+                    HttpContext.Session.SetString("Role", account.Role);
+
                     ViewBag.Username = account.UserName;
                     ViewBag.UserId = account.ID;
                     ViewBag.Avatar = account.Avatar;
-                    return RedirectToAction("MyBoards", "Home");
+                    if (account.Role == "Admin")
+                    {
+                        return RedirectToAction("MyBoards", "Home");
+                    }
+                    else if (account.Role == "User")
+                    {
+                        return RedirectToAction("MyBoards", "Home");
+                    }
                 }
             }
             return View();

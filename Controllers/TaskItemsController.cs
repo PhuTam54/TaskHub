@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using TaskHub.Data;
 using TaskHub.Models;
+using TaskHub.Models.Authentication;
 
 namespace TaskHub.Controllers
 {
+
     public class TaskItemsController : Controller
     {
         private readonly TaskHubContext _context;
@@ -20,11 +22,13 @@ namespace TaskHub.Controllers
         }
 
         // GET: TaskItems
+
         public async Task<IActionResult> Index()
         {
             var taskHubContext = _context.TaskItem.Include(t => t.List).Include(t => t.User);
             return View(await taskHubContext.ToListAsync());
         }
+        [Authentication]
 
         // GET: TaskItems/Details/5
         public async Task<IActionResult> Details(int? id)

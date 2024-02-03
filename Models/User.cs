@@ -34,7 +34,7 @@ namespace TaskHub.Models
                 return FirstMidName + " " + LastName;
             }
         }
-
+        public string Role { get; set; }
         public ICollection<WorkSpaceMember> WorkSpaceMembers { get; set; }
         public ICollection<Comment> Comments { get; set; }
         public ICollection<TaskItem> TaskItems { get; set; }

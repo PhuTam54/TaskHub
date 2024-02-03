@@ -3,9 +3,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using TaskHub.Data;
 using TaskHub.Models;
+using TaskHub.Models.Authentication;
 
 namespace TaskHub.Controllers
 {
+    
     public class AccountsController : Controller
     {
         private readonly TaskHubContext _context;
@@ -16,7 +18,6 @@ namespace TaskHub.Controllers
         }
 
         // GET: Accounts
-        // GET: Movies
         public async Task<IActionResult> Index(string searchString)
         {
             if (_context.Account == null)
@@ -34,7 +35,7 @@ namespace TaskHub.Controllers
 
             return View(await accounts.ToListAsync());
         }
-
+        [Authentication]
         // GET: Accounts/Details/5
         public async Task<IActionResult> Details(int? id)
         {
