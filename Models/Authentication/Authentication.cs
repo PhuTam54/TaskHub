@@ -22,7 +22,7 @@ namespace TaskHub.Models.Authentication
 
                 bool isRedirectedFromAdmin = context.HttpContext.Request.Headers["Referer"].ToString().Contains("Users/Login");
 
-                if (userRole == "Admin" && isRedirectedFromAdmin && context.RouteData.Values["Controller"].ToString() != "Admin" && context.RouteData.Values["Action"].ToString() != "dashboard")
+                if (userRole == "Admin" && isRedirectedFromAdmin && context.RouteData.Values["Controller"].ToString() != "Admin" && context.RouteData.Values["Action"].ToString() != "Users")
                 {
                     context.Result = new NotFoundResult();
                 }
@@ -30,7 +30,7 @@ namespace TaskHub.Models.Authentication
                 {
                     context.Result = new NotFoundResult();
                 }
-                else if (userRole == "User" && context.RouteData.Values["Controller"].ToString() != "Page" && context.RouteData.Values["Action"].ToString() != "home")
+                else if (userRole == "User" && context.RouteData.Values["Controller"].ToString() != "Users" && context.RouteData.Values["Action"].ToString() != "Login")
                 {
                     context.Result = new RedirectToRouteResult(
                         new RouteValueDictionary
