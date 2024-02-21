@@ -1,5 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.UI.Services;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using System.Configuration;
 using TaskHub.Data;
 using TaskHub.Models;
 var builder = WebApplication.CreateBuilder(args);
@@ -10,8 +12,6 @@ builder.Services.AddDbContext<TaskHubContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("TaskHubContext") ?? throw new InvalidOperationException("Connection string 'TaskHubContext' not found.")));
 builder.Services.AddSession();
 builder.Services.AddHttpContextAccessor();
-
-builder.Services.AddSession();
 
 var app = builder.Build();
 

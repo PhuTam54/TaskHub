@@ -10,6 +10,9 @@ using TaskHub.Data;
 using TaskHub.Models.WorkSpaceViewModels;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.CodeAnalysis.Scripting;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 
 namespace TaskHub.Controllers
 {
@@ -17,11 +20,16 @@ namespace TaskHub.Controllers
     {
         private readonly TaskHubContext _context;
         private readonly IWebHostEnvironment _hostingEnvironment;
-
+        //private readonly UserManager<User> _userManager; 
+        //private readonly ILogger<UsersController> _logger;
+        //private readonly IEmailSender _emailSender;
         public UsersController(TaskHubContext context, IWebHostEnvironment hostingEnvironment)
         {
             _context = context;
             _hostingEnvironment = hostingEnvironment;
+            //_logger = logger;
+            //_userManager = userManager;
+            //_emailSender = emailSender;
         }
 
         // GET: Users/Register
@@ -31,8 +39,6 @@ namespace TaskHub.Controllers
         }
 
         // POST: Users/Register
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register([Bind("ID,UserName,Email,Password,LastName,FirstMidName")] User user)
@@ -61,12 +67,63 @@ namespace TaskHub.Controllers
             return View(user);
         }
         [HttpGet]
+        [AllowAnonymous]
         public IActionResult ForgotPassword()
         {
-            
-                return View();
-           
+            return View();
         }
+
+        //[HttpPost]
+        //public async Task<IActionResult> ForgotPassword(ForgotPasswordViewModel model)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        var user = await _userManager.FindByEmailAsync(model.Email);
+        //        if (user == null || !(await _userManager.IsEmailConfirmedAsync(user)))
+        //        {
+        //            return View("ForgotPasswordConfirmation");
+        //        }
+
+        //        var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+        //        var callbackUrl = Url.Action("ResetPassword", "Account", new { email = model.Email, token }, protocol: HttpContext.Request.Scheme);
+        //        await _emailSender.SendEmailAsync(model.Email, "Reset Password",
+        //            $"Please reset your password by <a href='{callbackUrl}'>clicking here</a>.");
+        //        return RedirectToAction("ForgotPasswordConfirmation");
+        //    }
+
+        //    return View(model);
+        //}
+        [HttpGet]
+        public IActionResult ResetPassword(string userId, string token)
+        {
+            var model = new ResetPasswordViewModel { UserId = userId, Token = token };
+            return View(model);
+        }
+
+        //[HttpPost]
+        //public async Task<IActionResult> ResetPassword(ResetPasswordViewModel model)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        var user = await _userManager.FindByIdAsync(model.UserId);
+        //        if (user == null)
+        //        {
+        //            return RedirectToAction("ResetPasswordConfirmation");
+        //        }
+
+        //        var result = await _userManager.ResetPasswordAsync(user, model.Token, model.Password);
+        //        if (result.Succeeded)
+        //        {
+        //            return RedirectToAction("ResetPasswordConfirmation");
+        //        }
+        //        foreach (var error in result.Errors)
+        //        {
+        //            ModelState.AddModelError(string.Empty, error.Description);
+        //        }
+        //    }
+
+        //    return View(model);
+        //}
 
         [HttpGet]
         public IActionResult Login()
