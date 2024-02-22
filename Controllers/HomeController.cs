@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using TaskHub.Data;
 using TaskHub.Models;
 using TaskHub.Models.WorkSpaceViewModels;
+using Microsoft.AspNetCore.Http;
 
 namespace TaskHub.Controllers
 {
@@ -42,9 +43,10 @@ namespace TaskHub.Controllers
         }
 
         // GET: Home/MyBoards/:WorkSpaceId
-        public async Task<IActionResult> MyBoards(int? id)
+        public async Task<IActionResult> MyBoards(int id)
         {
             ViewBag.WorkSpaceId = id;
+            HttpContext.Session.SetInt32("WorkSpaceID", id);
             var userId = HttpContext.Session.GetInt32("UserID");
             var userName = HttpContext.Session.GetString("UserName");
             var userAvatar = HttpContext.Session.GetString("Avatar");
@@ -67,6 +69,15 @@ namespace TaskHub.Controllers
             ViewBag.UserId = userId;
             ViewBag.Avatar = userAvatar;
             return View(viewModel);
+        }
+
+        // User invited to a WorkSpace
+        [HttpGet]
+        public async Task<IActionResult> JoinWorkSpace([Bind("MemberId,WorkSpaceId,UserId,EnrollmentDate,Status")] WorkSpaceMember workSpaceMember)
+        {
+            _context.Add(workSpaceMember);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
         }
     }
 }
