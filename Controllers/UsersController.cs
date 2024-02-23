@@ -50,9 +50,12 @@ namespace TaskHub.Controllers
                 user.Avatar = "https://img.meta.com.vn/Data/image/2021/09/22/anh-meo-cute-de-thuong-dang-yeu-42.jpg";
                 user.FirstMidName = user.UserName;
                 user.LastName = "";
+                user.UserRole = "User";
 
                 _context.Add(user);
                 await _context.SaveChangesAsync();
+                HttpContext.Session.SetString("UserName", user.UserName);
+                HttpContext.Session.SetString("Role", user.UserRole);
                 return RedirectToAction("Login");
             }
             return View(user);
@@ -77,15 +80,33 @@ namespace TaskHub.Controllers
             if (HttpContext.Session.GetString("UserName") == null)
             {
                 var account = _context.User.Where(x => x.Email.Equals(user.Email)).FirstOrDefault();
+
                 if (account != null && BCrypt.Net.BCrypt.Verify(user.Password, account.Password))
                 {
+                    if (account.UserRole != "Admin")
+                    {
+                        ModelState.AddModelError(string.Empty, "You are not authorized to access this page.");
+                        return View();
+                    }
+
                     HttpContext.Session.SetInt32("UserID", account.ID);
                     HttpContext.Session.SetString("UserName", account.UserName);
                     HttpContext.Session.SetString("Avatar", account.Avatar);
+
+                    HttpContext.Session.SetString("UserName", account.UserName.ToString());
+                    HttpContext.Session.SetString("Role", account.UserRole);
+
                     ViewBag.Username = account.UserName;
                     ViewBag.UserId = account.ID;
                     ViewBag.Avatar = account.Avatar;
-                    return RedirectToAction("MyBoards", "Home");
+                    if (account.UserRole == "Admin")
+                    {
+                        return RedirectToAction("MyBoards", "Home");
+                    }
+                    else if (account.UserRole == "User")
+                    {
+                        return RedirectToAction("MyBoards", "Home");
+                    }
                 }
             }
             return View();
@@ -98,7 +119,11 @@ namespace TaskHub.Controllers
             HttpContext.Session.Remove("UserName");
             return RedirectToAction("Login", "Users");
         }
-
+        [HttpGet]
+        public IActionResult ForgotPassword()
+        {
+            return View();
+        }
         // GET: Users
         public async Task<IActionResult> Index(int? id)
         {
@@ -302,14 +327,14 @@ namespace TaskHub.Controllers
             {
                 _context.User.Remove(user);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool UserExists(int id)
         {
-          return (_context.User?.Any(e => e.ID == id)).GetValueOrDefault();
+            return (_context.User?.Any(e => e.ID == id)).GetValueOrDefault();
         }
     }
 }

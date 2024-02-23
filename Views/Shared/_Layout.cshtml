@@ -1,4 +1,4 @@
-﻿
+﻿@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor;
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -145,7 +145,15 @@
                                     <p>Users</p>
                                 </a>
                             </li>
-
+                            @if (HttpContextAccessor.HttpContext.Session.GetString("UserName") != null)
+                            {
+                                <li class="nav-item">
+                                    <a asp-controller="Users" asp-action="Logout" class="nav-link">
+                                        <i class="fa fa-user"></i>
+                                        <p>Logout</p>
+                                    </a>
+                                </li>
+                            }
                             <li class="nav-header text-center" style="margin-left: -10px"><br><br><br><br>Phu Tam 54</li>
                         </ul>
                     </nav>

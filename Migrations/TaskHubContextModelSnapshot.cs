@@ -187,6 +187,10 @@ namespace TaskHub.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
+                    b.Property<string>("UserRole")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("ID");
 
                     b.ToTable("User", (string)null);
@@ -204,7 +208,6 @@ namespace TaskHub.Migrations
                         .HasColumnType("int");
 
                     b.Property<int>("UserId")
-                        .HasMaxLength(50)
                         .HasColumnType("int");
 
                     b.Property<string>("WorkSpaceDescription")
