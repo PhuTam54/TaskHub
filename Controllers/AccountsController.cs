@@ -7,7 +7,7 @@ using TaskHub.Models.Authentication;
 
 namespace TaskHub.Controllers
 {
-    
+    [Authentication]
     public class AccountsController : Controller
     {
         private readonly TaskHubContext _context;

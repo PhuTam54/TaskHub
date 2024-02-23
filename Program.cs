@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System.Configuration;
 using TaskHub.Data;
 using TaskHub.Models;
+using TaskHub.Models.InterfaceService;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -12,7 +13,7 @@ builder.Services.AddDbContext<TaskHubContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("TaskHubContext") ?? throw new InvalidOperationException("Connection string 'TaskHubContext' not found.")));
 builder.Services.AddSession();
 builder.Services.AddHttpContextAccessor();
-
+builder.Services.AddScoped<IUserService, UserService>();
 var app = builder.Build();
 
 // Seed data

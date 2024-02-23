@@ -13,6 +13,7 @@ using Microsoft.CodeAnalysis.Scripting;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
+using TaskHub.Models.InterfaceService;
 
 namespace TaskHub.Controllers
 {
@@ -20,16 +21,14 @@ namespace TaskHub.Controllers
     {
         private readonly TaskHubContext _context;
         private readonly IWebHostEnvironment _hostingEnvironment;
-        //private readonly UserManager<User> _userManager; 
-        //private readonly ILogger<UsersController> _logger;
-        //private readonly IEmailSender _emailSender;
-        public UsersController(TaskHubContext context, IWebHostEnvironment hostingEnvironment)
+        private readonly IUserService _userService;
+        private readonly IEmailService _emailService;
+        public UsersController(TaskHubContext context, IWebHostEnvironment hostingEnvironment, IUserService userService, IEmailService emailService)
         {
             _context = context;
             _hostingEnvironment = hostingEnvironment;
-            //_logger = logger;
-            //_userManager = userManager;
-            //_emailSender = emailSender;
+            _userService = userService;
+            _emailService = emailService;
         }
 
         // GET: Users/Register
@@ -56,12 +55,12 @@ namespace TaskHub.Controllers
                 user.Avatar = "https://img.meta.com.vn/Data/image/2021/09/22/anh-meo-cute-de-thuong-dang-yeu-42.jpg";
                 user.FirstMidName = user.UserName;
                 user.LastName = "";
-                user.Role = "User";
+                user.UserRole = "User";
 
                 _context.Add(user);
                 await _context.SaveChangesAsync();
                 HttpContext.Session.SetString("UserName", user.UserName);
-                HttpContext.Session.SetString("Role", user.Role);
+                HttpContext.Session.SetString("Role", user.UserRole);
                 return RedirectToAction("Login");
             }
             return View(user);
@@ -74,56 +73,51 @@ namespace TaskHub.Controllers
         }
 
         //[HttpPost]
-        //public async Task<IActionResult> ForgotPassword(ForgotPasswordViewModel model)
+        //[AllowAnonymous]
+        //[ValidateAntiForgeryToken]
+        //public async Task<IActionResult> ForgotPassword(string email)
         //{
-        //    if (ModelState.IsValid)
+        //    var user = await _userService.GetUserByEmailAsync(email);
+        //    if (user == null)
         //    {
-        //        var user = await _userManager.FindByEmailAsync(model.Email);
-        //        if (user == null || !(await _userManager.IsEmailConfirmedAsync(user)))
-        //        {
-        //            return View("ForgotPasswordConfirmation");
-        //        }
-
-        //        var token = await _userManager.GeneratePasswordResetTokenAsync(user);
-        //        var callbackUrl = Url.Action("ResetPassword", "Account", new { email = model.Email, token }, protocol: HttpContext.Request.Scheme);
-        //        await _emailSender.SendEmailAsync(model.Email, "Reset Password",
-        //            $"Please reset your password by <a href='{callbackUrl}'>clicking here</a>.");
-        //        return RedirectToAction("ForgotPasswordConfirmation");
+        //        // Return an error message if the email is not found
+        //        ModelState.AddModelError(string.Empty, "Email not found.");
+        //        return View();
         //    }
 
+        //    var token = await _userService.GeneratePasswordResetTokenAsync(user);
+        //    var callbackUrl = Url.Action("ResetPassword", "Users", new { userId = user.ID, token }, protocol: HttpContext.Request.Scheme);
+        //    var message = $"Please reset your password by <a href='{callbackUrl}'>clicking here</a>.";
+        //    await _emailService.SendEmailAsync(email, "Reset Password", message);
+
+        //    return RedirectToAction("ForgotPasswordConfirmation");
+        //}
+        //[HttpGet]
+        //[AllowAnonymous]
+        //public IActionResult ResetPassword(string userId, string token)
+        //{
+        //    var model = new ResetPasswordViewModel { UserId = userId, Token = token };
         //    return View(model);
         //}
-        [HttpGet]
-        public IActionResult ResetPassword(string userId, string token)
-        {
-            var model = new ResetPasswordViewModel { UserId = userId, Token = token };
-            return View(model);
-        }
 
         //[HttpPost]
+        //[AllowAnonymous]
+        //[ValidateAntiForgeryToken]
         //public async Task<IActionResult> ResetPassword(ResetPasswordViewModel model)
         //{
-        //    if (ModelState.IsValid)
+        //    var user = await _userService.GetUserByIdAsync(model.UserId);
+        //    if (user == null || !await _userService.VerifyPasswordResetTokenAsync(user, model.Token))
         //    {
-        //        var user = await _userManager.FindByIdAsync(model.UserId);
-        //        if (user == null)
-        //        {
-        //            return RedirectToAction("ResetPasswordConfirmation");
-        //        }
-
-        //        var result = await _userManager.ResetPasswordAsync(user, model.Token, model.Password);
-        //        if (result.Succeeded)
-        //        {
-        //            return RedirectToAction("ResetPasswordConfirmation");
-        //        }
-        //        foreach (var error in result.Errors)
-        //        {
-        //            ModelState.AddModelError(string.Empty, error.Description);
-        //        }
+        //        // Return an error message if the token is invalid
+        //        ModelState.AddModelError(string.Empty, "Invalid token.");
+        //        return View(model);
         //    }
 
-        //    return View(model);
+        //    await _userService.ResetPasswordAsync(user, model.NewPassword);
+        //    return RedirectToAction("ResetPasswordConfirmation");
         //}
+
+
 
         [HttpGet]
         public IActionResult Login()
@@ -146,7 +140,7 @@ namespace TaskHub.Controllers
 
                 if (account != null && BCrypt.Net.BCrypt.Verify(user.Password, account.Password))
                 {
-                    if (account.Role != "Admin")
+                    if (account.UserRole != "Admin")
                     {
                         ModelState.AddModelError(string.Empty, "You are not authorized to access this page.");
                         return View();
@@ -157,16 +151,16 @@ namespace TaskHub.Controllers
                     HttpContext.Session.SetString("Avatar", account.Avatar);
 
                     HttpContext.Session.SetString("UserName", account.UserName.ToString());
-                    HttpContext.Session.SetString("Role", account.Role);
+                    HttpContext.Session.SetString("Role", account.UserRole);
 
                     ViewBag.Username = account.UserName;
                     ViewBag.UserId = account.ID;
                     ViewBag.Avatar = account.Avatar;
-                    if (account.Role == "Admin")
+                    if (account.UserRole == "Admin")
                     {
                         return RedirectToAction("MyBoards", "Home");
                     }
-                    else if (account.Role == "User")
+                    else if (account.UserRole == "User")
                     {
                         return RedirectToAction("MyBoards", "Home");
                     }

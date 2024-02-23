@@ -33,7 +33,7 @@ public static class SeedData
                     FirstMidName = "Tam",
                     LastName = "Phu",
                     Avatar = "https://img.meta.com.vn/Data/image/2021/09/22/anh-meo-cute-de-thuong-dang-yeu-42.jpg",
-                    Role = "Admin"
+                    UserRole = "Admin"
                 },
                   new User
                 {
@@ -43,7 +43,7 @@ public static class SeedData
                     FirstMidName = "Admin",
                     LastName = "Admin",
                     Avatar = "https://img.meta.com.vn/Data/image/2021/09/22/anh-meo-cute-de-thuong-dang-yeu-42.jpg",
-                    Role = "Admin"
+                    UserRole = "Admin"
                 },
                 new User
                 {

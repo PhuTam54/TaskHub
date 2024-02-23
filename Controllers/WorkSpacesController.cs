@@ -9,9 +9,12 @@ using Microsoft.EntityFrameworkCore;
 using TaskHub.Data;
 using TaskHub.Models;
 using TaskHub.Models.WorkSpaceViewModels;
+using TaskHub.Models.Authentication;
 
 namespace TaskHub.Controllers
 {
+    [Authentication]
+
     public class WorkSpacesController : Controller
     {
         private readonly TaskHubContext _context;
