@@ -18,7 +18,7 @@ namespace TaskHub.Models.Authentication
             }
             else
             {
-                string userRole = context.HttpContext.Session.GetString("Role");
+                string userRole = context.HttpContext.Session.GetString("UserRole");
 
                 bool isRedirectedFromAdmin = context.HttpContext.Request.Headers["Referer"].ToString().Contains("Users/Login");
 
@@ -36,7 +36,7 @@ namespace TaskHub.Models.Authentication
                         new RouteValueDictionary
                         {
                            {"Controller", "Users" },
-                           {"Action","Index" }
+                           {"Action","Error" }
                         });
                 }
             }

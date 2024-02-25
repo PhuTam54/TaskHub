@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TaskHub.Data;
+using TaskHub.Models.Authentication;
 using TaskHub.Models.WorkSpaceViewModels;
 
 namespace TaskHub.Controllers
 {
+    [Authentication]
     public class DashBoardController : Controller
     {
         private readonly TaskHubContext _context;

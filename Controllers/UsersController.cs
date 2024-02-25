@@ -55,7 +55,7 @@ namespace TaskHub.Controllers
                 _context.Add(user);
                 await _context.SaveChangesAsync();
                 HttpContext.Session.SetString("UserName", user.UserName);
-                HttpContext.Session.SetString("Role", user.UserRole);
+                HttpContext.Session.SetString("UserRole", user.UserRole);
                 return RedirectToAction("Login");
             }
             return View(user);
@@ -83,32 +83,24 @@ namespace TaskHub.Controllers
 
                 if (account != null && BCrypt.Net.BCrypt.Verify(user.Password, account.Password))
                 {
-                    if (account.UserRole != "Admin")
-                    {
-                        ModelState.AddModelError(string.Empty, "You are not authorized to access this page.");
-                        return View();
-                    }
-
                     HttpContext.Session.SetInt32("UserID", account.ID);
                     HttpContext.Session.SetString("UserName", account.UserName);
                     HttpContext.Session.SetString("Avatar", account.Avatar);
-
                     HttpContext.Session.SetString("UserName", account.UserName.ToString());
-                    HttpContext.Session.SetString("Role", account.UserRole);
+                    HttpContext.Session.SetString("UserRole", account.UserRole);
 
                     ViewBag.Username = account.UserName;
                     ViewBag.UserId = account.ID;
                     ViewBag.Avatar = account.Avatar;
-                    if (account.UserRole == "Admin")
+
+                    if (account.UserRole == "Admin" || account.UserRole == "User")
                     {
                         return RedirectToAction("MyBoards", "Home");
                     }
-                    else if (account.UserRole == "User")
-                    {
-                        return RedirectToAction("MyBoards", "Home");
-                    }
+                    return View();
                 }
             }
+
             return View();
         }
 
