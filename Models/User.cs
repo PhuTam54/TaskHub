@@ -16,7 +16,10 @@ namespace TaskHub.Models
 
         [StringLength(50)]
         public string Email { get; set; }
+        public bool EmailSend { get; set; }
         public string Password { get; set; }
+        public string ResetPasswordToken { get; set; }
+        public DateTime? ResetPasswordTokenExpiration { get; set; }
 
         [StringLength(50)]
         [Display(Name = "Last Name")]

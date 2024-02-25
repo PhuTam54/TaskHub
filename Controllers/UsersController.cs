@@ -10,7 +10,9 @@ using TaskHub.Data;
 using TaskHub.Models.WorkSpaceViewModels;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.CodeAnalysis.Scripting;
-
+using System.Security.Cryptography;
+using System.Net;
+using System.Net.Mail;
 namespace TaskHub.Controllers
 {
     public class UsersController : Controller
@@ -33,6 +35,7 @@ namespace TaskHub.Controllers
         // POST: Users/Register
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        // POST: Users/Register
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register([Bind("ID,UserName,Email,Password,LastName,FirstMidName")] User user)
@@ -43,24 +46,37 @@ namespace TaskHub.Controllers
                 ModelState.AddModelError("Email", "Email already exists.");
                 return View(user);
             }
-            else if (true)
-            {
-                // Hash the password before saving it
-                user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
-                user.Avatar = "https://img.meta.com.vn/Data/image/2021/09/22/anh-meo-cute-de-thuong-dang-yeu-42.jpg";
-                user.FirstMidName = user.UserName;
-                user.LastName = "";
-                user.UserRole = "User";
 
-                _context.Add(user);
-                await _context.SaveChangesAsync();
-                HttpContext.Session.SetString("UserName", user.UserName);
-                HttpContext.Session.SetString("UserRole", user.UserRole);
-                return RedirectToAction("Login");
-            }
-            return View(user);
+            // Generate a random reset password token
+            string resetPasswordToken = GenerateRandomToken();
+
+            // Hash the password before saving it
+            user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
+            user.Avatar = "https://img.meta.com.vn/Data/image/2021/09/22/anh-meo-cute-de-thuong-dang-yeu-42.jpg";
+            user.FirstMidName = user.UserName;
+            user.LastName = "";
+            user.UserRole = "User";
+            user.ResetPasswordToken = resetPasswordToken;
+
+            _context.Add(user);
+            await _context.SaveChangesAsync();
+            HttpContext.Session.SetString("UserName", user.UserName);
+            HttpContext.Session.SetString("UserRole", user.UserRole);
+            return RedirectToAction("Login");
         }
 
+        // Generate a random reset password token
+        private string GenerateRandomToken()
+        {
+            // Generate a random token here
+            return Guid.NewGuid().ToString();
+        }
+
+        [HttpGet]
+        public IActionResult Error()
+        {
+            return View();
+        }
 
         [HttpGet]
         public IActionResult Login()
@@ -110,11 +126,6 @@ namespace TaskHub.Controllers
             HttpContext.Session.Remove("UserId");
             HttpContext.Session.Remove("UserName");
             return RedirectToAction("Login", "Users");
-        }
-        [HttpGet]
-        public IActionResult ForgotPassword()
-        {
-            return View();
         }
         // GET: Users
         public async Task<IActionResult> Index(int? id)
@@ -204,6 +215,121 @@ namespace TaskHub.Controllers
                 return RedirectToAction(nameof(Index));
             }
             return View(user);
+        }
+
+        // GET: Users/ForgotPassword
+        public IActionResult ForgotPassword()
+        {
+            return View();
+        }
+
+        // POST: Users/ForgotPassword
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ForgotPassword(string email, User users)
+        {
+            if (true)
+            {
+                ModelState.Clear();
+                users.EmailSend = true;
+
+                if (string.IsNullOrEmpty(email))
+                {
+                    ModelState.AddModelError("Email", "Email is required.");
+                    return View();
+                }
+
+                var user = await _context.User.FirstOrDefaultAsync(u => u.Email == email);
+                if (user == null)
+                {
+                    ModelState.AddModelError("Email", "User with this email does not exist.");
+                    return View();
+                }
+
+                var token = GenerateToken();
+                user.ResetPasswordToken = token;
+                user.ResetPasswordTokenExpiration = DateTime.UtcNow.AddHours(1);
+                await _context.SaveChangesAsync();
+
+                var callbackUrl = Url.Action("ResetPassword", "Users", new { token = token }, protocol: HttpContext.Request.Scheme);
+                await SendResetPasswordEmail(email, callbackUrl);
+
+                TempData["Message"] = "Reset password link has been sent to your email.";
+            }
+           
+            return RedirectToAction("ForgotPassword");
+        }
+        public async Task SendResetPasswordEmail(string email, string callbackUrl)
+        {
+            var mailMessage = new MailMessage();
+            mailMessage.To.Add(email);
+            mailMessage.Subject = "Reset Password";
+            mailMessage.From = new MailAddress(email);
+            mailMessage.IsBodyHtml = true;
+            mailMessage.Body = $"Please reset your password by <a href='{callbackUrl}'>clicking here</a>.";
+
+            using (var smtpClient = new SmtpClient("smtp.gmail.com"))
+            {
+                smtpClient.Port = 587;
+                smtpClient.UseDefaultCredentials = false;
+                smtpClient.EnableSsl = true;
+                smtpClient.Credentials = new NetworkCredential("locnvth2209036@fpt.edu.vn", "facuytnqgsyxupdl");
+
+                await smtpClient.SendMailAsync(mailMessage);
+            }
+        }
+
+        // GET: Users/ResetPassword
+        public async Task<IActionResult> ResetPassword(string token)
+        {
+            var user = await _context.User.FirstOrDefaultAsync(u => u.ResetPasswordToken == token && u.ResetPasswordTokenExpiration > DateTime.UtcNow);
+            if (user == null)
+            {
+                TempData["ErrorMessage"] = "Invalid or expired reset password token.";
+                return RedirectToAction(nameof(Login));
+            }
+
+            var viewModel = new ResetPasswordViewModel
+            {
+                Token = token
+            };
+            return View(viewModel);
+        }
+
+        // POST: Users/ResetPassword
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ResetPassword(ResetPasswordViewModel viewModel)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(viewModel);
+            }
+
+            var user = await _context.User.FirstOrDefaultAsync(u => u.ResetPasswordToken == viewModel.Token && u.ResetPasswordTokenExpiration > DateTime.UtcNow);
+            if (user == null)
+            {
+                TempData["ErrorMessage"] = "Invalid or expired reset password token.";
+                return RedirectToAction(nameof(Login));
+            }
+
+            user.Password = BCrypt.Net.BCrypt.HashPassword(viewModel.NewPassword);
+            user.ResetPasswordToken = "";
+            user.ResetPasswordTokenExpiration = null;
+            await _context.SaveChangesAsync();
+
+            TempData["Message"] = "Password has been reset successfully.";
+            return RedirectToAction(nameof(Login));
+        }
+
+        private string GenerateToken()
+        {
+            using (var rng = new RNGCryptoServiceProvider())
+            {
+                var tokenData = new byte[32];
+                rng.GetBytes(tokenData);
+                return Convert.ToBase64String(tokenData);
+            }
         }
 
         // GET: Users/Edit/5
