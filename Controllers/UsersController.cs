@@ -31,7 +31,7 @@ namespace TaskHub.Controllers
         {
             return View();
         }
-
+      
         // POST: Users/Register
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -179,10 +179,11 @@ namespace TaskHub.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,UserName,Email,Password,LastName,FirstMidName")] User user, IFormFile Avatar)
+        public async Task<IActionResult> Create([Bind("ID,UserName,Email,Password,LastName,FirstMidName,UserRole")] User user, IFormFile Avatar)
         {
             if (true)
             {
+
                 var allowedExtenstions = new[] { ".jpg", ".jpeg", ".png", ".gif" };
 
                 var filePaths = new List<string>();
@@ -210,6 +211,7 @@ namespace TaskHub.Controllers
 
                     user.Avatar = "/uploads/" + fileName;
                 }
+               
                 _context.Add(user);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -351,8 +353,6 @@ namespace TaskHub.Controllers
         }
 
         // POST: Users/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("ID,UserName,Email,Password,LastName,FirstMidName")] User user, IFormFile Avatar)
@@ -366,34 +366,55 @@ namespace TaskHub.Controllers
             {
                 try
                 {
-                    var allowedExtenstions = new[] { ".jpg", ".jpeg", ".png", ".gif" };
-
-                    var filePaths = new List<string>();
-                    // Check if the file has a valid extensions
-                    var fileExtension = Path.GetExtension(Avatar.FileName).ToLowerInvariant();
-                    if (string.IsNullOrEmpty(fileExtension) || !allowedExtenstions.Contains(fileExtension))
+                    var existingUser = await _context.User.FirstOrDefaultAsync(u => u.ID == id);
+                    if (existingUser == null)
                     {
-                        return BadRequest("Invalid file extension. Allowed extensions are: " + string.Join(", ", allowedExtenstions));
-                    };
-
-                    if (Avatar.Length > 0)
-                    {
-                        // Change the folder path
-                        var uploadFolderPath = Path.Combine(_hostingEnvironment.WebRootPath, "uploads");
-                        Directory.CreateDirectory(uploadFolderPath);
-
-                        var fileName = Path.GetRandomFileName() + fileExtension;
-                        var filePath = Path.Combine(uploadFolderPath, fileName);
-                        filePaths.Add(filePath);
-
-                        using (var stream = new FileStream(filePath, FileMode.Create))
-                        {
-                            await Avatar.CopyToAsync(stream);
-                        }
-
-                        user.Avatar = "/uploads/" + fileName;
+                        return NotFound();
                     }
-                    _context.Update(user);
+
+                    existingUser.UserName = user.UserName;
+                    existingUser.Email = user.Email;
+                    existingUser.Password = user.Password;
+                    existingUser.LastName = user.LastName;
+                    existingUser.FirstMidName = user.FirstMidName;
+
+                    // Check if Avatar is provided
+                    if (Avatar != null && Avatar.Length > 0)
+                    {
+                        // Process and save Avatar
+                        var allowedExtensions = new[] { ".jpg", ".jpeg", ".png", ".gif" };
+                        var fileExtension = Path.GetExtension(Avatar.FileName).ToLowerInvariant();
+
+                        if (!string.IsNullOrEmpty(fileExtension) && allowedExtensions.Contains(fileExtension))
+                        {
+                            var uploadFolderPath = Path.Combine(_hostingEnvironment.WebRootPath, "uploads");
+                            Directory.CreateDirectory(uploadFolderPath);
+
+                            var fileName = Path.GetRandomFileName() + fileExtension;
+                            var filePath = Path.Combine(uploadFolderPath, fileName);
+
+                            using (var stream = new FileStream(filePath, FileMode.Create))
+                            {
+                                await Avatar.CopyToAsync(stream);
+                            }
+
+                            existingUser.Avatar = "/uploads/" + fileName;
+                        }
+                        else
+                        {
+                            // Handle invalid file extension
+                            ModelState.AddModelError("Avatar", "Invalid file extension. Allowed extensions are: " + string.Join(", ", allowedExtensions));
+                            return View(user);
+                        }
+                    }
+
+                    // Ensure ResetPasswordToken is not null
+                    if (existingUser.ResetPasswordToken == null)
+                    {
+                        existingUser.ResetPasswordToken = GenerateRandomToken();
+                    }
+
+                    _context.Update(existingUser);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -411,6 +432,7 @@ namespace TaskHub.Controllers
             }
             return View(user);
         }
+
 
         // GET: Users/Delete/5
         public async Task<IActionResult> Delete(int? id)

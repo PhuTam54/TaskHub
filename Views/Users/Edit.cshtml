@@ -53,10 +53,12 @@
                                         <span asp-validation-for="UserRole" class="text-danger"></span>
                                     </div>
                                     <div class="form-group">
-                                        <label asp-for="Avatar" class="control-label"></label>
-                                        <input asp-for="Avatar" type="file" class="form-control" />
+                                        <label asp-for="Avatar" for="avatarInput" id="avatarLabel" class="control-label"></label>
+                                        <input asp-for="Avatar" type="file" class="form-control"/>
+                                        <img src="@Model.Avatar" class="img-thumbnail" width="100" height="100" />
                                         <span asp-validation-for="Avatar" class="text-danger"></span>
                                     </div>
+
                                     <!-- /.form group -->
                                 </div>
                             </div>
@@ -79,7 +81,6 @@
     </section>
     <!-- /.content -->
 </div>
-
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");

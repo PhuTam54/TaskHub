@@ -6,7 +6,6 @@ using TaskHub.Models.WorkSpaceViewModels;
 
 namespace TaskHub.Controllers
 {
-    [Authentication]
     public class DashBoardController : Controller
     {
         private readonly TaskHubContext _context;
