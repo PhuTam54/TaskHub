@@ -145,6 +145,13 @@
     </div>
 </div>
 
+@Html.AntiForgeryToken()
+
+@{
+    var cardCount = 0;
+    var itemCount = 0;
+}
+
 @section Scripts {
     <script>
         "use strict";
@@ -178,10 +185,13 @@
 
         const e_title = document.getElementById('title');
 
+        let cardCount = @cardCount;
+        let itemCount = @itemCount;
+
         // Auto save enabled as default
         let autoSaveInternalId = setInterval(function () {
             saveData();
-        }, 5000);
+        }, 2000);
 
         var appData = {
             'boards': [],
@@ -381,21 +391,38 @@
 
             let _newBoard = new Board(_boardTitle, uniqueID(), { 'theme': null });
             appData.boards.push(_newBoard);
+
+            let boardData = {
+                WorkSpaceId: @ViewBag.WorkSpaceId,
+                BoardTitle : _boardTitle,
+                Status : 1,
+            }
+
+            // Save Data to DB
+            var url = '/Home/CreateBoard';
+            var method = 'POST';
+            var action = 'Add a new Board';
+            crudCallApi(url, boardData, method, action)
+
             listBoards();
         }
 
         /* <=================================== Classes ===================================> */
         class Item {
 
-            constructor(title, description = null, id, parentCardId) {
+            constructor(title, description = null, id, deadline = Date.now(), position, parentCardId, userId = 1) {
                 this.title = title;
                 this.description = description;  // A field for a future version, perhaps v2
                 this.id = id;
                 this.isDone = false;
+                this.deadline = deadline;
+                this.position = position;
                 this.parentCardId = parentCardId;
+                this.userId = userId;
             }
-
+            
             getParentCard() {
+                var parentCardId = parseInt(this.parentCardId.replace("list", ""), 10);
                 return document.getElementById(this.parentCardId);
             }
 
@@ -438,6 +465,10 @@
                 this.parentBoardId = parentBoardId;
             }
 
+            parentId() {
+                return parseInt(this.id.replace("list", ""), 10);
+            }
+
             addItem(item) {
                 this.items.push(item);
                 renderCard(this.id);
@@ -446,6 +477,22 @@
             removeItem(item) {
                 this.items = this.items.filter(val => val !== item);
                 renderCard(this.id);
+            }
+
+            deleteItemFromDb(item) {
+                this.removeItem(item);
+
+                var _itemId = parseInt(item.id.replace("task", ""), 10);
+                var _itemName = item.name;
+                console.log(_itemId)
+
+                // Delete from DB
+                var itemToDelete = _itemId;
+                var itemData = {}
+                var url = '/Home/DeleteTaskItem/' + itemToDelete;
+                var method = 'DELETE';
+                var action = 'Delete a Task';
+                crudCallApi(url, itemData, method, action)
             }
 
             update() {
@@ -498,7 +545,9 @@
                     _newItemDeleteButton.ariaHidden = true;
                     _newItemDeleteButton.classList.add('fa', 'fa-trash');
                     _newItemDeleteButton.addEventListener('click', () => {
-                        createConfirmDialog("Are you sure to delete this task?", () => this.removeItem(_item));
+                        createConfirmDialog("Are you sure to delete this task?", () =>
+                            this.deleteItemFromDb(_item)
+                        );
                     });
 
                     // Add both the buttons to the span tag.
@@ -590,8 +639,32 @@
                 _newButton.addEventListener('click', () => {
                     let _inputValue = _newInput.value;
                     if (!_inputValue) return createAlert("Type a name for the item!");
-                    let _item = new Item(_inputValue, null, getBoardFromId(this.parentBoardId).uniqueID(), this.id);
+
+                    let position = 1;
+                    let description = '';
+                    let userId = 1;
+                    let deadline = Date.now().toString();
+
+                    let _item = new Item(_inputValue, description, getBoardFromId(this.parentBoardId).uniqueID(), deadline, position, this.id, userId);
                     this.addItem(_item);
+
+                    let itemData = {
+                        ListId: this.parentId(),
+                        Title: _item.title,
+                        Description: _item.description,
+                        UserId: _item.userId,
+                        position: _item.position,
+                        Status: 1,
+                    }
+
+                    console.log(itemData)
+
+                    // Save Data to DB
+                    var url = '/Home/CreateTaskItem';
+                    var method = 'POST';
+                    var action = 'Add a new Task';
+                    crudCallApi(url, itemData, method, action)
+
                     _newInput.value = '';
                     _newInput.focus(); // wont because the card is being re-rendered
                 });
@@ -634,6 +707,10 @@
                 return 'e' + this.identifier.toString();
             }
 
+            parentId() {
+                return parseInt(this.id.replace("board", ""), 10);
+            }
+
             addCard() {
                 let _cardTitle = e_addCardText.value;
                 e_addCardText.value = '';
@@ -641,8 +718,20 @@
                 // If the user pressed the button without typing any name, we'll default to "Untitled Card {cards length +1}"
                 if (!_cardTitle) _cardTitle = `Untitled Card ${this.cards.length + 1}`;
 
-                let _card = new Card(_cardTitle, this.uniqueID(), this.id);
+                let _card = new Card(_cardTitle, this.uniqueID(), this.parentId());
                 this.cards.push(_card);
+
+                let cardData = {
+                    BoardId: this.parentId(),
+                    ListTitle: _cardTitle,
+                    Status: 1,
+                }
+
+                // Save Data to DB
+                var url = '/Home/CreateList';
+                var method = 'POST';
+                var action = 'Add a new List';
+                crudCallApi(url, cardData, method, action)
 
                 let _newCard = _card.generateElement();
                 e_cardsContainer.insertBefore(_newCard, e_cardsContainer.childNodes[e_cardsContainer.childNodes.length - 2]);
@@ -851,8 +940,19 @@
         };
 
         const cardContextMenu_deleteCard = () => {
-            createConfirmDialog('Are you sure to delete this card', () => {
+            createConfirmDialog('Are you sure to delete this list', () => {
                 let _currentCardObject = getCardFromElement(cardContextMenu_currentCard);
+
+                var _cardId = parseInt(_currentCardObject.id.replace("list", ""), 10);
+                var _cardName = _currentCardObject.name;
+                console.log(_cardId)
+                // Delete from DB
+                var cardToDelete = _cardId;
+                var cardData = {}
+                var url = '/Home/DeleteList/' + cardToDelete;
+                var method = 'DELETE';
+                var action = 'Delete a Lists';
+                crudCallApi(url, cardData, method, action)
 
                 // Remove the card from the cards list based on its index position.
                 currentCards().splice(currentCards().indexOf(_currentCardObject), 1);
@@ -882,41 +982,88 @@
 
         /* <=================================== Persistent Data Storage ===================================> */
         function saveData() {
-            window.localStorage.setItem('taskHub-appData', JSON.stringify(appData));
-            // Dữ liệu bạn muốn gửi đến server (ví dụ: một đối tượng JSON)
-            const dataToSend = {
-                name: 'John',
-                age: 30,
-                email: 'john@example.com'
-            };
+            //window.localStorage.setItem('taskHub-appData', JSON.stringify(appData));
 
-            // URL của endpoint trên server
-            const url = '/Boards/Create'; // Địa chỉ endpoint tương ứng với API của bạn
+            //// Khai báo biến để lưu trữ dữ liệu tách biệt
+            //let boards = [];
 
-            // Tạo yêu cầu HTTP bằng phương thức POST
-            fetch(url, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json', // Loại dữ liệu gửi đi là JSON
-                },
-                body: JSON.stringify(dataToSend), // Chuyển đổi dữ liệu sang định dạng JSON
-            })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.json(); // Chuyển đổi phản hồi từ server thành đối tượng JSON
-                })
-                .then(data => {
-                    console.log('Server response:', data); // Xử lý phản hồi từ server
-                })
-                .catch(error => {
-                    console.error('There was a problem with your fetch operation:', error);
-                });
+            //// Lặp qua từng board trong dữ liệu ban đầu (_appData)
+            //for (let _board of appData.boards) {
+            //    // Tạo một board mới từ dữ liệu của mỗi board trong _appData
+            //    let newBoard = {
+            //        name: _board.name,
+            //        id: _board.id,
+            //        settings: _board.settings,
+            //        identifier: _board.identifier,
+            //        cards: [] // Mảng chứa các cards trong board
+            //    };
 
+            //    // Lặp qua từng card trong dữ liệu board hiện tại
+            //    for (let _card of _board.cards) {
+            //        // Tạo một card mới từ dữ liệu của mỗi card trong board hiện tại
+            //        let newCard = {
+            //            name: _card.name,
+            //            id: _card.id,
+            //            items: [] // Mảng chứa các items trong card
+            //        };
+
+            //        // Lặp qua từng item trong dữ liệu card hiện tại
+            //        for (let _item of _card.items) {
+            //            // Tạo một item mới từ dữ liệu của mỗi item trong card hiện tại
+            //            let newItem = {
+            //                title: _item.title,
+            //                description: _item.description,
+            //                id: _item.id
+            //            };
+
+            //            // Thêm item mới vào mảng items của card
+            //            newCard.items.push(newItem);
+            //        }
+
+            //        // Thêm card mới vào mảng cards của board
+            //        newBoard.cards.push(newCard);
+            //    }
+
+            //    // Thêm board mới vào mảng boards
+            //    boards.push(newBoard);
+            //}
+
+            //if (boards.length() > @Model.WorkSpaces.Count())
+            //{
+            //    addBoardToDb(boards)
+            //} else if(boards.length() < @Model.WorkSpaces.Count())
+            //{
+            //    deleteABoard(boards)
+            //} else {
+            //    updateABoard(boards)
+            //}
+
+            //if (boards.cards.length() > @cardCount) {
+            //    addCardToDb()
+            //} else if (boards.cards.length() < @cardCount) {
+            //    deleteACard()
+            //} else {
+            //    updateACard()
+            //}
+
+            //if (boards.cards.items.length() > @itemCount) {
+            //    addItemToDb()
+            //} else if (boards.cards.items.length() < @itemCount) {
+            //    deleteAItem()
+            //} else {
+            //    updateAItem()
+            //}
+            
+            //const urlCreateBoard = ''; // Địa chỉ endpoint tương ứng với API của bạn
+            //const urlCreateList = '';
+            //const urlCreateTaskItem = '';
+
+            //const urlUpdateBoard = '/Boards/Update'; // Địa chỉ endpoint tương ứng với API của bạn
+            //const urlUpdateList = '/Lists/Update';
+            //const urlUpdateTaskItem = '/TaskItems/Update';
         }
 
-        function getDataFromLocalStorage() {
+        function getDataFromDatabase() {
             let dataFromDatabase = {
                 settings: { theme: null },
                 currentBoard: 1,
@@ -930,7 +1077,7 @@
                 {
                     <text>{
                                     name: "@board.BoardTitle",
-                                    id: "@board.BoardId",
+                                    id: "@board.BoardId" + "board",
                                     settings: { /* Các cài đặt của Board */ },
                                     identifier: 54,
                                     cards: [
@@ -938,31 +1085,40 @@
                         {
                             <text>{
                                                 name: "@list.ListTitle",
-                                                id: "@list.ListId",
+                                                id: "@list.ListId" + "list",
                                                 items: [
                                 @foreach (var taskItem in list.TaskItems)
                                 {
-                                    <text>{ title: "@taskItem.Title", description: "@taskItem.Description", id: "@taskItem.Id" }, </text>
+                                    <text>{
+                                                            title: "@taskItem.Title",
+                                                            description: "@taskItem.Description",
+                                                            id: "@taskItem.Id" + "task",
+                                                            isDone: false,
+                                                            deadline: "@taskItem.Deadline",
+                                                            position: 1,
+                                                            cardId: "@taskItem.ListId" + "list",
+                                                            userId: "@taskItem.UserId"
+                                                        }, </text>
                                 }
-                                                                                                                                                                                                                                ]
+                                                                                                                                                                                                                                                        ]
                                             }, </text>
                         }
-                                                                                                                                                                                    ]
+                                                                                                                                                                                                        ]
                                 }, </text>
                 }
             }
 
         }
-                                 ]
+                                         ]
             };
 
             // Lưu dữ liệu vào localStorage
             return dataFromDatabase;
         }
 
-
         function loadData() {
-            let _data = getDataFromLocalStorage()
+            let _data = getDataFromDatabase()
+            console.log(_data);
             if (_data) {
                 let _appData = _data;
 
@@ -982,7 +1138,8 @@
 
                         // Fill the cards with items.
                         for (let _item of _card.items) {
-                            let _newItem = new Item(_item.title, _item.description, _item.id, _card.id);
+                            let _newItem = new Item(_item.title, _item.description, _item.id, _item.deadline, _item.position, _card.id, _item.userId);
+
                             // Push the item into the card.
                             _newCard.items.push(_newItem);
                         }
@@ -1001,9 +1158,7 @@
                 appData.boards.push(_defaultBoard);
                 alert("Else")
             }
-            console.log("Load done")
             listBoards();
-
         }
 
         function clearData() {
@@ -1011,6 +1166,36 @@
         }
 
         loadData();
+
+        /* <=================================== CRUD call API ===================================> */
+        function crudCallApi(url, body, method, action) {
+            var token = document.querySelector('input[name="__RequestVerificationToken"]').value;
+            var body = JSON.stringify(body);
+            console.log(body)
+
+            fetch(url, {
+                method: method,
+                headers: {
+                    'Content-Type': 'application/json',
+                    'RequestVerificationToken': token
+                },
+                body: body
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log(action + ' successfully:', data);
+                })
+                .catch(error => {
+                    console.error('Error ' + action + ': ', error);
+                });
+
+            createAlert(action + ' successfully!!!');
+        }
 
         /* <=================================== Other Events ===================================> */
         e_addCardText.addEventListener('keyup', (e) => {
@@ -1040,6 +1225,7 @@
         e_deleteButton.addEventListener('click', () => {
             createConfirmDialog('Are you sure to delete this board?', () => {
                 let _boardName = currentBoard().name;
+                var _boardId = parseInt(currentBoard().id.replace("board", ""), 10);
 
                 // Delete the current board.
                 appData.boards.splice(appData.currentBoard, 1);
@@ -1056,13 +1242,19 @@
                 listBoards();
                 renderBoard(appData.boards[appData.currentBoard]);
 
-                createAlert(`Deleted board "${_boardName}"`)
+                // Delete from DB
+                var boardToDelete = _boardId;
+                var boardData = {}
+                var url = '/Home/DeleteBoard/' + boardToDelete;
+                var method = 'DELETE';
+                var action = 'Delete a Board';
+                crudCallApi(url, boardData, method, action)
             });
         });
 
         window.onbeforeunload = function () {
             if (JSON.stringify(appData) !== getDataFromLocalStorage()) {
-                return confirm();
+                //return confirm();
             }
         }
         /* <=================================== Sidebar ===================================> */
