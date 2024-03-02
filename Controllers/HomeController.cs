@@ -68,7 +68,7 @@ namespace TaskHub.Controllers
                         .ThenInclude(i => i.TaskItems)
                             .ThenInclude(i => i.Comments)
                 .AsNoTracking()
-                .Where(i => i.WorkSpaceMembers.Any(wm => wm.User.ID == userId))
+                .Where(i => i.WorkSpaceMembers.Any(wm => wm.User.ID == 2))
                 .ToListAsync();
 
             ViewBag.DataFromDatabase = viewModel.WorkSpaces;
@@ -98,7 +98,7 @@ namespace TaskHub.Controllers
             {
                 _context.Add(board);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(MyBoards));
             }
         }
 
@@ -201,6 +201,7 @@ namespace TaskHub.Controllers
                 return RedirectToAction(nameof(Index));
             }
         }
+
 
         // DELETE: Home/DeleteList/{id}
         [HttpDelete]

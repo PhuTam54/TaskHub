@@ -285,7 +285,7 @@
                 let _link = document.createElement('a');
                 _link.classList.add('nav-link');
                 if (isActive) {
-                    _link.classList.add(isActive);
+                    _link.classList.add(isActive);  
                 }
                 _link.innerHTML = `
                                                                         <i class="fa fa-clipboard nav-icon"></i>
@@ -303,12 +303,32 @@
             }
         }
 
-
         function renderBoard(board) {
             appData.currentBoard = appData.boards.indexOf(board);
+            window.localStorage.setItem('taskHub-currentBoard', appData.currentBoard);
+
             document.title = 'TaskHub | ' + currentBoard().name;
             e_title.innerText = currentBoard().name;
-            //e_title.addEventListener('click'), allow editing board name
+            e_title.addEventListener('dblclick', (e) => {
+                let _input = document.createElement('input');
+                _input.value = _newBoardHeaderTitle.textContent;
+                _input.classList.add('board-title');
+                _input.maxLength = 128;
+                _newBoardHeaderTitle.replaceWith(_input);
+
+                let _save = () => {
+                    this.name = _input.value;
+                    renderBoard(this.id);
+
+                    // Save to db
+
+                };
+
+                _input.addEventListener('blur', _save, {
+                    once: true,
+                });
+                _input.focus();
+            });
             // To-Do: set theme
             renderAllCards();
         }
@@ -392,6 +412,8 @@
             let _newBoard = new Board(_boardTitle, uniqueID(), { 'theme': null });
             appData.boards.push(_newBoard);
 
+            listBoards();
+
             let boardData = {
                 WorkSpaceId: @ViewBag.WorkSpaceId,
                 BoardTitle : _boardTitle,
@@ -404,7 +426,9 @@
             var action = 'Add a new Board';
             crudCallApi(url, boardData, method, action)
 
-            listBoards();
+            setTimeout(() => {
+                window.location.reload(true);
+            }, 200)
         }
 
         /* <=================================== Classes ===================================> */
@@ -484,12 +508,10 @@
 
                 var _itemId = parseInt(item.id.replace("task", ""), 10);
                 var _itemName = item.name;
-                console.log(_itemId)
 
                 // Delete from DB
-                var itemToDelete = _itemId;
                 var itemData = {}
-                var url = '/Home/DeleteTaskItem/' + itemToDelete;
+                var url = '/Home/DeleteTaskItem/' + _itemId;
                 var method = 'DELETE';
                 var action = 'Delete a Task';
                 crudCallApi(url, itemData, method, action)
@@ -590,7 +612,6 @@
                 _newCardHeaderTitle.id = this.id + '-h2';
                 _newCardHeaderTitle.innerText = this.name;
                 _newCardHeaderTitle.classList.add('text-fix', 'card-title');
-
                 // A better, more flexible alternative to contentEditable.
                 // We replace the text element with an input element.
                 _newCardHeaderTitle.addEventListener('click', (e) => {
@@ -599,10 +620,25 @@
                     _input.classList.add('card-title');
                     _input.maxLength = 128;
                     _newCardHeaderTitle.replaceWith(_input);
-
                     let _save = () => {
                         this.name = _input.value;
                         renderCard(this.id);
+
+                        var _cardId = parseInt(this.id, 10);
+                        var _boardId = parseInt(this.parentBoardId, 10);
+
+                        let cardData = {
+                            ListId: _cardId,
+                            BoardId: _boardId,
+                            ListTitle: this.name,
+                            Status: 1,
+                        }
+
+                        // Save Data to DB
+                        var url = '/Home/EditList/' + _cardId;
+                        var method = 'PUT';
+                        var action = 'Update a List';
+                        crudCallApi(url, cardData, method, action)
                     };
 
                     _input.addEventListener('blur', _save, {
@@ -647,6 +683,8 @@
 
                     let _item = new Item(_inputValue, description, getBoardFromId(this.parentBoardId).uniqueID(), deadline, position, this.id, userId);
                     this.addItem(_item);
+                    _newInput.value = '';
+                    _newInput.focus(); // wont because the card is being re-rendered
 
                     let itemData = {
                         ListId: this.parentId(),
@@ -665,8 +703,9 @@
                     var action = 'Add a new Task';
                     crudCallApi(url, itemData, method, action)
 
-                    _newInput.value = '';
-                    _newInput.focus(); // wont because the card is being re-rendered
+                    setTimeout(() => {
+                        window.location.reload(true);
+                    }, 200)
                 });
 
                 let _newCard = document.createElement('div');
@@ -720,6 +759,8 @@
 
                 let _card = new Card(_cardTitle, this.uniqueID(), this.parentId());
                 this.cards.push(_card);
+                let _newCard = _card.generateElement();
+                e_cardsContainer.insertBefore(_newCard, e_cardsContainer.childNodes[e_cardsContainer.childNodes.length - 2]);
 
                 let cardData = {
                     BoardId: this.parentId(),
@@ -733,8 +774,9 @@
                 var action = 'Add a new List';
                 crudCallApi(url, cardData, method, action)
 
-                let _newCard = _card.generateElement();
-                e_cardsContainer.insertBefore(_newCard, e_cardsContainer.childNodes[e_cardsContainer.childNodes.length - 2]);
+                setTimeout(() => {
+                    window.location.reload(true);
+                }, 200)
             }
         }
 
@@ -942,10 +984,14 @@
         const cardContextMenu_deleteCard = () => {
             createConfirmDialog('Are you sure to delete this list', () => {
                 let _currentCardObject = getCardFromElement(cardContextMenu_currentCard);
+                // Remove the card from the cards list based on its index position.
+                currentCards().splice(currentCards().indexOf(_currentCardObject), 1);
+                cardContextMenu_hide({ target: { offsetParent: 'n/a' } }); // this is really stupid but it works, LoL
+
+                renderCard(_currentCardObject.id);
 
                 var _cardId = parseInt(_currentCardObject.id.replace("list", ""), 10);
                 var _cardName = _currentCardObject.name;
-                console.log(_cardId)
                 // Delete from DB
                 var cardToDelete = _cardId;
                 var cardData = {}
@@ -953,12 +999,6 @@
                 var method = 'DELETE';
                 var action = 'Delete a Lists';
                 crudCallApi(url, cardData, method, action)
-
-                // Remove the card from the cards list based on its index position.
-                currentCards().splice(currentCards().indexOf(_currentCardObject), 1);
-                cardContextMenu_hide({ target: { offsetParent: 'n/a' } }); // this is really stupid but it works, LoL
-
-                renderCard(_currentCardObject.id);
             });
         }
 
@@ -1064,9 +1104,11 @@
         }
 
         function getDataFromDatabase() {
+            let currentBoardFromLocalStorage = window.localStorage.getItem('taskHub-currentBoard');
+
             let dataFromDatabase = {
                 settings: { theme: null },
-                currentBoard: 1,
+                currentBoard: currentBoardFromLocalStorage >= 0 ? currentBoardFromLocalStorage : 0,
                 identifier: 123,
                 boards: [
         @foreach (var item in Model.WorkSpaces)
@@ -1111,22 +1153,21 @@
         }
                                          ]
             };
-
             // Lưu dữ liệu vào localStorage
             return dataFromDatabase;
         }
 
         function loadData() {
             let _data = getDataFromDatabase()
-            console.log(_data);
+            console.log(_data)
             if (_data) {
                 let _appData = _data;
 
                 // Since JSON doesn't store functions and such.
                 // We'll have to reinitailize the classes with the loaded data.
                 appData.settings = _appData.settings;
-                appData.currentBoard = _appData.currentBoard >= 0 ? appData.currentBoard : 0;
-                appData.identifier = _appData.identifier !== null ? appData.identifier : 0;
+                appData.currentBoard = _appData.currentBoard;
+                appData.identifier = _appData.identifier !== null ? _appData.identifier : 0;
 
                 // Fill the data with boards.
                 for (let _board of _appData.boards) {
@@ -1168,12 +1209,12 @@
         loadData();
 
         /* <=================================== CRUD call API ===================================> */
-        function crudCallApi(url, body, method, action) {
+        async function crudCallApi(url, body, method, action) {
             var token = document.querySelector('input[name="__RequestVerificationToken"]').value;
             var body = JSON.stringify(body);
             console.log(body)
 
-            fetch(url, {
+            await fetch(url, {
                 method: method,
                 headers: {
                     'Content-Type': 'application/json',
@@ -1185,16 +1226,15 @@
                     if (!response.ok) {
                         throw new Error('Network response was not ok');
                     }
+
+                    createAlert(action + ' successfully!!!');
                     return response.json();
                 })
                 .then(data => {
                     console.log(action + ' successfully:', data);
                 })
                 .catch(error => {
-                    console.error('Error ' + action + ': ', error);
                 });
-
-            createAlert(action + ' successfully!!!');
         }
 
         /* <=================================== Other Events ===================================> */
