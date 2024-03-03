@@ -63,9 +63,9 @@ namespace TaskHub.Controllers
                 .Include(i => i.User)
                 .Include(i => i.WorkSpaceMembers)
                     .ThenInclude(i => i.User)
-                .Include(i => i.Boards)
+                .Include(i => i.Boards.OrderBy(b => b.BoardId))
                     .ThenInclude(i => i.Lists)
-                        .ThenInclude(i => i.TaskItems)
+                        .ThenInclude(i => i.TaskItems.OrderBy(ti => ti.position))
                             .ThenInclude(i => i.Comments)
                 .AsNoTracking()
                 .Where(i => i.WorkSpaceMembers.Any(wm => wm.User.ID == 2))
@@ -202,7 +202,6 @@ namespace TaskHub.Controllers
             }
         }
 
-
         // DELETE: Home/DeleteList/{id}
         [HttpDelete]
         [ValidateAntiForgeryToken]
@@ -233,7 +232,7 @@ namespace TaskHub.Controllers
         {
             if (true)
             {
-                taskItem.Deadline = DateTime.Parse("2024-2-28");
+                taskItem.Deadline = DateTime.Now;
                 _context.Add(taskItem);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));

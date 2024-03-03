@@ -28,7 +28,7 @@ public static class SeedData
                 new User
                 {
                     UserName = "phutam",
-                    Email = "phutam@gmail.com",
+                    Email = "phutamytb@gmail.com",
                     Password = BCrypt.Net.BCrypt.HashPassword("123456"),
                     FirstMidName = "Tam",
                     LastName = "Phu",
@@ -55,7 +55,7 @@ public static class SeedData
                 new User
                 {
                     UserName = "tom",
-                    Email = "tom@gmail.com",
+                    Email = "tamnpth2210002@fpt.edu.vn",
                     Password = BCrypt.Net.BCrypt.HashPassword("123456"),
                     FirstMidName = "Tom",
                     LastName = "Holland",
@@ -319,7 +319,7 @@ public static class SeedData
                     Deadline = DateTime.Parse("2024-1-21"),
                     UserId = Users.Single( s => s.UserName == "phutam").ID,
                     ListId = Lists.Single( s => s.ListTitle == "Done").ListId,
-                    position = 2,
+                    position = 0,
                     Status = 1,
                 },
                 new TaskItem
@@ -329,7 +329,7 @@ public static class SeedData
                     Deadline = DateTime.Parse("2024-1-22"),
                     UserId = Users.Single( s => s.UserName == "tranthuy").ID,
                     ListId = Lists.Single( s => s.ListTitle == "Todo").ListId,
-                    position = 1,
+                    position = 0,
                     Status = 1,
                 },
                 new TaskItem
@@ -339,7 +339,7 @@ public static class SeedData
                     Deadline = DateTime.Parse("2024-1-21"),
                     UserId = Users.Single( s => s.UserName == "peter").ID,
                     ListId = Lists.Single( s => s.ListTitle == "Doing").ListId,
-                    position = 1,
+                    position = 0,
                     Status = 1,
                 },
                 new TaskItem
@@ -349,7 +349,7 @@ public static class SeedData
                     Deadline = DateTime.Parse("2024-1-20"),
                     UserId = Users.Single( s => s.UserName == "tom").ID,
                     ListId = Lists.Single( s => s.ListTitle == "Todo").ListId,
-                    position = 2,
+                    position = 0,
                     Status = 1,
                 },
                 new TaskItem
@@ -359,7 +359,7 @@ public static class SeedData
                     Deadline = DateTime.Parse("2024-1-21"),
                     UserId = Users.Single( s => s.UserName == "phutam").ID,
                     ListId = Lists.Single( s => s.ListTitle == "Done 2").ListId,
-                    position = 1,
+                    position = 0,
                     Status = 1,
                 },
                 new TaskItem
@@ -369,7 +369,7 @@ public static class SeedData
                     Deadline = DateTime.Parse("2024-1-20"),
                     UserId = Users.Single( s => s.UserName == "tom").ID,
                     ListId = Lists.Single( s => s.ListTitle == "Todo 2").ListId,
-                    position = 1,
+                    position = 0,
                     Status = 1,
                 },
                 new TaskItem
@@ -379,7 +379,7 @@ public static class SeedData
                     Deadline = DateTime.Parse("2024-1-22"),
                     UserId = Users.Single( s => s.UserName == "peter").ID,
                     ListId = Lists.Single( s => s.ListTitle == "Done 3").ListId,
-                    position = 1,
+                    position = 0,
                     Status = 1,
                 }
             };

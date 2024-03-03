@@ -285,50 +285,71 @@
                 let _link = document.createElement('a');
                 _link.classList.add('nav-link');
                 if (isActive) {
-                    _link.classList.add(isActive);  
+                    _link.classList.add(isActive);
                 }
                 _link.innerHTML = `
-                                                                        <i class="fa fa-clipboard nav-icon"></i>
-                                                                        <p>${_board.name}</p>
-                                                                    `;
+                    <i class="fa fa-clipboard nav-icon"></i>
+                    <p>${_board.name}</p>
+                `;
                 _link.onclick = function () {
                     renderBoard(_board);
                     listBoards();
                 };
+
                 _link.style.cursor = 'pointer';
 
-                _boardElement.appendChild(_link);
+                _boardElement.prepend(_link);
 
-                e_boardsList.appendChild(_boardElement);
+                e_boardsList.prepend(_boardElement);
             }
         }
 
         function renderBoard(board) {
             appData.currentBoard = appData.boards.indexOf(board);
             window.localStorage.setItem('taskHub-currentBoard', appData.currentBoard);
-
             document.title = 'TaskHub | ' + currentBoard().name;
             e_title.innerText = currentBoard().name;
-            e_title.addEventListener('dblclick', (e) => {
+
+            e_title.onclick = function () {
                 let _input = document.createElement('input');
-                _input.value = _newBoardHeaderTitle.textContent;
-                _input.classList.add('board-title');
+                _input.value = currentBoard().name;
+                _input.id = "title";
                 _input.maxLength = 128;
-                _newBoardHeaderTitle.replaceWith(_input);
+                e_title.replaceWith(_input);
 
                 let _save = () => {
-                    this.name = _input.value;
-                    renderBoard(this.id);
+                    let _boardId = parseInt(currentBoard().id, 10);
+                    let newTitle = _input.value;
 
-                    // Save to db
+                    //_input.replaceWith(e_title);
+                    //renderBoard(board); // Hiển thị lại board sau khi thay đổi tên
+                    //e_title.value = newTitle;
+                    //_input.value = newTitle;
 
+                    let boardData = {
+                        BoardId: _boardId,
+                        WorkSpaceId: @ViewBag.WorkSpaceId,
+                        BoardTitle: newTitle, // Sử dụng tên mới nhập vào
+                        Status: 1,
+                    };
+
+                    // Save Data to DB
+                    var url = '/Home/EditBoard/' + _boardId;
+                    var method = 'PUT';
+                    var action = 'Update a Board';
+                    crudCallApi(url, boardData, method, action);
+
+                    setTimeout(() => {
+                        window.location.reload(true);
+                    }, 300)
                 };
 
                 _input.addEventListener('blur', _save, {
                     once: true,
                 });
+
                 _input.focus();
-            });
+            };
             // To-Do: set theme
             renderAllCards();
         }
@@ -428,7 +449,7 @@
 
             setTimeout(() => {
                 window.location.reload(true);
-            }, 200)
+            }, 300)
         }
 
         /* <=================================== Classes ===================================> */
@@ -552,8 +573,26 @@
                         _newItemTitle.replaceWith(_input);
 
                         let _save = () => {
-                            _item.title = _input.value;
+                            _item.title = _input.value.trim();
                             renderCard(this.id);
+
+                            var _itemId = parseInt(_newItem.id, 10);
+
+                            let taskItemData = {
+                                Id: _itemId,
+                                Title: _item.title,
+                                Description: _item.description,
+                                ListId: this.parentId(),
+                                UserId: _item.userId,
+                                position: _item.position,
+                                Status: 1,
+                            }
+
+                            // Save Data to DB
+                            var url = '/Home/EditTaskItem/' + _itemId;
+                            var method = 'PUT';
+                            var action = 'Update a Task';
+                            crudCallApi(url, taskItemData, method, action)
                         };
 
                         _input.addEventListener('blur', _save, {
@@ -676,7 +715,7 @@
                     let _inputValue = _newInput.value;
                     if (!_inputValue) return createAlert("Type a name for the item!");
 
-                    let position = 1;
+                    let position = 0;
                     let description = '';
                     let userId = 1;
                     let deadline = Date.now().toString();
@@ -695,8 +734,6 @@
                         Status: 1,
                     }
 
-                    console.log(itemData)
-
                     // Save Data to DB
                     var url = '/Home/CreateTaskItem';
                     var method = 'POST';
@@ -705,7 +742,7 @@
 
                     setTimeout(() => {
                         window.location.reload(true);
-                    }, 200)
+                    }, 300)
                 });
 
                 let _newCard = document.createElement('div');
@@ -776,7 +813,7 @@
 
                 setTimeout(() => {
                     window.location.reload(true);
-                }, 200)
+                }, 300)
             }
         }
 
@@ -848,10 +885,50 @@
                             // Move the position of the held item to the position of whichever item was hovered over.
                             // This will push the item that was hovered over down, with the item that was being held taking its place.
                             _hoverCardObject.items.move(_hoverCardObject.items.indexOf(_heldItemObject), _hoverCardObject.items.indexOf(_hoverItemObject));
+
+                            // Lấy ra index mới của _hoverItemObject trong mảng
+                            let newIndexHoverItem = _hoverCardObject.items.indexOf(_hoverItemObject);
+
+                            // Lấy ra index mới của _heldItemObject trong mảng
+                            let newIndexHeldItem = _hoverCardObject.items.indexOf(_heldItemObject);
+
+                            var _heldItemId = parseInt(_heldItemObject.id, 10);
+                            var _hoveredItemId = parseInt(_hoverItemObject.id, 10);
+                            var _listId = parseInt(_hoverCardObject.id, 10);
+
+                            // Save held item to DB
+                            let heldItemData = {
+                                Id: _heldItemId,
+                                Title: _heldItemObject.title,
+                                Description: _heldItemObject.description,
+                                ListId: _listId,
+                                UserId: _heldItemObject.userId,
+                                position: newIndexHeldItem,
+                                Status: 1,
+                            }
+
+                            var url = '/Home/EditTaskItem/' + _heldItemId;
+                            var method = 'PUT';
+                            var action = 'Update a Task';
+                            crudCallApi(url, heldItemData, method, action)
+
+                            // Save hovered item to DB
+                            let hoveredItemData = {
+                                Id: _hoveredItemId,
+                                Title: _hoverItemObject.title,
+                                Description: _hoverItemObject.description,
+                                ListId: _listId,
+                                UserId: _hoverItemObject.userId,
+                                position: newIndexHoverItem,
+                                Status: 1,
+                            }
+
+                            var hoveredItemUrl = '/Home/EditTaskItem/' + _hoveredItemId;
+                            crudCallApi(hoveredItemUrl, hoveredItemData, method, action)
                         }
                     }
-
-                    renderCard(_heldItemObject.getParentCard().id);
+                    renderAllCards()
+                    //renderCard(_heldItemObject.getParentCard().id);
 
                 } else {
                     // If the card the mouse is over is not the same as the parent card of the item being held.
@@ -878,6 +955,46 @@
                             getCardFromElement(_heldItemObject.getParentCard()).removeItem(_heldItemObject);
                             // Give the held item a new parent card id.
                             _heldItemObject.parentCardId = _hoverItemParentObject.id;
+
+                            // Lấy ra index mới của _hoverItemObject trong mảng
+                            let newIndexHoverItem = _hoverItemParentObject.items.indexOf(_hoverItemObject);
+
+                            // Lấy ra index mới của _heldItemObject trong mảng
+                            let newIndexHeldItem = _hoverItemParentObject.items.indexOf(_heldItemObject);
+
+                            var _heldItemId = parseInt(_heldItemObject.id, 10);
+                            var _hoveredItemId = parseInt(_hoverItemObject.id, 10);
+                            var _listId = parseInt(_hoverItemParentObject.id, 10);
+                            
+                            // Save held item to DB
+                            let heldItemData = {
+                                Id: _heldItemId,
+                                Title: _heldItemObject.title,
+                                Description: _heldItemObject.description,
+                                ListId: _listId,
+                                UserId: _heldItemObject.userId,
+                                position: newIndexHeldItem,
+                                Status: 1,
+                            }
+
+                            var url = '/Home/EditTaskItem/' + _heldItemId;
+                            var method = 'PUT';
+                            var action = 'Update a Task';
+                            crudCallApi(url, heldItemData, method, action)
+
+                            // Save hovered item to DB
+                            let hoveredItemData = {
+                                Id: _hoveredItemId,
+                                Title: _hoverItemObject.title,
+                                Description: _hoverItemObject.description,
+                                ListId: _listId,
+                                UserId: _hoverItemObject.userId,
+                                position: newIndexHoverItem,
+                                Status: 1,
+                            }
+
+                            var hoveredItemUrl = '/Home/EditTaskItem/' + _hoveredItemId;
+                            crudCallApi(hoveredItemUrl, hoveredItemData, method, action)
                         }
                     } else {
                         // If an item wasn't being hovered and instead just the card.
@@ -889,12 +1006,31 @@
                         getCardFromElement(_heldItemObject.getParentCard()).removeItem(_heldItemObject);
                         // Give the held item a new parent card id.
                         _heldItemObject.parentCardId = _hoverCardObject.id;
+
+                        var _itemId = parseInt(_heldItemObject.id, 10);
+                        var _listId = parseInt(_hoverCardObject.id, 10);
+
+                        let taskItemData = {
+                            Id: _itemId,
+                            Title: _heldItemObject.title,
+                            Description: _heldItemObject.description,
+                            ListId: _listId,
+                            UserId: _heldItemObject.userId,
+                            position: -1,
+                            Status: 1,
+                        }
+
+                        // Save Data to DB
+                        var url = '/Home/EditTaskItem/' + _itemId;
+                        var method = 'PUT';
+                        var action = 'Update a Task';
+                        crudCallApi(url, taskItemData, method, action)
                     }
 
                     renderCard(_hoverCardObject.id);
                     renderCard(_heldItemObject.getParentCard().id);
                 }
-                // renderAllCards();
+                // renderallcards();
                 // renderCard(originCard);
                 // renderCard(targetCard);
             }
