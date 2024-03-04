@@ -80,220 +80,227 @@
                         <a href="/Users" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
-                <!-- ./col -->
             </div>
-            <!-- /.row -->
-            @*<!-- Main row -->
-            <div class="row">
-                <!-- Left col -->
-                <section class="col-lg-6 connectedSortable">
+        </div>
+        <div class="row">
+            <div class="col-lg-6 grid-margin stretch-card">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">User chart</h4>
+                        <canvas id="barChart1" style="height:230px"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 grid-margin stretch-card">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">Total chart</h4>
+                        <canvas id="doughnutChart" style="height:250px"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-                    <!-- New exams -->
-                    <div class="card direct-chat direct-chat-primary">
-                        <div class="card-header">
-                            <a href="admin/admin-exam"><h3 class="card-title">New Exams</h3></a>
-                        </div>
-                        <!-- /.card-header -->
-                        <div class="card-body">
-                            <div class="card">
-                                <!-- ./card-header -->
+        <div class="row">
+            <div class="col-12 grid-margin">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">Users</h4>
+                        <div class="table-responsive">
+                            <table class="table">
                                 <div class="card-body">
                                     <table id="example2" class="table table-bordered table-striped">
                                         <thead>
                                             <tr>
                                                 <th>No.</th>
-                                                <th>ExamName</th>
-                                                <th>StartEnd_date</th>
-                                                <th>Participants</th>
-                                                <th>Status</th>
+                                                <th>Avatar</th>
+                                                <th>Name</th>
+                                                <th>Email</th>
+                                                <th>Action</th>
                                             </tr>
                                         </thead>
-                                        <tbody>
-                                            @foreach ($newExams as $exam)
-                                            <tr>
-                                                <td>{{ $loop->index + 1 }}</td>
-                                                <td>
-                                                    <p>{{ $exam->exam_name }}</p>
-                                                    <img src=" {{ $exam->exam_thumbnail ?? asset(" storage /img/main-img/course-1.jpg") }}" width="80" alt="img">
-                                                </td>
-                                                <td>{{ $exam->start_date ?? "Never start" }} <br> => <br> {{ $exam->end_date ?? "Never end" }}</td>
-                                                <td>
-                                                    <!-- Trigger the modal with a button -->
-                                                    <a type="button" class="text text-info text-md" data-toggle="modal" data-target="#showPaticipantModal{{ $exam->id }}">
-                                                        <i class="fa fa-eye"></i>
-                                                        {{ $exam->Enrollments->count() }} to show
-                                                    </a>
-
-                                                    <!-- Modal -->
-                                                    <div id="showPaticipantModal{{ $exam->id }}" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-                                                        <div class="modal-dialog modal-dialog-centered" role="document">
-
-                                                            <!-- Modal content-->
-                                                            <div class="modal-content" style="min-width: 700px; max-height: 600px">
-                                                                <div class="modal-header">
-                                                                    <h4 class="modal-title">Showing Participants</h4>
-                                                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                                                </div>
-                                                                <div class="modal-body overflow-auto">
-                                                                    <h5 class="text fs-6">Exam: {{ $exam->exam_name }}</h5>
-                                                                    <table class="table table-bordered table-striped">
-                                                                        <thead>
-                                                                            <tr>
-                                                                                <th>No.</th>
-                                                                                <th>Student's Name</th>
-                                                                                <th>Class</th>
-                                                                                <th>Attempt</th>
-                                                                                <th>Status</th>
-                                                                            </tr>
-                                                                        </thead>
-                                                                        <tbody>
-                                                                            @foreach ($exam->Enrollments as $index => $enrollment)
-                                                                            <tr>
-                                                                                <td>{{ $loop->index + 1 }}</td>
-                                                                                <td>{{ $enrollment->User->name }}</td>
-                                                                                @if ($enrollment->User->Classes != null)
-                                                                                <td>{{ $enrollment->User->Classes->class_name }}</td>
-
-                                                                                @else
-                                                                                <td></td>
-                                                                                @endif
-                                                                                <td>{{ $enrollment->attempt > 1 ? $enrollment->attempt . " times" : $enrollment->attempt . " time"}}</td>
-                                                                                <td>{!! $enrollment->getStatus() !!}</td>
-                                                                            </tr>
-
-                                                                            @endforeach
-                                                                        </tbody>
-                                                                        <tfoot>
-                                                                            <tr>
-                                                                                <th>No.</th>
-                                                                                <th>Student's Name</th>
-                                                                                <th>Class</th>
-                                                                                <th>Attempt</th>
-                                                                                <th>Status</th>
-                                                                            </tr>
-                                                                        </tfoot>
-                                                                    </table>
-                                                                </div>
-                                                                <div class="modal-footer">
-                                                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                                                </div>
-                                                            </div>
-
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td>{!! $exam->getStatus() !!}</td>
-                                            </tr>
-
-                                            @endforeach
-                                        </tbody>
-                                        <tfoot>
-                                            <tr>
-                                                <th>No.</th>
-                                                <th>ExamName</th>
-                                                <th>StartEnd_date</th>
-                                                <th>Participants</th>
-                                                <th>Status</th>
-                                            </tr>
-                                        </tfoot>
-                                    </table>
-                                </div>
-                                <!-- /.card-body -->
-                            </div>
-                            <!-- /.card -->
-                        </div>
-                        <!-- /.card-body -->
-                    </div>
-                    <!--/.New exams -->
-
-                </section>
-                <!-- /.Left col -->
-                <!-- Right col -->
-                <section class="col-lg-6 connectedSortable">
-
-                    <!-- New results -->
-                    <div class="card direct-chat direct-chat-primary">
-                        <div class="card-header">
-                            <a href="admin/admin-result"><h3 class="card-title">New Results</h3></a>
-                        </div>
-                        <!-- /.card-header -->
-                        <div class="card-body">
-                            <div class="card">
-                                <!-- ./card-header -->
-                                <div class="card-body">
-                                    <table id="example2" class="table table-bordered table-striped">
-                                        <thead>
-                                            <tr>
-                                                <th>No.</th>
-                                                <th>Student</th>
-                                                <th>Exam</th>
-                                                <th>Score</th>
-                                                <th>Time_taken</th>
-                                                <th>Grade</th>
-                                                <th>Status</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach ($newResults as $result)
-                                            <tr>
-                                                <td>{{ $loop->index + 1 }}</td>
-                                                <td>{{ $result->Enrollment->User->name }}</td>
-                                                <td>{{ $result->Enrollment->Exam->exam_name }}</td>
-                                                <td>
-                                                    <div class="text-primary d-inline">
-                                                        {{ number_format($result->score, 2) }}
-                                                    </div> / {{  number_format($result->Enrollment->Exam->ExamQuestion->total_marks, 2) }}
-                                                </td>
-                                                @if ($result->time_taken / 3600 > 1)
-                                                <td>
-                                                    {{ floor($result->time_taken / 3600) }} hours
-                                                    {{ floor($result->time_taken % 3600 / 60) }} minutes
-                                                    {{ $result->time_taken % 60 }} seconds
-                                                </td>
-
-                                                @elseif(($result->time_taken % 3600) / 60 > 1)
-                                                <td>
-                                                    {{ floor($result->time_taken % 3600 / 60) }} minutes
-                                                    {{ $result->time_taken % 60 }} seconds
-                                                </td>
-                                                @elseif($result->time_taken % 60 > 1)
-                                                <td>
-                                                    {{ $result->time_taken % 60 }} seconds
-                                                </td>
-                                                @endif
-                                                <td>{!! $result->getGrade() !!}</td>
-                                                <td>{!! $result->getStatus() !!}</td>
-
-                                            </tr>
-
-                                            @endforeach
-                                        </tbody>
-                                        <tfoot>
-                                            <tr>
-                                                <th>No.</th>
-                                                <th>Student</th>
-                                                <th>Exam</th>
-                                                <th>Score</th>
-                                                <th>Time_taken</th>
-                                                <th>Grade</th>
-                                                <th>Status</th>
-                                            </tr>
-                                        </tfoot>
-                                    </table>
-                                </div>
-                                <!-- /.card-body -->
-                            </div>
-                            <!-- /.card -->
+                            <tbody>
+                                @{
+                                    var index = 0;
+                                }
+                                @foreach (var item in Model.Users)
+                                {
+                                    index++;
+                                    string selectedRow = "";
+                                    if (item.ID == (int?)ViewData["UserID"])
+                                    {
+                                        selectedRow = "table-success";
+                                    }
+                                    <tr class="@selectedRow">
+                                        <td>@index</td>
+                                        <td class="">
+                                            <img src="@Html.DisplayFor(modelItem => item.Avatar)" width="60" style="max-height: 100px; object-fit: cover" alt="img">
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.UserName)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Email)
+                                        </td>
+                                                 
+                                        <td class="project-actions text-center">
+                                            <a asp-action="Details" asp-route-id="@item.ID" class="btn btn-secondary btn-sm">
+                                                <i class="fas fa-eye">
+                                                </i>
+                                                Details
+                                            </a>
+                                            <a asp-action="Edit" asp-route-id="@item.ID" class="btn btn-info btn-sm">
+                                                <i class="fas fa-pencil-alt">
+                                                </i>
+                                                Edit
+                                            </a>
+                                            <a asp-action="Delete" asp-route-id="@item.ID" class="btn">
+                                                <button class="btn btn-danger btn-sm" style="margin-left: -12px" type="submit">
+                                                    <i class="fas fa-trash">
+                                                    </i>
+                                                    Delete
+                                                </button>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <th>No.</th>
+                                        <th>Avatar</th>
+                                        <th>Name</th>
+                                        <th>Email</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </tfoot>
+                            </table>
                         </div>
                     </div>
-                    <!--/.New exams -->
-
-                </section>
-                <!-- /.Left col -->
-            </div>
-            <!-- /.row (main row) -->*@
-        </div><!-- /.container-fluid -->
+                </div>
+            </div> 
+        </div>
     </section>
     <!-- /.content -->
 </div>
 <!-- /.content-wrapper -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $.ajax({
+            type: "POST",
+            url: "/Home/GetToTalUsers",
+            data: "",
+            contentType: "application/json; charset=utf8",
+            dataType: "json",
+            success: OnSuccess,
+        });
+        function OnSuccess(data) {
+            const barChart1 = document.getElementById('barChart1');
+            const doughnutChart1 = document.getElementById('doughnutChart1');
+            const myChart = document.getElementById('myChart');
+            var _data = data;
+            var _labels = _data[0];
+            var _ChartData = _data[1];
+            var backColor = [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(255, 159, 64, 0.2)',
+                'rgba(255, 205, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(153, 102, 255, 0.2)',
+                'rgba(201, 203, 207, 0.2)'
+            ];
+            var borColor = [
+                'rgb(255, 99, 132)',
+                'rgb(255, 159, 64)',
+                'rgb(255, 205, 86)',
+                'rgb(75, 192, 192)',
+                'rgb(54, 162, 235)',
+                'rgb(153, 102, 255)',
+                'rgb(201, 203, 207)'
+            ];
+
+            new Chart(barChart1, {
+                type: 'bar',
+                data: {
+                    labels: _labels,
+                    datasets: [{
+                        backgroundColor: backColor,
+                        borderColor: borColor,
+                        data: _ChartData,
+                        borderWidth: 1,
+                    }]
+                }
+            });
+
+            new Chart(doughnutChart1, {
+                type: 'doughnut1',
+                data: {
+                    labels: _labels,
+                    datasets: [{
+                        backgroundColor: backColor,
+                        borderColor: borColor,
+                        data: _ChartData,
+                        borderWidth: 1,
+                    }]
+                }
+            });
+        }
+    });
+</script>
+<script type="text/javascript">
+    $(function () {
+        $.ajax({
+            type: "POST",
+            url: "/Home/GetToTal",
+            contentType: "application/json; charset=utf8",
+            dataType: "json",
+            success: function (data) {
+                // Dữ liệu trả về từ controller
+                var totalData = data;
+
+                // Dữ liệu cho biểu đồ doughnut
+                var doughnutPieData = {
+                    datasets: [{
+                        data: totalData,
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.5)',
+                            'rgba(54, 162, 235, 0.5)',
+                            'rgba(255, 206, 86, 0.5)'
+                        ],
+                        borderColor: [
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 206, 86, 1)'
+                        ],
+                    }],
+
+                    labels: [
+                        'Users',
+                        'WorkSpaces',
+                        'WorkSpaceMembers',
+                    ]
+                };
+                var doughnutPieOptions = {
+                    responsive: true,
+                    animation: {
+                        animateScale: true,
+                        animateRotate: true
+                    }
+                };
+
+                var doughnutChartCanvas = $("#doughnutChart").get(0).getContext("2d");
+
+                var doughnutChart = new Chart(doughnutChartCanvas, {
+                    type: 'doughnut',
+                    data: doughnutPieData,
+                    options: doughnutPieOptions
+                });
+            }
+        });
+    });
+
+</script>

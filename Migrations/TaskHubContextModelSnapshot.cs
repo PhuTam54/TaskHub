@@ -168,6 +168,9 @@ namespace TaskHub.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
+                    b.Property<bool>("EmailSend")
+                        .HasColumnType("bit");
+
                     b.Property<string>("FirstMidName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)")
@@ -182,10 +185,20 @@ namespace TaskHub.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("ResetPasswordToken")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("ResetPasswordTokenExpiration")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("UserName")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("UserRole")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ID");
 
@@ -204,7 +217,6 @@ namespace TaskHub.Migrations
                         .HasColumnType("int");
 
                     b.Property<int>("UserId")
-                        .HasMaxLength(50)
                         .HasColumnType("int");
 
                     b.Property<string>("WorkSpaceDescription")

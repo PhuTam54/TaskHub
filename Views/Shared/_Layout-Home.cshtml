@@ -1,4 +1,5 @@
-﻿
+﻿@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor;
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -152,7 +153,15 @@
                                     </a>
                                 </li>
                             }
-                            
+                            @if (HttpContextAccessor.HttpContext.Session.GetString("UserName") != null)
+                            {
+                                <li class="nav-item">
+                                    <a asp-controller="Users" asp-action="Logout" class="nav-link">
+                                        <i class="fa fa-user"></i>
+                                        <p>Logout</p>
+                                    </a>
+                                </li>
+                            }
 
                             <div id="boards-list">
                                 <!-- Boards will be listed here... -->

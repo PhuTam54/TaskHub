@@ -10,7 +10,9 @@ using TaskHub.Data;
 using TaskHub.Models.WorkSpaceViewModels;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.CodeAnalysis.Scripting;
-
+using System.Security.Cryptography;
+using System.Net;
+using System.Net.Mail;
 namespace TaskHub.Controllers
 {
     public class UsersController : Controller
@@ -29,10 +31,11 @@ namespace TaskHub.Controllers
         {
             return View();
         }
-
+      
         // POST: Users/Register
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        // POST: Users/Register
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register([Bind("ID,UserName,Email,Password,LastName,FirstMidName")] User user)
@@ -43,21 +46,37 @@ namespace TaskHub.Controllers
                 ModelState.AddModelError("Email", "Email already exists.");
                 return View(user);
             }
-            else if (true)
-            {
-                // Hash the password before saving it
-                user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
-                user.Avatar = "https://img.meta.com.vn/Data/image/2021/09/22/anh-meo-cute-de-thuong-dang-yeu-42.jpg";
-                user.FirstMidName = user.UserName;
-                user.LastName = "";
 
-                _context.Add(user);
-                await _context.SaveChangesAsync();
-                return RedirectToAction("Login");
-            }
-            return View(user);
+            // Generate a random reset password token
+            string resetPasswordToken = GenerateRandomToken();
+
+            // Hash the password before saving it
+            user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
+            user.Avatar = "https://img.meta.com.vn/Data/image/2021/09/22/anh-meo-cute-de-thuong-dang-yeu-42.jpg";
+            user.FirstMidName = user.UserName;
+            user.LastName = "";
+            user.UserRole = "User";
+            user.ResetPasswordToken = resetPasswordToken;
+
+            _context.Add(user);
+            await _context.SaveChangesAsync();
+            HttpContext.Session.SetString("UserName", user.UserName);
+            HttpContext.Session.SetString("UserRole", user.UserRole);
+            return RedirectToAction("Login");
         }
 
+        // Generate a random reset password token
+        private string GenerateRandomToken()
+        {
+            // Generate a random token here
+            return Guid.NewGuid().ToString();
+        }
+
+        [HttpGet]
+        public IActionResult Error()
+        {
+            return View();
+        }
 
         [HttpGet]
         public IActionResult Login()
@@ -77,17 +96,27 @@ namespace TaskHub.Controllers
             if (HttpContext.Session.GetString("UserName") == null)
             {
                 var account = _context.User.Where(x => x.Email.Equals(user.Email)).FirstOrDefault();
+
                 if (account != null && BCrypt.Net.BCrypt.Verify(user.Password, account.Password))
                 {
                     HttpContext.Session.SetInt32("UserID", account.ID);
                     HttpContext.Session.SetString("UserName", account.UserName);
                     HttpContext.Session.SetString("Avatar", account.Avatar);
+                    HttpContext.Session.SetString("UserName", account.UserName.ToString());
+                    HttpContext.Session.SetString("UserRole", account.UserRole);
+
                     ViewBag.Username = account.UserName;
                     ViewBag.UserId = account.ID;
                     ViewBag.Avatar = account.Avatar;
-                    return RedirectToAction("MyBoards", "Home");
+
+                    if (account.UserRole == "Admin" || account.UserRole == "User")
+                    {
+                        return RedirectToAction("MyBoards", "Home");
+                    }
+                    return View();
                 }
             }
+
             return View();
         }
 
@@ -98,7 +127,6 @@ namespace TaskHub.Controllers
             HttpContext.Session.Remove("UserName");
             return RedirectToAction("Login", "Users");
         }
-
         // GET: Users
         public async Task<IActionResult> Index(int? id)
         {
@@ -151,10 +179,11 @@ namespace TaskHub.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,UserName,Email,Password,LastName,FirstMidName")] User user, IFormFile Avatar)
+        public async Task<IActionResult> Create([Bind("ID,UserName,Email,Password,LastName,FirstMidName,UserRole")] User user, IFormFile Avatar)
         {
             if (true)
             {
+
                 var allowedExtenstions = new[] { ".jpg", ".jpeg", ".png", ".gif" };
 
                 var filePaths = new List<string>();
@@ -182,11 +211,127 @@ namespace TaskHub.Controllers
 
                     user.Avatar = "/uploads/" + fileName;
                 }
+               
                 _context.Add(user);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             return View(user);
+        }
+
+        // GET: Users/ForgotPassword
+        public IActionResult ForgotPassword()
+        {
+            return View();
+        }
+
+        // POST: Users/ForgotPassword
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ForgotPassword(string email, User users)
+        {
+            if (true)
+            {
+                ModelState.Clear();
+                users.EmailSend = true;
+
+                if (string.IsNullOrEmpty(email))
+                {
+                    ModelState.AddModelError("Email", "Email is required.");
+                    return View();
+                }
+
+                var user = await _context.User.FirstOrDefaultAsync(u => u.Email == email);
+                if (user == null)
+                {
+                    ModelState.AddModelError("Email", "User with this email does not exist.");
+                    return View();
+                }
+
+                var token = GenerateToken();
+                user.ResetPasswordToken = token;
+                user.ResetPasswordTokenExpiration = DateTime.UtcNow.AddHours(1);
+                await _context.SaveChangesAsync();
+
+                var callbackUrl = Url.Action("ResetPassword", "Users", new { token = token }, protocol: HttpContext.Request.Scheme);
+                await SendResetPasswordEmail(email, callbackUrl);
+
+                TempData["Message"] = "Reset password link has been sent to your email.";
+            }
+           
+            return RedirectToAction("ForgotPassword");
+        }
+        public async Task SendResetPasswordEmail(string email, string callbackUrl)
+        {
+            var mailMessage = new MailMessage();
+            mailMessage.To.Add(email);
+            mailMessage.Subject = "Reset Password";
+            mailMessage.From = new MailAddress(email);
+            mailMessage.IsBodyHtml = true;
+            mailMessage.Body = $"Please reset your password by <a href='{callbackUrl}'>clicking here</a>.";
+
+            using (var smtpClient = new SmtpClient("smtp.gmail.com"))
+            {
+                smtpClient.Port = 587;
+                smtpClient.UseDefaultCredentials = false;
+                smtpClient.EnableSsl = true;
+                smtpClient.Credentials = new NetworkCredential("locnvth2209036@fpt.edu.vn", "facuytnqgsyxupdl");
+
+                await smtpClient.SendMailAsync(mailMessage);
+            }
+        }
+
+        // GET: Users/ResetPassword
+        public async Task<IActionResult> ResetPassword(string token)
+        {
+            var user = await _context.User.FirstOrDefaultAsync(u => u.ResetPasswordToken == token && u.ResetPasswordTokenExpiration > DateTime.UtcNow);
+            if (user == null)
+            {
+                TempData["ErrorMessage"] = "Invalid or expired reset password token.";
+                return RedirectToAction(nameof(Login));
+            }
+
+            var viewModel = new ResetPasswordViewModel
+            {
+                Token = token
+            };
+            return View(viewModel);
+        }
+
+        // POST: Users/ResetPassword
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ResetPassword(ResetPasswordViewModel viewModel)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(viewModel);
+            }
+
+            var user = await _context.User.FirstOrDefaultAsync(u => u.ResetPasswordToken == viewModel.Token && u.ResetPasswordTokenExpiration > DateTime.UtcNow);
+            if (user == null)
+            {
+                TempData["ErrorMessage"] = "Invalid or expired reset password token.";
+                return RedirectToAction(nameof(Login));
+            }
+
+            user.Password = BCrypt.Net.BCrypt.HashPassword(viewModel.NewPassword);
+            user.ResetPasswordToken = "";
+            user.ResetPasswordTokenExpiration = null;
+            await _context.SaveChangesAsync();
+
+            TempData["Message"] = "Password has been reset successfully.";
+            return RedirectToAction(nameof(Login));
+        }
+
+        private string GenerateToken()
+        {
+            using (var rng = new RNGCryptoServiceProvider())
+            {
+                var tokenData = new byte[32];
+                rng.GetBytes(tokenData);
+                return Convert.ToBase64String(tokenData);
+            }
         }
 
         // GET: Users/Edit/5
@@ -208,8 +353,6 @@ namespace TaskHub.Controllers
         }
 
         // POST: Users/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("ID,UserName,Email,Password,LastName,FirstMidName")] User user, IFormFile Avatar)
@@ -223,34 +366,55 @@ namespace TaskHub.Controllers
             {
                 try
                 {
-                    var allowedExtenstions = new[] { ".jpg", ".jpeg", ".png", ".gif" };
-
-                    var filePaths = new List<string>();
-                    // Check if the file has a valid extensions
-                    var fileExtension = Path.GetExtension(Avatar.FileName).ToLowerInvariant();
-                    if (string.IsNullOrEmpty(fileExtension) || !allowedExtenstions.Contains(fileExtension))
+                    var existingUser = await _context.User.FirstOrDefaultAsync(u => u.ID == id);
+                    if (existingUser == null)
                     {
-                        return BadRequest("Invalid file extension. Allowed extensions are: " + string.Join(", ", allowedExtenstions));
-                    };
-
-                    if (Avatar.Length > 0)
-                    {
-                        // Change the folder path
-                        var uploadFolderPath = Path.Combine(_hostingEnvironment.WebRootPath, "uploads");
-                        Directory.CreateDirectory(uploadFolderPath);
-
-                        var fileName = Path.GetRandomFileName() + fileExtension;
-                        var filePath = Path.Combine(uploadFolderPath, fileName);
-                        filePaths.Add(filePath);
-
-                        using (var stream = new FileStream(filePath, FileMode.Create))
-                        {
-                            await Avatar.CopyToAsync(stream);
-                        }
-
-                        user.Avatar = "/uploads/" + fileName;
+                        return NotFound();
                     }
-                    _context.Update(user);
+
+                    existingUser.UserName = user.UserName;
+                    existingUser.Email = user.Email;
+                    existingUser.Password = user.Password;
+                    existingUser.LastName = user.LastName;
+                    existingUser.FirstMidName = user.FirstMidName;
+
+                    // Check if Avatar is provided
+                    if (Avatar != null && Avatar.Length > 0)
+                    {
+                        // Process and save Avatar
+                        var allowedExtensions = new[] { ".jpg", ".jpeg", ".png", ".gif" };
+                        var fileExtension = Path.GetExtension(Avatar.FileName).ToLowerInvariant();
+
+                        if (!string.IsNullOrEmpty(fileExtension) && allowedExtensions.Contains(fileExtension))
+                        {
+                            var uploadFolderPath = Path.Combine(_hostingEnvironment.WebRootPath, "uploads");
+                            Directory.CreateDirectory(uploadFolderPath);
+
+                            var fileName = Path.GetRandomFileName() + fileExtension;
+                            var filePath = Path.Combine(uploadFolderPath, fileName);
+
+                            using (var stream = new FileStream(filePath, FileMode.Create))
+                            {
+                                await Avatar.CopyToAsync(stream);
+                            }
+
+                            existingUser.Avatar = "/uploads/" + fileName;
+                        }
+                        else
+                        {
+                            // Handle invalid file extension
+                            ModelState.AddModelError("Avatar", "Invalid file extension. Allowed extensions are: " + string.Join(", ", allowedExtensions));
+                            return View(user);
+                        }
+                    }
+
+                    // Ensure ResetPasswordToken is not null
+                    if (existingUser.ResetPasswordToken == null)
+                    {
+                        existingUser.ResetPasswordToken = GenerateRandomToken();
+                    }
+
+                    _context.Update(existingUser);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -268,6 +432,7 @@ namespace TaskHub.Controllers
             }
             return View(user);
         }
+
 
         // GET: Users/Delete/5
         public async Task<IActionResult> Delete(int? id)
@@ -302,14 +467,14 @@ namespace TaskHub.Controllers
             {
                 _context.User.Remove(user);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool UserExists(int id)
         {
-          return (_context.User?.Any(e => e.ID == id)).GetValueOrDefault();
+            return (_context.User?.Any(e => e.ID == id)).GetValueOrDefault();
         }
     }
 }

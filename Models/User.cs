@@ -16,7 +16,10 @@ namespace TaskHub.Models
 
         [StringLength(50)]
         public string Email { get; set; }
+        public bool EmailSend { get; set; }
         public string Password { get; set; }
+        public string? ResetPasswordToken { get; set; }
+        public DateTime? ResetPasswordTokenExpiration { get; set; }
 
         [StringLength(50)]
         [Display(Name = "Last Name")]
@@ -34,7 +37,7 @@ namespace TaskHub.Models
                 return FirstMidName + " " + LastName;
             }
         }
-
+        public string UserRole { get; set; }
         public ICollection<WorkSpaceMember> WorkSpaceMembers { get; set; }
         public ICollection<Comment> Comments { get; set; }
         public ICollection<TaskItem> TaskItems { get; set; }

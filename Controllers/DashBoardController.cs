@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TaskHub.Data;
+using TaskHub.Models.Authentication;
 using TaskHub.Models.WorkSpaceViewModels;
 
 namespace TaskHub.Controllers

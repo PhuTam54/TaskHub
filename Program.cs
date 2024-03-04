@@ -2,7 +2,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using TaskHub.Data;
 using TaskHub.MailUtils;
-using TaskHub.Middleware;
 using TaskHub.Models;
 using TaskHub.Service;
 using Microsoft.Extensions.Configuration;
@@ -14,7 +13,7 @@ builder.Services.AddRazorPages();
 builder.Services.AddDbContext<TaskHubContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("TaskHubContext") ?? 
     throw new InvalidOperationException("Connection string 'TaskHubContext' not found.")));
-
+builder.Services.AddHttpContextAccessor();
 builder.Services.AddSession();
 
 //// Add configuration from appsettings.json
@@ -52,7 +51,6 @@ app.UseSession();
 app.UseStaticFiles();
 
 // Initial Middleware 
-app.UseAdminMiddleware();
 
 app.UseRouting(); // EndpointRoutingMiddleware
 

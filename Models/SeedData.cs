@@ -33,6 +33,17 @@ public static class SeedData
                     FirstMidName = "Tam",
                     LastName = "Phu",
                     Avatar = "https://img.meta.com.vn/Data/image/2021/09/22/anh-meo-cute-de-thuong-dang-yeu-42.jpg",
+                    UserRole = "Admin"
+                },
+                 new User
+                {
+                    UserName = "admin",
+                    Email = "admin@gmail.com",
+                    Password = BCrypt.Net.BCrypt.HashPassword("123456"),
+                    FirstMidName = "admin",
+                    LastName = "admin",
+                    Avatar = "https://img.meta.com.vn/Data/image/2021/09/22/anh-meo-cute-de-thuong-dang-yeu-42.jpg",
+                    UserRole = "Admin"
                 },
                 new User
                 {
@@ -42,6 +53,8 @@ public static class SeedData
                     FirstMidName = "Thuy",
                     LastName = "Tran",
                     Avatar = "https://img.meta.com.vn/Data/image/2021/09/22/anh-meo-cute-de-thuong-dang-yeu-42.jpg",
+                    UserRole = "Admin"
+
                 },
                 new User
                 {
@@ -51,6 +64,8 @@ public static class SeedData
                     FirstMidName = "Peter",
                     LastName = "Parker",
                     Avatar = "https://img.meta.com.vn/Data/image/2021/09/22/anh-meo-cute-de-thuong-dang-yeu-42.jpg",
+                    UserRole = "Admin"
+
                 },
                 new User
                 {
@@ -60,6 +75,8 @@ public static class SeedData
                     FirstMidName = "Tom",
                     LastName = "Holland",
                     Avatar = "https://img.meta.com.vn/Data/image/2021/09/22/anh-meo-cute-de-thuong-dang-yeu-42.jpg",
+                    UserRole = "Admin"
+
                 },
                 new User
                 {
@@ -69,6 +86,8 @@ public static class SeedData
                     FirstMidName = "Cristiano",
                     LastName = "Ronaldo",
                     Avatar = "https://img.meta.com.vn/Data/image/2021/09/22/anh-meo-cute-de-thuong-dang-yeu-42.jpg",
+                    UserRole = "Admin"
+
                 },
                 new User
                 {
@@ -78,6 +97,8 @@ public static class SeedData
                     FirstMidName = "Tam",
                     LastName = "Phu 2",
                     Avatar = "https://img.meta.com.vn/Data/image/2021/09/22/anh-meo-cute-de-thuong-dang-yeu-42.jpg",
+                    UserRole = "Admin"
+
                 },
                 new User
                 {
@@ -87,6 +108,8 @@ public static class SeedData
                     FirstMidName = "Thuy",
                     LastName = "Tran 2",
                     Avatar = "https://img.meta.com.vn/Data/image/2021/09/22/anh-meo-cute-de-thuong-dang-yeu-42.jpg",
+                    UserRole = "Admin"
+
                 },
                 new User
                 {
@@ -96,69 +119,8 @@ public static class SeedData
                     FirstMidName = "Peter",
                     LastName = "Parker 2",
                     Avatar = "https://img.meta.com.vn/Data/image/2021/09/22/anh-meo-cute-de-thuong-dang-yeu-42.jpg",
-                },
-                new User
-                {
-                    UserName = "tom2",
-                    Email = "tom2@gmail.com",
-                    Password = BCrypt.Net.BCrypt.HashPassword("123456"),
-                    FirstMidName = "Tom",
-                    LastName = "Holland 2",
-                    Avatar = "https://img.meta.com.vn/Data/image/2021/09/22/anh-meo-cute-de-thuong-dang-yeu-42.jpg",
-                },
-                new User
-                {
-                    UserName = "ronaldo2",
-                    Email = "ronaldo2@gmail.com",
-                    Password = BCrypt.Net.BCrypt.HashPassword("123456"),
-                    FirstMidName = "Cristiano",
-                    LastName = "Ronaldo 2",
-                    Avatar = "https://img.meta.com.vn/Data/image/2021/09/22/anh-meo-cute-de-thuong-dang-yeu-42.jpg",
-                },
-                new User
-                {
-                    UserName = "phutam3",
-                    Email = "phutam3@gmail.com",
-                    Password = BCrypt.Net.BCrypt.HashPassword("123456"),
-                    FirstMidName = "Tam",
-                    LastName = "Phu 3",
-                    Avatar = "https://img.meta.com.vn/Data/image/2021/09/22/anh-meo-cute-de-thuong-dang-yeu-42.jpg",
-                },
-                new User
-                {
-                    UserName = "tranthuy3",
-                    Email = "tranthuy3@gmail.com",
-                    Password = BCrypt.Net.BCrypt.HashPassword("123456"),
-                    FirstMidName = "Thuy",
-                    LastName = "Tran 3",
-                    Avatar = "https://img.meta.com.vn/Data/image/2021/09/22/anh-meo-cute-de-thuong-dang-yeu-42.jpg",
-                },
-                new User
-                {
-                    UserName = "peter3",
-                    Email = "peter3@gmail.com",
-                    Password = BCrypt.Net.BCrypt.HashPassword("123456"),
-                    FirstMidName = "Peter",
-                    LastName = "Parker 3",
-                    Avatar = "https://img.meta.com.vn/Data/image/2021/09/22/anh-meo-cute-de-thuong-dang-yeu-42.jpg",
-                },
-                new User
-                {
-                    UserName = "tom3",
-                    Email = "tom3@gmail.com",
-                    Password = BCrypt.Net.BCrypt.HashPassword("123456"),
-                    FirstMidName = "Tom",
-                    LastName = "Holland 3",
-                    Avatar = "https://img.meta.com.vn/Data/image/2021/09/22/anh-meo-cute-de-thuong-dang-yeu-42.jpg",
-                },
-                new User
-                {
-                    UserName = "ronaldo3",
-                    Email = "ronaldo3@gmail.com",
-                    Password = BCrypt.Net.BCrypt.HashPassword("123456"),
-                    FirstMidName = "Cristiano",
-                    LastName = "Ronaldo 3",
-                    Avatar = "https://img.meta.com.vn/Data/image/2021/09/22/anh-meo-cute-de-thuong-dang-yeu-42.jpg",
+                    UserRole = "Admin"
+
                 }
             };
             foreach (User s in Users)
