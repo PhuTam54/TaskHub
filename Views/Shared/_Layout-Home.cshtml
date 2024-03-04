@@ -64,14 +64,7 @@
 
                 <div class="user-settings">
                     <span class="title-actions-container" style="font-size:25px;cursor:pointer;letter-spacing: 1ch;">
-                        <label for="auto-save" class="auto-save-text">Auto Save</label>
-                        <label class="switch" id="auto-save-label">
-                            <input id="auto-save" type="checkbox" checked>
-                            <span class="slider round"></span>
-                        </label>
-                        <i title="Delete this board." id="delete-button" class="fa fa-trash"></i>
-                        <i title="Save all boards." id="save-button" class="fa fa-floppy-o"></i>
-                        <i title="Settings" id="settings-button" class="fa fa-gear"></i>
+                        <button class="btn" data-ripple-color="dark" type="button" style="color: #0079bf;  border-color: #0079bf;"><i class="fas fa-share"></i> Share</button>
                     </span>
                 </div>
             </nav>
@@ -166,7 +159,7 @@
                 <!-- /.sidebar -->
             </aside>
 
-            <div class="content-wrapper">
+            <div class="content-wrapper" style="background: #0067a3; ">
                 @RenderBody()
             </div>
 

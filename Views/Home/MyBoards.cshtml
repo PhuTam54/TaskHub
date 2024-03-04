@@ -78,25 +78,97 @@
 </div>
 <!-- /.card-body -->*@
 
-<section class="board-info-bar">
+<!-- Content Wrapper. Contains page content -->
+<div class="">
 
-    <div class="board-controls">
+<section class="mb-3">
 
-        <button class="board-title btn">
-            <h2 id="title"></h2>
-        </button>
+    <div class="d-flex justify-content-between">
 
-        <button class="star-btn btn" aria-label="Star Board">
-            <i class="fa fa-star" aria-hidden="true"></i>
-        </button>
+        <div>
+            <button class="board-title btn">
+                <h2 id="title"></h2>
+            </button>
 
-        <button class="personal-btn btn">Personal</button>
+            <button class="star-btn btn" aria-label="Star Board">
+                <i class="fa fa-star" aria-hidden="true"></i>
+            </button>
 
-        <button class="private-btn btn"><i class="fa fa-briefcase private-btn-icon" aria-hidden="true"></i>Private</button>
+            <button class="personal-btn btn">Personal</button>
 
+            <button class="private-btn btn"><i class="fa fa-briefcase private-btn-icon" aria-hidden="true"></i>Private</button>
+
+        </div>
+        <div>
+            <div class="d-flex align-items-center">
+                <button type="button" class="btn mx-3" data-ripple-color="dark" style="color: #0079bf;  border-color: #0079bf;"><i class="fas fa-users mr-2"></i> Team</button>
+                    @foreach (var item in Model.WorkSpaces)
+                    {
+                        @if (item.WorkSpaceId == ViewBag.WorkSpaceId)
+                        {
+                            @foreach (var member in item.WorkSpaceMembers)
+                            {
+                                <a href="#"><img src="@member.User.Avatar" alt="@member.User.UserName" class="border rounded-circle" style="height: 30px;"></a>
+                            }
+                        }
+                    }
+                    <!-- Trigger the modal with a button -->
+                <button type="button" class="btn mx-3" data-toggle="modal" data-target="#showInviteModel" data-ripple-color="dark" style="color: #0079bf;  border-color: #0079bf;"><i class="fas fa-user-plus mr2"></i> Invite</button>
+                <!-- Modal -->
+                <div id="showInviteModel" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+
+                        <!-- Modal content-->
+                        <div class="modal-content" style="min-width: 700px; max-height: 600px">
+                            <div class="modal-header">
+                                <h4 class="modal-title">Invite to this board</h4>
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            </div>
+                            <div class="modal-body overflow-auto">
+                                <div class="container">
+                                    <div class="board-share">
+                                            <form action="/SendMailService" class="share-input">
+                                            <input type="text" name="email" placeholder="Enter email...">
+                                            <select>
+                                                <option value="member">Member</option>
+                                                <option value="admin">Admin</option>
+                                            </select>
+                                            <button type="submit">Share</button>
+                                        </form>
+
+                                    </div>
+                                </div>
+
+                                <p>Or copy link</p>
+                                <div class="field">
+                                    <i class="url-icon uil uil-link"></i>
+                                    <input type="text" readonly value="example.com/share-link">
+                                    <button>Copy</button>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="user-settings">
+                    <span class="title-actions-container" style="font-size:25px;cursor:pointer;letter-spacing: 1ch;">
+                        <label for="auto-save" class="auto-save-text">Auto Save</label>
+                        <label class="switch" id="auto-save-label">
+                            <input id="auto-save" type="checkbox" checked>
+                            <span class="slider round"></span>
+                        </label>
+                        <i title="Delete this board." id="delete-button" class="fa fa-trash"></i>
+                        <i title="Save all boards." id="save-button" class="fa fa-floppy-o"></i>
+                        <i title="Settings" id="settings-button" class="fa fa-gear"></i>
+                    </span>
+                </div>
+            </div>
+        </div>
     </div>
-
-    <button class="menu-btn btn"><i class="fa fa-ellipsis-h menu-btn-icon" aria-hidden="true"></i>Show Menu</button>
 
 </section>
 
@@ -145,9 +217,12 @@
     </div>
 </div>
 
+</div>
+
 @Html.AntiForgeryToken()
 
 @{
+    var isInvite = Context.Request.HttpContext.Session.GetString("isInvite");
     var cardCount = 0;
     var itemCount = 0;
 }
@@ -1373,6 +1448,9 @@
                 });
         }
 
+        if (isInvite == "True") {
+            createAlert('Invite successfully!!!');
+        }
         /* <=================================== Other Events ===================================> */
         e_addCardText.addEventListener('keyup', (e) => {
             if (e.code === "Enter") currentBoard().addCard();

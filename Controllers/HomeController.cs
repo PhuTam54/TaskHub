@@ -68,7 +68,7 @@ namespace TaskHub.Controllers
                         .ThenInclude(i => i.TaskItems.OrderBy(ti => ti.position))
                             .ThenInclude(i => i.Comments)
                 .AsNoTracking()
-                .Where(i => i.WorkSpaceMembers.Any(wm => wm.User.ID == 2))
+                .Where(i => i.WorkSpaceMembers.Any(wm => wm.User.ID == userId))
                 .ToListAsync();
 
             ViewBag.DataFromDatabase = viewModel.WorkSpaces;
