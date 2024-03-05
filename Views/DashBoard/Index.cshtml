@@ -83,6 +83,24 @@
                 <!-- ./col -->
             </div>
             <!-- /.row -->
+            <div class="row">
+                <div class="col-lg-6 grid-margin stretch-card">
+                    <div class="card">
+                        <div class="card-body">
+                            <h4 class="card-title">User chart</h4>
+                            <canvas id="barChart1" style="height:230px"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 grid-margin stretch-card">
+                    <div class="card">
+                        <div class="card-body">
+                            <h4 class="card-title">Total chart</h4>
+                            <canvas id="doughnutChart" style="height:250px"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
             @*<!-- Main row -->
             <div class="row">
                 <!-- Left col -->
@@ -297,3 +315,123 @@
     <!-- /.content -->
 </div>
 <!-- /.content-wrapper -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $.ajax({
+            type: "POST",
+            url: "/DashBoard/GetToTalUsers",
+            data: "",
+            contentType: "application/json; charset=utf8",
+            dataType: "json",
+            success: OnSuccess,
+        });
+        function OnSuccess(data) {
+            const barChart1 = document.getElementById('barChart1');
+            const doughnutChart1 = document.getElementById('doughnutChart1');
+            const myChart = document.getElementById('myChart');
+            var _data = data;
+            var _labels = _data[0];
+            var _ChartData = _data[1];
+            var backColor = [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(255, 159, 64, 0.2)',
+                'rgba(255, 205, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(153, 102, 255, 0.2)',
+                'rgba(201, 203, 207, 0.2)'
+            ];
+            var borColor = [
+                'rgb(255, 99, 132)',
+                'rgb(255, 159, 64)',
+                'rgb(255, 205, 86)',
+                'rgb(75, 192, 192)',
+                'rgb(54, 162, 235)',
+                'rgb(153, 102, 255)',
+                'rgb(201, 203, 207)'
+            ];
+
+            new Chart(barChart1, {
+                type: 'bar',
+                data: {
+                    labels: _labels,
+                    datasets: [{
+                        backgroundColor: backColor,
+                        borderColor: borColor,
+                        data: _ChartData,
+                        borderWidth: 1,
+                    }]
+                }
+            });
+
+            new Chart(doughnutChart1, {
+                type: 'doughnut1',
+                data: {
+                    labels: _labels,
+                    datasets: [{
+                        backgroundColor: backColor,
+                        borderColor: borColor,
+                        data: _ChartData,
+                        borderWidth: 1,
+                    }]
+                }
+            });
+        }
+    });
+</script>
+<script type="text/javascript">
+    $(function () {
+        $.ajax({
+            type: "POST",
+            url: "/DashBoard/GetToTal",
+            contentType: "application/json; charset=utf8",
+            dataType: "json",
+            success: function (data) {
+                // Dữ liệu trả về từ controller
+                var totalData = data;
+
+                // Dữ liệu cho biểu đồ doughnut
+                var doughnutPieData = {
+                    datasets: [{
+                        data: totalData,
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.5)',
+                            'rgba(54, 162, 235, 0.5)',
+                            'rgba(255, 206, 86, 0.5)'
+                        ],
+                        borderColor: [
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 206, 86, 1)'
+                        ],
+                    }],
+
+                    labels: [
+                        'Users',
+                        'WorkSpaces',
+                        'WorkSpaceMembers',
+                    ]
+                };
+                var doughnutPieOptions = {
+                    responsive: true,
+                    animation: {
+                        animateScale: true,
+                        animateRotate: true
+                    }
+                };
+
+                var doughnutChartCanvas = $("#doughnutChart").get(0).getContext("2d");
+
+                var doughnutChart = new Chart(doughnutChartCanvas, {
+                    type: 'doughnut',
+                    data: doughnutPieData,
+                    options: doughnutPieOptions
+                });
+            }
+        });
+    });
+
+</script>

@@ -8,76 +8,6 @@
     ViewData["Title"] = "My Boards";
 }
 
-@*<!-- ./card-header -->
-<div class="card-body">
-    @foreach (var item in Model.WorkSpaces)
-    {
-        {
-            <table id="example2" class="table table-bordered table-striped">
-                <tr>
-                    <th>Board Title</th>
-                    <th colspan="3">Lists</th>
-                </tr>
-                @foreach (var board in item.Boards)
-                {
-                    @if (board.BoardId == ViewBag.BoardId)
-                    {
-                        <tr>
-                            <td>
-                                @board.BoardTitle
-                            </td>
-                            <td>
-                                @if (board.Lists.Count() > 0)
-                                {
-                                    <table class="table">
-                                        <tr>
-                                            <th>List Title</th>
-                                            <th>Tasks</th>
-                                        </tr>
-                                        @foreach (var list in board.Lists)
-                                        {
-                                            <tr>
-                                                <td>
-                                                    @list.ListTitle
-                                                </td>
-                                                <td>
-                                                    <ul>
-                                                        @foreach (var task in list.TaskItems)
-                                                        {
-                                                            <li>@task.Title</li>
-                                                            @if (task.Comments.Count() > 0)
-                                                            {
-                                                                <span class="text-bold">Comments: </span>
-                                                                <br>
-                                                                @foreach (var cmt in task.Comments)
-                                                                {
-                                                                    @cmt.CommentContent
-                                                                    <br />
-                                                                }
-                                                            }
-                                                        }
-                                                    </ul>
-                                                </td>
-                                            </tr>
-                                        }
-                                    </table>
-                                }
-                            </td>
-                        </tr>
-                    }
-                }
-                <tfoot>
-                    <tr>
-                        <th>Board Title</th>
-                        <th colspan="3">Lists</th>
-                    </tr>
-                </tfoot>
-            </table>
-        }
-    }
-</div>
-<!-- /.card-body -->*@
-
 <!-- Content Wrapper. Contains page content -->
 <div class="">
 
@@ -222,7 +152,6 @@
 @Html.AntiForgeryToken()
 
 @{
-    var isInvite = Context.Request.HttpContext.Session.GetString("isInvite");
     var cardCount = 0;
     var itemCount = 0;
 }
@@ -1234,84 +1163,6 @@
         /* <=================================== Persistent Data Storage ===================================> */
         function saveData() {
             //window.localStorage.setItem('taskHub-appData', JSON.stringify(appData));
-
-            //// Khai báo biến để lưu trữ dữ liệu tách biệt
-            //let boards = [];
-
-            //// Lặp qua từng board trong dữ liệu ban đầu (_appData)
-            //for (let _board of appData.boards) {
-            //    // Tạo một board mới từ dữ liệu của mỗi board trong _appData
-            //    let newBoard = {
-            //        name: _board.name,
-            //        id: _board.id,
-            //        settings: _board.settings,
-            //        identifier: _board.identifier,
-            //        cards: [] // Mảng chứa các cards trong board
-            //    };
-
-            //    // Lặp qua từng card trong dữ liệu board hiện tại
-            //    for (let _card of _board.cards) {
-            //        // Tạo một card mới từ dữ liệu của mỗi card trong board hiện tại
-            //        let newCard = {
-            //            name: _card.name,
-            //            id: _card.id,
-            //            items: [] // Mảng chứa các items trong card
-            //        };
-
-            //        // Lặp qua từng item trong dữ liệu card hiện tại
-            //        for (let _item of _card.items) {
-            //            // Tạo một item mới từ dữ liệu của mỗi item trong card hiện tại
-            //            let newItem = {
-            //                title: _item.title,
-            //                description: _item.description,
-            //                id: _item.id
-            //            };
-
-            //            // Thêm item mới vào mảng items của card
-            //            newCard.items.push(newItem);
-            //        }
-
-            //        // Thêm card mới vào mảng cards của board
-            //        newBoard.cards.push(newCard);
-            //    }
-
-            //    // Thêm board mới vào mảng boards
-            //    boards.push(newBoard);
-            //}
-
-            //if (boards.length() > @Model.WorkSpaces.Count())
-            //{
-            //    addBoardToDb(boards)
-            //} else if(boards.length() < @Model.WorkSpaces.Count())
-            //{
-            //    deleteABoard(boards)
-            //} else {
-            //    updateABoard(boards)
-            //}
-
-            //if (boards.cards.length() > @cardCount) {
-            //    addCardToDb()
-            //} else if (boards.cards.length() < @cardCount) {
-            //    deleteACard()
-            //} else {
-            //    updateACard()
-            //}
-
-            //if (boards.cards.items.length() > @itemCount) {
-            //    addItemToDb()
-            //} else if (boards.cards.items.length() < @itemCount) {
-            //    deleteAItem()
-            //} else {
-            //    updateAItem()
-            //}
-            
-            //const urlCreateBoard = ''; // Địa chỉ endpoint tương ứng với API của bạn
-            //const urlCreateList = '';
-            //const urlCreateTaskItem = '';
-
-            //const urlUpdateBoard = '/Boards/Update'; // Địa chỉ endpoint tương ứng với API của bạn
-            //const urlUpdateList = '/Lists/Update';
-            //const urlUpdateTaskItem = '/TaskItems/Update';
         }
 
         function getDataFromDatabase() {
@@ -1446,10 +1297,6 @@
                 })
                 .catch(error => {
                 });
-        }
-
-        if (isInvite == "True") {
-            createAlert('Invite successfully!!!');
         }
         /* <=================================== Other Events ===================================> */
         e_addCardText.addEventListener('keyup', (e) => {

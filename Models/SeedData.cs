@@ -14,6 +14,8 @@ public static class SeedData
 {
     public static void Initialize(IServiceProvider serviceProvider)
     {
+        
+
         using (var context = new TaskHubContext(
             serviceProvider.GetRequiredService<
                 DbContextOptions<TaskHubContext>>()))
@@ -27,11 +29,26 @@ public static class SeedData
             {
                 new User
                 {
+                    UserName = "admin",
+                    Email = "admin@gmail.com",
+                    Password = BCrypt.Net.BCrypt.HashPassword("123456"),
+                    FirstMidName = "Admin",
+                    LastName = "",
+                    UserRole = "Admin",
+                    ResetPasswordToken = "",
+                    ResetPasswordTokenExpiration = DateTime.Now,
+                    Avatar = "https://img.meta.com.vn/Data/image/2021/09/22/anh-meo-cute-de-thuong-dang-yeu-42.jpg",
+                },
+                new User
+                {
                     UserName = "phutam",
                     Email = "phutamytb@gmail.com",
                     Password = BCrypt.Net.BCrypt.HashPassword("123456"),
                     FirstMidName = "Tam",
                     LastName = "Phu",
+                    UserRole = "User",
+                    ResetPasswordToken = "",
+                    ResetPasswordTokenExpiration = DateTime.Now,
                     Avatar = "https://img.meta.com.vn/Data/image/2021/09/22/anh-meo-cute-de-thuong-dang-yeu-42.jpg",
                 },
                 new User
@@ -41,6 +58,9 @@ public static class SeedData
                     Password = BCrypt.Net.BCrypt.HashPassword("123456"),
                     FirstMidName = "Thuy",
                     LastName = "Tran",
+                    UserRole = "User",
+                    ResetPasswordToken = "",
+                    ResetPasswordTokenExpiration = DateTime.Now,
                     Avatar = "https://img.meta.com.vn/Data/image/2021/09/22/anh-meo-cute-de-thuong-dang-yeu-42.jpg",
                 },
                 new User
@@ -50,6 +70,9 @@ public static class SeedData
                     Password = BCrypt.Net.BCrypt.HashPassword("123456"),
                     FirstMidName = "Peter",
                     LastName = "Parker",
+                    UserRole = "User",
+                    ResetPasswordToken = "",
+                    ResetPasswordTokenExpiration = DateTime.Now,
                     Avatar = "https://img.meta.com.vn/Data/image/2021/09/22/anh-meo-cute-de-thuong-dang-yeu-42.jpg",
                 },
                 new User
@@ -59,6 +82,9 @@ public static class SeedData
                     Password = BCrypt.Net.BCrypt.HashPassword("123456"),
                     FirstMidName = "Tom",
                     LastName = "Holland",
+                    UserRole = "User",
+                    ResetPasswordToken = "",
+                    ResetPasswordTokenExpiration = DateTime.Now,
                     Avatar = "https://img.meta.com.vn/Data/image/2021/09/22/anh-meo-cute-de-thuong-dang-yeu-42.jpg",
                 },
                 new User
@@ -68,6 +94,9 @@ public static class SeedData
                     Password = BCrypt.Net.BCrypt.HashPassword("123456"),
                     FirstMidName = "Cristiano",
                     LastName = "Ronaldo",
+                    UserRole = "User",
+                    ResetPasswordToken = "",
+                    ResetPasswordTokenExpiration = DateTime.Now,
                     Avatar = "https://img.meta.com.vn/Data/image/2021/09/22/anh-meo-cute-de-thuong-dang-yeu-42.jpg",
                 },
                 new User
@@ -77,6 +106,9 @@ public static class SeedData
                     Password = BCrypt.Net.BCrypt.HashPassword("123456"),
                     FirstMidName = "Tam",
                     LastName = "Phu 2",
+                    UserRole = "User",
+                    ResetPasswordToken = "",
+                    ResetPasswordTokenExpiration = DateTime.Now,
                     Avatar = "https://img.meta.com.vn/Data/image/2021/09/22/anh-meo-cute-de-thuong-dang-yeu-42.jpg",
                 },
                 new User
@@ -86,6 +118,9 @@ public static class SeedData
                     Password = BCrypt.Net.BCrypt.HashPassword("123456"),
                     FirstMidName = "Thuy",
                     LastName = "Tran 2",
+                    UserRole = "User",
+                    ResetPasswordToken = "",
+                    ResetPasswordTokenExpiration = DateTime.Now,
                     Avatar = "https://img.meta.com.vn/Data/image/2021/09/22/anh-meo-cute-de-thuong-dang-yeu-42.jpg",
                 },
                 new User
@@ -95,6 +130,9 @@ public static class SeedData
                     Password = BCrypt.Net.BCrypt.HashPassword("123456"),
                     FirstMidName = "Peter",
                     LastName = "Parker 2",
+                    UserRole = "User",
+                    ResetPasswordToken = "",
+                    ResetPasswordTokenExpiration = DateTime.Now,
                     Avatar = "https://img.meta.com.vn/Data/image/2021/09/22/anh-meo-cute-de-thuong-dang-yeu-42.jpg",
                 },
                 new User
@@ -104,6 +142,9 @@ public static class SeedData
                     Password = BCrypt.Net.BCrypt.HashPassword("123456"),
                     FirstMidName = "Tom",
                     LastName = "Holland 2",
+                    UserRole = "User",
+                    ResetPasswordToken = "",
+                    ResetPasswordTokenExpiration = DateTime.Now,
                     Avatar = "https://img.meta.com.vn/Data/image/2021/09/22/anh-meo-cute-de-thuong-dang-yeu-42.jpg",
                 },
                 new User
@@ -113,6 +154,9 @@ public static class SeedData
                     Password = BCrypt.Net.BCrypt.HashPassword("123456"),
                     FirstMidName = "Cristiano",
                     LastName = "Ronaldo 2",
+                    UserRole = "User",
+                    ResetPasswordToken = "",
+                    ResetPasswordTokenExpiration = DateTime.Now,
                     Avatar = "https://img.meta.com.vn/Data/image/2021/09/22/anh-meo-cute-de-thuong-dang-yeu-42.jpg",
                 },
                 new User
@@ -122,6 +166,9 @@ public static class SeedData
                     Password = BCrypt.Net.BCrypt.HashPassword("123456"),
                     FirstMidName = "Tam",
                     LastName = "Phu 3",
+                    UserRole = "User",
+                    ResetPasswordToken = "",
+                    ResetPasswordTokenExpiration = DateTime.Now,
                     Avatar = "https://img.meta.com.vn/Data/image/2021/09/22/anh-meo-cute-de-thuong-dang-yeu-42.jpg",
                 },
                 new User
@@ -131,6 +178,9 @@ public static class SeedData
                     Password = BCrypt.Net.BCrypt.HashPassword("123456"),
                     FirstMidName = "Thuy",
                     LastName = "Tran 3",
+                    UserRole = "User",
+                    ResetPasswordToken = "",
+                    ResetPasswordTokenExpiration = DateTime.Now,
                     Avatar = "https://img.meta.com.vn/Data/image/2021/09/22/anh-meo-cute-de-thuong-dang-yeu-42.jpg",
                 },
                 new User
@@ -140,6 +190,9 @@ public static class SeedData
                     Password = BCrypt.Net.BCrypt.HashPassword("123456"),
                     FirstMidName = "Peter",
                     LastName = "Parker 3",
+                    UserRole = "User",
+                    ResetPasswordToken = "",
+                    ResetPasswordTokenExpiration = DateTime.Now,
                     Avatar = "https://img.meta.com.vn/Data/image/2021/09/22/anh-meo-cute-de-thuong-dang-yeu-42.jpg",
                 },
                 new User
@@ -149,6 +202,9 @@ public static class SeedData
                     Password = BCrypt.Net.BCrypt.HashPassword("123456"),
                     FirstMidName = "Tom",
                     LastName = "Holland 3",
+                    UserRole = "User",
+                    ResetPasswordToken = "",
+                    ResetPasswordTokenExpiration = DateTime.Now,
                     Avatar = "https://img.meta.com.vn/Data/image/2021/09/22/anh-meo-cute-de-thuong-dang-yeu-42.jpg",
                 },
                 new User
@@ -158,6 +214,9 @@ public static class SeedData
                     Password = BCrypt.Net.BCrypt.HashPassword("123456"),
                     FirstMidName = "Cristiano",
                     LastName = "Ronaldo 3",
+                    UserRole = "User",
+                    ResetPasswordToken = "",
+                    ResetPasswordTokenExpiration = DateTime.Now,
                     Avatar = "https://img.meta.com.vn/Data/image/2021/09/22/anh-meo-cute-de-thuong-dang-yeu-42.jpg",
                 }
             };

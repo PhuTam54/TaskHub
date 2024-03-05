@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using TaskHub.Data;
 using TaskHub.Models;
+using TaskHub.Models.Authentication;
 
 namespace TaskHub.Controllers
 {
+    [Authentication]
     public class TaskItemsController : Controller
     {
         private readonly TaskHubContext _context;

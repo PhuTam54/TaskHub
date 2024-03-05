@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using TaskHub.Models;
 
@@ -17,6 +18,12 @@ namespace TaskHub.Models
         [StringLength(50)]
         public string Email { get; set; }
         public string Password { get; set; }
+        [DefaultValue(false)]
+        public bool IsAdmin { get; set; }
+        [StringLength(50)]
+        public string UserRole { get; set; }
+        public string? ResetPasswordToken { get; set; }
+        public DateTime? ResetPasswordTokenExpiration { get; set; }
 
         [StringLength(50)]
         [Display(Name = "Last Name")]
